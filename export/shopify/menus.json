@@ -1,0 +1,134 @@
+[
+  {
+    "handle": "customer-account-main-menu",
+    "id": "gid://shopify/Menu/341442134097",
+    "items": [
+      {
+        "id": "gid://shopify/MenuItem/852700004433",
+        "items": [],
+        "resourceHandle": null,
+        "resourceId": "gid://shopify/CustomerAccountPage/264948678737",
+        "tags": [],
+        "title": "Orders",
+        "type": "CUSTOMER_ACCOUNT_PAGE",
+        "url": "https://shopify.com/107566563409/account/orders"
+      },
+      {
+        "id": "gid://shopify/MenuItem/852700037201",
+        "items": [],
+        "resourceHandle": null,
+        "resourceId": "gid://shopify/CustomerAccountPage/264948711505",
+        "tags": [],
+        "title": "Profile",
+        "type": "CUSTOMER_ACCOUNT_PAGE",
+        "url": "https://shopify.com/107566563409/account/profile"
+      }
+    ],
+    "title": "Customer account main menu"
+  },
+  {
+    "handle": "footer",
+    "id": "gid://shopify/Menu/341442101329",
+    "items": [
+      {
+        "id": "gid://shopify/MenuItem/852699971665",
+        "items": [],
+        "resourceHandle": null,
+        "resourceId": null,
+        "tags": [],
+        "title": "Search",
+        "type": "SEARCH",
+        "url": "/search"
+      },
+      {
+        "id": "gid://shopify/MenuItem/852700069969",
+        "items": [],
+        "resourceHandle": "data-sharing-opt-out",
+        "resourceId": "gid://shopify/Page/763576057937",
+        "tags": [],
+        "title": "Your Privacy Choices",
+        "type": "PAGE",
+        "url": "/pages/data-sharing-opt-out"
+      }
+    ],
+    "title": "Footer menu"
+  },
+  {
+    "handle": "main-menu",
+    "id": "gid://shopify/Menu/341442068561",
+    "items": [
+      {
+        "id": "gid://shopify/MenuItem/852699873361",
+        "items": [],
+        "resourceHandle": null,
+        "resourceId": null,
+        "tags": [],
+        "title": "Home",
+        "type": "FRONTPAGE",
+        "url": "/"
+      },
+      {
+        "id": "gid://shopify/MenuItem/865016414289",
+        "items": [],
+        "resourceHandle": "our-story",
+        "resourceId": "gid://shopify/Page/766614798417",
+        "tags": [],
+        "title": "Our Story",
+        "type": "PAGE",
+        "url": "/pages/our-story"
+      },
+      {
+        "id": "gid://shopify/MenuItem/852699906129",
+        "items": [
+          {
+            "id": "gid://shopify/MenuItem/865474674769",
+            "items": [],
+            "resourceHandle": "face-care",
+            "resourceId": "gid://shopify/Collection/705866661969",
+            "tags": [],
+            "title": "Face Care",
+            "type": "COLLECTION",
+            "url": "/collections/face-care"
+          },
+          {
+            "id": "gid://shopify/MenuItem/865474707537",
+            "items": [],
+            "resourceHandle": "face-care-copy",
+            "resourceId": "gid://shopify/Collection/705866760273",
+            "tags": [],
+            "title": "Rose Water & Toners",
+            "type": "COLLECTION",
+            "url": "/collections/face-care-copy"
+          },
+          {
+            "id": "gid://shopify/MenuItem/865474936913",
+            "items": [],
+            "resourceHandle": "rose-water-toners-copy",
+            "resourceId": "gid://shopify/Collection/705866793041",
+            "tags": [],
+            "title": "Masks & Treatments",
+            "type": "COLLECTION",
+            "url": "/collections/rose-water-toners-copy"
+          }
+        ],
+        "resourceHandle": "our-collection",
+        "resourceId": "gid://shopify/Page/766614831185",
+        "tags": [],
+        "title": "Our Collection",
+        "type": "PAGE",
+        "url": "/pages/our-collection"
+      },
+      {
+        "id": "gid://shopify/MenuItem/852699938897",
+        "items": [],
+        "resourceHandle": "contact",
+        "resourceId": "gid://shopify/Page/763576025169",
+        "tags": [],
+        "title": "Contact",
+        "type": "PAGE",
+        "url": "/pages/contact"
+      }
+    ],
+    "title": "Main menu"
+  }
+]

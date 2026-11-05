@@ -1,0 +1,2070 @@
+[
+  {
+    "createdAt": "2026-11-04T11:31:44Z",
+    "descriptionHtml": "<p>Rosart Rose Water is a 100% natural floral water obtained through the distillation of Bulgarian Rosa Damascena rose petals.</p>\n<p>This pure, single-ingredient rose water helps soothe, hydrate and refresh the skin, leaving it feeling soft, comfortable and revitalised.</p>\n<p>Ideal for daily use as a refreshing facial toner or a gentle addition to your skincare routine.</p>\n<p>Made in Bulgaria.</p>",
+    "handle": "100-natural-damascena-rose-water-10ml",
+    "id": "gid://shopify/Product/16432947331153",
+    "images": [
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseWaterSet.png?v=1793791940",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_3.png?v=1793880128",
+        "width": 1200
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419497762897",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseWaterSet.png?v=1793791940",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74452926726225",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_3.png?v=1793880128",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Keep out of reach of children.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Storage: Keep in a cool place.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, inspired by the natural heritage of the Bulgarian Rose Valley.\n\n100% natural rose water obtained through the distillation of Rosa Damascena flowers.\n\nSingle-ingredient formula."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Spray directly onto the face or skin, or apply an appropriate amount and gently pat until absorbed.\n\nAlternatively, apply using a moistened cotton pad or as a wet compress."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Rosa Damascena Flower Water – Pure Bulgarian rose water obtained through the distillation of Rosa Damascena flowers. Helps soothe, moisturise and refresh the skin.\n\nFull Ingredients (INCI)\n\nRosa Damascena Flower Water."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Water 10ml, made from 100% natural Bulgarian Rosa Damascena flower water. Gently soothes, hydrates and refreshes skin."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Water 10ml | 100% Natural Bulgarian Rose Water"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19069437968465",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Toner",
+    "publishedAt": "2026-11-04T11:51:59Z",
+    "seo": {
+      "description": "Discover Rosart Rose Water 10ml, made from 100% natural Bulgarian Rosa Damascena flower water. Gently soothes, hydrates and refreshes skin.",
+      "title": "Rosart Rose Water 10ml | 100% Natural Bulgarian Rose Water"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "Bulgarian Rose",
+      "Face Care",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "100% Natural Damascena Rose Water 10ml",
+    "updatedAt": "2026-11-05T12:02:49Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63404155437137",
+        "position": 1,
+        "price": "10.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARWT10ML",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T11:04:09Z",
+    "descriptionHtml": "<p>Rosart Bulgarian Rose Hydrosol Essence Mask is a hydrating facial sheet mask formulated with 93.3% organic Bulgarian Rosa Damascena Flower Water.</p>\n<p>Enriched with rose-derived botanical extracts, sodium hyaluronate and glycerin, it helps replenish moisture, soothe the skin and improve its softness and elasticity.</p>\n<p>Leaves skin feeling refreshed, hydrated and radiant.</p>\n<p>Ideal for dry, sensitive or tired-looking skin.</p>\n<p>Each pack contains 5 individually packed sheet masks (25ml essence per mask).</p>",
+    "handle": "bulgarian-rose-hydrosol-essence-mask-5pcs",
+    "id": "gid://shopify/Product/16432873701457",
+    "images": [
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseEssenceMaskBox.png?v=1793790307",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseMaskShowcase.png?v=1793881335",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_007bac73-3152-441e-9d95-86ccd6e85270.png?v=1793881123",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST2.png?v=1793881336",
+        "width": 1200
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419025838161",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseEssenceMaskBox.png?v=1793790307",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74454394142801",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseMaskShowcase.png?v=1793881335",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74453937946705",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_007bac73-3152-441e-9d95-86ccd6e85270.png?v=1793881123",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74454394110033",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST2.png?v=1793881336",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only. Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs. Keep out of reach of children.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, inspired by the natural heritage of the Bulgarian Rose Valley.\n\nFormulated with Damask rose water, rose flower oil and selected botanical extracts.\n\nDeveloped as part of Rosart's rose-inspired skincare collection."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Pour an appropriate amount onto a cotton pad and gently sweep over the face and neck.\n\nUse morning and evening after cleansing, before applying serum and moisturiser."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Damask Rose Water – Helps refresh, hydrate and condition the skin.\n\nDamask Rose Flower Oil – A rose-derived ingredient that complements the toner’s botanical formula.\n\nRosa Multiflora Fruit Extract – A botanical extract that helps condition the skin.\n\nAngelica Keiskei Extract – A botanical ingredient included in the formula.\n\nSodium Hyaluronate – Helps maintain skin hydration and softness.\n\nFull Ingredients (INCI)\n\nAqua (Water), Rose Water, Glycerin, Butylene Glycol, Rosa Centifolia Flower, Rosa Damascena Flower Water, Rosa Multiflora Fruit Extract, Angelica Keiskei Extract, Rosa Damascena Flower Oil, Sodium Hyaluronate, PEG-150, PPG-26-Buteth-26, PEG-40 Hydrogenated Castor Oil, Sodium Citrate, Xanthan Gum, Citric Acid, BHT, Parfum (Fragrance), Phenoxyethanol, Citronellol, Geraniol."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Facial Toner 330ml with Damask rose water, botanical extracts and sodium hyaluronate. Refreshes and hydrates skin. Made in Bulgaria."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Facial Toner 330ml | Hydrating Toner"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19069354147921",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Sheet Mask",
+    "publishedAt": "2026-11-04T11:52:00Z",
+    "seo": {
+      "description": "Discover Rosart Rose Facial Toner 330ml with Damask rose water, botanical extracts and sodium hyaluronate. Refreshes and hydrates skin. Made in Bulgaria.",
+      "title": "Rosart Rose Facial Toner 330ml | Hydrating Toner"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "Bulgarian Rose",
+      "Face Care",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Bulgarian Rose Hydrosol Essence Mask 5pcs",
+    "updatedAt": "2026-11-05T12:22:26Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63403867832401",
+        "position": 1,
+        "price": "40.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RABRHEM5",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T11:34:04Z",
+    "descriptionHtml": "<p>Rosart Pure Face Rosehip Oil is a nourishing facial oil formulated with organic rosehip oil, Damask rose oil and vitamin E.</p>\n<p>Rich in naturally occurring essential fatty acids, the formula helps soften and condition the skin while improving the appearance of dullness and fine lines.</p>\n<p>Leaves skin feeling smoother, nourished and radiant.</p>\n<p>Ideal for skin that needs additional nourishment and a healthy-looking glow.</p>",
+    "handle": "pure-face-rosehip-oil-20ml",
+    "id": "gid://shopify/Product/16432953065553",
+    "images": [
+      {
+        "altText": "",
+        "height": 1568,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_2.png?v=1793792089",
+        "width": 1254
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRosehipOilinaSunlitGarden.png?v=1793792090",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1040,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_3.png?v=1793792088",
+        "width": 832
+      },
+      {
+        "altText": "",
+        "height": 1568,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_1.png?v=1793792089",
+        "width": 1254
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419533742161",
+        "image": {
+          "altText": "",
+          "height": 1568,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_2.png?v=1793792089",
+          "width": 1254
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419533807697",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRosehipOilinaSunlitGarden.png?v=1793792090",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419533774929",
+        "image": {
+          "altText": "",
+          "height": 1040,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_3.png?v=1793792088",
+          "width": 832
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419533840465",
+        "image": {
+          "altText": "",
+          "height": 1568,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_1.png?v=1793792089",
+          "width": 1254
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Keep out of reach of children.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, inspired by the natural heritage of the Bulgarian Rose Valley.\n\nFormulated with organic rosehip oil, Damask rose oil and vitamin E.\n\nThe packaging displays Certified Organic Raw Materials and GMP Certified, together with USDA Organic, EU Organic, CERES and GMP certification marks."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "After applying serum and before moisturiser, dispense 2–3 drops onto your fingertips.\n\nGently massage onto the face using upward circular motions until absorbed."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Rosehip Oil (Rosa Canina Fruit Oil) – A plant-derived oil rich in naturally occurring essential fatty acids. Helps nourish and soften the skin while improving the appearance of dullness and fine lines.\n\nDamask Rose Oil (Rosa Damascena Flower Oil) – A fragrant rose-derived botanical oil that complements the nourishing formula.\n\nVitamin E (Tocopherol) – An antioxidant ingredient that helps condition the skin and protect the oils from oxidation.\n\nFull Ingredients (INCI)\n\nRosa Damascena Flower Oil, Rosa Canina Fruit Oil, Tocopherol."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Pure Face Rosehip Oil 20ml with organic rosehip oil, Damask rose oil and vitamin E. Nourishes skin and improves the appearance of dullness."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Pure Face Rosehip Oil 20ml | Nourishing Facial Oil"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19069444522065",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Oil",
+    "publishedAt": "2026-11-04T11:52:00Z",
+    "seo": {
+      "description": "Discover Rosart Pure Face Rosehip Oil 20ml with organic rosehip oil, Damask rose oil and vitamin E. Nourishes skin and improves the appearance of dullness.",
+      "title": "Rosart Pure Face Rosehip Oil 20ml | Nourishing Facial Oil"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "Bulgarian Rose",
+      "Face Care",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Pure Face Rosehip Oil 20ml",
+    "updatedAt": "2026-11-05T12:10:19Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63404177555537",
+        "position": 1,
+        "price": "65.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARHO20",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T11:40:14Z",
+    "descriptionHtml": "<p>Rosart Pure Face Rosehip Oil is a nourishing facial oil formulated with organic rosehip oil, Damask rose oil and vitamin E.</p>\n<p>Rich in naturally occurring essential fatty acids, the formula helps soften and condition the skin while improving the appearance of dullness and fine lines.</p>\n<p>Leaves skin feeling smoother, nourished and radiant.</p>\n<p>Ideal for skin that needs additional nourishment and a healthy-looking glow.</p>",
+    "handle": "pure-face-rosehip-oil-2ml",
+    "id": "gid://shopify/Product/16432963649617",
+    "images": [
+      {
+        "altText": "",
+        "height": 1403,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartSmallDropperBottleinWarmStudioLight.png?v=1793792441",
+        "width": 1121
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419602587729",
+        "image": {
+          "altText": "",
+          "height": 1403,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartSmallDropperBottleinWarmStudioLight.png?v=1793792441",
+          "width": 1121
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Keep out of reach of children.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, inspired by the natural heritage of the Bulgarian Rose Valley.\n\nFormulated with organic rosehip oil, Damask rose oil and vitamin E.\n\nThe packaging displays Certified Organic Raw Materials and GMP Certified, together with USDA Organic, EU Organic, CERES and GMP certification marks."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "After applying serum and before moisturiser, dispense 2–3 drops onto your fingertips.\n\nGently massage onto the face using upward circular motions until absorbed."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Rosehip Oil (Rosa Canina Fruit Oil) – A plant-derived oil rich in naturally occurring essential fatty acids. Helps nourish and soften the skin while improving the appearance of dullness and fine lines.\n\nDamask Rose Oil (Rosa Damascena Flower Oil) – A fragrant rose-derived botanical oil that complements the nourishing formula.\n\nVitamin E (Tocopherol) – An antioxidant ingredient that helps condition the skin and protect the oils from oxidation.\n\nFull Ingredients (INCI)\n\nRosa Damascena Flower Oil, Rosa Canina Fruit Oil, Tocopherol."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Pure Face Rosehip Oil 2ml with organic rosehip oil, Damask rose oil and vitamin E. Nourishes skin and improves the appearance of dullness."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Pure Face Rosehip Oil 2ml | Nourishing Facial Oil"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19069455695953",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Oil",
+    "publishedAt": "2026-11-04T11:52:01Z",
+    "seo": {
+      "description": "Discover Rosart Pure Face Rosehip Oil 2ml with organic rosehip oil, Damask rose oil and vitamin E. Nourishes skin and improves the appearance of dullness.",
+      "title": "Rosart Pure Face Rosehip Oil 2ml | Nourishing Facial Oil"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "Bulgarian Rose",
+      "Face Care",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Pure Face Rosehip Oil 2ml",
+    "updatedAt": "2026-11-05T12:09:54Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63404213239889",
+        "position": 1,
+        "price": "10.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARHO2ML",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T10:49:46Z",
+    "descriptionHtml": "<p>Rosart Rose Face Mask is a hydrating facial treatment enriched with organic Bulgarian rose water, rose oil and nutrient-rich seaweed.</p>\n<p>Formulated with marine polysaccharides and rose-derived ingredients, it helps replenish moisture, soften the appearance of fine lines and revitalise tired-looking skin.</p>\n<p>Leaves skin feeling smoother, refreshed and deeply hydrated.</p>\n<p>Suitable for all skin types, including sensitive skin.</p>",
+    "handle": "rosart-rose-face-mask-80ml",
+    "id": "gid://shopify/Product/16432837361745",
+    "images": [
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseFaceMaskDuo.png?v=1793789419",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1536,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskGardenStillLife.png?v=1793789419",
+        "width": 1024
+      },
+      {
+        "altText": "",
+        "height": 1536,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskinBloom.png?v=1793789419",
+        "width": 1024
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74418718212177",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseFaceMaskDuo.png?v=1793789419",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74418718244945",
+        "image": {
+          "altText": "",
+          "height": 1536,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskGardenStillLife.png?v=1793789419",
+          "width": 1024
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74418718277713",
+        "image": {
+          "altText": "",
+          "height": 1536,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskinBloom.png?v=1793789419",
+          "width": 1024
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only. Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs. Keep out of reach of children.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, inspired by the natural heritage of the Bulgarian Rose Valley.\n\nFormulated with Bulgarian rose-derived ingredients and marine polysaccharides.\n\nThe manufacturer identifies the rose water and rose oil used in this formula as USDA-certified organic ingredients."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Apply a generous amount to clean, damp skin on the face and neck, avoiding the eye area.\n\nLeave on for 5–10 minutes, then rinse thoroughly with water."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Organic Bulgarian Rose Water – Helps hydrate, refresh and condition the skin.\n\nOrganic Rose Oil – Provides nourishing and antioxidant care.\n\nRose Concrete – A concentrated rose-derived ingredient used in the formula.\n\nMarine Exopolysaccharides (EPS Seafill) – Marine-derived polysaccharides that help improve skin hydration and the appearance of fine lines."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Face Mask with Bulgarian rose water, rose oil and marine polysaccharides. Hydrates, refreshes and softens skin. Made in Bulgaria."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Face Mask 80ml | Hydrating Facial Mask"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19069305126993",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Face Mask",
+    "publishedAt": "2026-11-04T11:52:01Z",
+    "seo": {
+      "description": "Discover Rosart Rose Face Mask with Bulgarian rose water, rose oil and marine polysaccharides. Hydrates, refreshes and softens skin. Made in Bulgaria.",
+      "title": "Rosart Rose Face Mask 80ml | Hydrating Facial Mask"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "80ml",
+      "Bulgarian Rose",
+      "Face Care",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Rose Face Mask 80ml",
+    "updatedAt": "2026-11-05T12:23:02Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63403666079825",
+        "position": 1,
+        "price": "55.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARFM80",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T10:47:00Z",
+    "descriptionHtml": "<p>Rosart Rose Cleansing Balm is a nourishing facial cleanser formulated with rosehip oil, jojoba oil and avocado oil to gently dissolve makeup, impurities and daily buildup.</p>\n<p>Enriched with Rosa Damascena flower wax and botanical oils, the rich balm helps soften and condition the skin while cleansing.</p>\n<p>It emulsifies with warm water for easy removal, leaving skin feeling smooth, refreshed and comfortable.</p>\n<p>No artificial fragrance added.</p>",
+    "handle": "rose-cleansing-balm-80ml",
+    "id": "gid://shopify/Product/16432829792337",
+    "images": [
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseCleansingBalmDisplay.png?v=1793789263",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseBalminaSunlitGarden.png?v=1793789264",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseCleansingBalmPortrait.png?v=1793789263",
+        "width": 1122
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74418652086353",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseCleansingBalmDisplay.png?v=1793789263",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74418652151889",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseBalminaSunlitGarden.png?v=1793789264",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74418652119121",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseCleansingBalmPortrait.png?v=1793789263",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only. Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs. Keep out of reach of children.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, inspired by the natural heritage of the Bulgarian Rose Valley.\n\nFormulated with rose-derived ingredients and carefully selected botanical oils.\n\nNo artificial fragrance added.\nFormulated with Damascena rose flower water, rose oil and selected botanical ingredients.\n\nNo artificial fragrance added."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "1. Warm a small amount of cleansing balm between your palms.\n2. Gently massage onto dry facial skin to dissolve makeup and impurities.\n3. Add warm water to emulsify the balm.\n4. Rinse thoroughly with water or remove with a damp cloth.\nUse morning and evening as part of your daily skincare routine."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Rosehip Oil – Helps nourish and soften the skin.\n\nJojoba Oil – Helps condition the skin and maintain softness.\n\nAvocado Oil – Provides nourishing and conditioning properties.\n\nRosa Damascena Flower Wax – Contributes to the balm's rich texture.\n\nCocoa Seed Butter – Helps soften and condition the skin.\n\n**Full Ingredients (INCI)**\n\nParaffinum Liquidum (Mineral Oil), Bis-Diglyceryl Polyacyladipate-2, Cetearyl Alcohol, Rosa Canina Fruit Oil, Lanolin Wax, Rosa Damascena Flower Wax, Theobroma Cacao (Cocoa) Seed Butter, Simmondsia Chinensis (Jojoba) Seed Oil, Persea Gratissima (Avocado) Oil, Rosa Damascena Flower Oil, Chamomilla Recutita (Matricaria) Flower Oil, Eucalyptus Globulus Leaf Oil, Eugenia Caryophyllus (Clove) Leaf Oil, Humulus Lupulus (Hops) Cone Oil, Citronellol, Geraniol."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Cleansing Balm with rosehip, jojoba and avocado oils. Gently removes makeup and impurities while leaving skin soft and nourished. Made in Bulgaria."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Cleansing Balm 80ml | Makeup Remover"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19069294477393",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Cleanser",
+    "publishedAt": "2026-11-04T11:52:01Z",
+    "seo": {
+      "description": "Discover Rosart Rose Cleansing Balm with rosehip, jojoba and avocado oils. Gently removes makeup and impurities while leaving skin soft and nourished. Made in Bulgaria.",
+      "title": "Rosart Rose Cleansing Balm 80ml | Makeup Remover"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "80ml",
+      "Bulgarian Rose",
+      "Face Care",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Rose Cleansing Balm 80ml",
+    "updatedAt": "2026-11-05T11:39:00Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63403610144849",
+        "position": 1,
+        "price": "70.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARCB80",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T06:05:45Z",
+    "descriptionHtml": "<p>Rosart Rose Face Cream is a nourishing facial moisturizer enriched with organic rose oil, rose water and rose concrete.</p>\n<p>Formulated to provide lasting hydration, it helps soften the appearance of fine lines and leaves skin feeling smoother, softer and more radiant.</p>\n<p>Suitable for day and night use.</p>",
+    "handle": "rose-face-cream-3g",
+    "id": "gid://shopify/Product/16431958523985",
+    "images": [
+      {
+        "altText": "",
+        "height": 992,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCream3g_14a773ff-e665-4af0-8662-6debcfef1347.jpg?v=1793772403",
+        "width": 790
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseFaceCreamStillLife_ca18a3dc-fd34-4fcd-90fa-796fa6294fe9.png?v=1793772421",
+        "width": 1122
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74412707905617",
+        "image": {
+          "altText": "",
+          "height": 992,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCream3g_14a773ff-e665-4af0-8662-6debcfef1347.jpg?v=1793772403",
+          "width": 790
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74412708659281",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseFaceCreamStillLife_ca18a3dc-fd34-4fcd-90fa-796fa6294fe9.png?v=1793772421",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only. Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs. Keep out of reach of children.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, Rosart draws on the natural heritage of the Bulgarian Rose Valley.\n\nThe manufacturer identifies the rose oil and rose water used in this formula as certified organic ingredients.\n\nRosart's brand materials feature USDA Organic, EU Organic, CERES and GMP certifications. Certification details and their applicable scope are subject to the manufacturer's documentation."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Apply an appropriate amount to clean facial skin and gently massage until absorbed.\n\nUse morning and evening as part of your daily skincare routine."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "**Organic Rose Oil** – Helps nourish the skin and provides antioxidant care.\n\n**Organic Rose Water** – Helps hydrate and refresh the skin.\n\n**Rose Concrete** – A concentrated rose extract included in the formula."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Face Cream 3g, enriched with organic rose oil, rose water and rose concrete. A nourishing facial moisturizer for day and night use."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Face Cream 3g | Hydrating Facial Moisturizer"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19068180824145",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Moisturizer",
+    "publishedAt": "2026-11-04T11:52:02Z",
+    "seo": {
+      "description": "Discover Rosart Rose Face Cream 3g, enriched with organic rose oil, rose water and rose concrete. A nourishing facial moisturizer for day and night use.",
+      "title": "Rosart Rose Face Cream 3g | Hydrating Facial Moisturizer"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "3g",
+      "Bulgarian Rose",
+      "Face Care",
+      "Face Cream",
+      "Moisturizer",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Rose Face Cream 3g",
+    "updatedAt": "2026-11-05T11:56:59Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63399437893713",
+        "position": 1,
+        "price": "10.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARFC3",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T03:46:16Z",
+    "descriptionHtml": "<p data-pm-slice=\"1 1 []\"><span>Rosart Rose Face Cream is a nourishing facial moisturizer enriched with organic rose oil, rose water and rose concrete.</span></p>\n<p><span>Formulated to provide lasting hydration, it helps soften the appearance of fine lines and leaves skin feeling smoother, softer and more radiant.</span></p>\n<p><span>Suitable for day and night use.</span></p>",
+    "handle": "rose-face-cream-50ml",
+    "id": "gid://shopify/Product/16431658401873",
+    "images": [
+      {
+        "altText": "",
+        "height": 992,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCreamDuo.jpg?v=1793771836",
+        "width": 788
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_1.png?v=1793771197",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/fc1.png?v=1793772987",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseFaceCreamPortrait.png?v=1793770749",
+        "width": 1122
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74412680839249",
+        "image": {
+          "altText": "",
+          "height": 992,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCreamDuo.jpg?v=1793771836",
+          "width": 788
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74412645941329",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_1.png?v=1793771197",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74412759351377",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/fc1.png?v=1793772987",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74412600852561",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseFaceCreamPortrait.png?v=1793770749",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only. Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs. Keep out of reach of children.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, Rosart draws on the natural heritage of the Bulgarian Rose Valley.\n\nThe manufacturer identifies the rose oil and rose water used in this formula as certified organic ingredients.\n\nRosart's brand materials feature USDA Organic, EU Organic, CERES and GMP certifications. Certification details and their applicable scope are subject to the manufacturer's documentation."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Apply an appropriate amount to clean facial skin and gently massage until absorbed.\n\nUse morning and evening as part of your daily skincare routine."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Organic Rose Oil – Helps nourish the skin and provides antioxidant care.\n\nOrganic Rose Water – Helps hydrate and refresh the skin.\n\nRose Concrete – A concentrated rose extract included in the formula."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Face Cream 50ml, formulated with organic rose oil, rose water and rose concrete to hydrate and nourish skin. For day and night use."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Face Cream 50ml | Bulgarian Rose Skincare"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19067774500945",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Moisturizer",
+    "publishedAt": "2026-11-04T11:52:02Z",
+    "seo": {
+      "description": "Discover Rosart Rose Face Cream 50ml, formulated with organic rose oil, rose water and rose concrete to hydrate and nourish skin. For day and night use.",
+      "title": "Rosart Rose Face Cream 50ml | Bulgarian Rose Skincare"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "50ml",
+      "Bulgarian Rose",
+      "Face Care",
+      "Face Cream",
+      "Moisturizer",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Rose Face Cream 50ml",
+    "updatedAt": "2026-11-05T11:58:15Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63398154960977",
+        "position": 1,
+        "price": "65.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARFC50",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T06:11:49Z",
+    "descriptionHtml": "<p>Rosart Rose Face Soufflé Cream is a lightweight facial moisturiser formulated with Damascena rose flower water, rose oil and nourishing botanical ingredients.</p>\n<p>Its soft, soufflé-like texture absorbs easily without feeling heavy, while rosehip oil, grape seed oil, avocado oil and sodium hyaluronate help maintain skin hydration and softness.</p>\n<p>Suitable for all skin types and daily use, morning and evening.</p>\n<p>No artificial fragrance added.</p>",
+    "handle": "rose-face-souffle-cream-3g",
+    "id": "gid://shopify/Product/16431961309265",
+    "images": [
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleCreamSet.png?v=1793772758",
+        "width": 1122
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74412718358609",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleCreamSet.png?v=1793772758",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only. Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs. Keep out of reach of children.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, inspired by the natural heritage of the Bulgarian Rose Valley.\n\nFormulated with rose-derived ingredients and selected botanical oils.\n\nNo artificial fragrance added."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Apply an appropriate amount to clean skin and gently massage until absorbed.\n\nUse in the morning as a daily moisturiser or in the evening as part of your nighttime skincare routine."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Damascena Rose Flower Water & Rose Oil – Rose-derived ingredients that complement the cream's botanical formula.\n\nRosehip Oil – Helps nourish and soften the skin.\n\nGrape Seed Oil & Avocado Oil – Help maintain skin softness and moisture.\n\nSodium Hyaluronate – Helps support skin hydration.\n\nFull Ingredients (INCI)\n\nRosa Damascena Flower Water, Aqua (Water), Rosa Canina Fruit Oil, Rosa Damascena Flower Wax, Vitis Vinifera (Grape) Seed Oil, Glyceryl Stearate, Oryza Sativa (Rice) Bran Oil, Caprylic/Capric Triglyceride, Butylene Glycol, Rosa Damascena Flower Oil, Persea Gratissima (Avocado) Oil, Sodium Hyaluronate, Rosa Canina Fruit Extract, Rosa Multiflora Fruit Extract, Phenoxyethanol, PEG-100 Stearate, Citronellol, Geraniol."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Face Soufflé Cream 3g, a lightweight moisturiser with rose water, botanical oils and sodium hyaluronate. Made in Bulgaria."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Face Soufflé Cream 3g | Lightweight Moisturiser"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19068183740497",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Moisturizer",
+    "publishedAt": "2026-11-04T11:52:03Z",
+    "seo": {
+      "description": "Discover Rosart Rose Face Soufflé Cream 3g, a lightweight moisturiser with rose water, botanical oils and sodium hyaluronate. Made in Bulgaria.",
+      "title": "Rosart Rose Face Soufflé Cream 3g | Lightweight Moisturiser"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "3g",
+      "Bulgarian Rose",
+      "Face Care",
+      "Face Cream",
+      "Moisturizer",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Rose Face Soufflé Cream 3g",
+    "updatedAt": "2026-11-05T11:40:21Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63399445987409",
+        "position": 1,
+        "price": "10.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARFSC3",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T06:08:54Z",
+    "descriptionHtml": "<p>Rosart Rose Face Soufflé Cream is a lightweight facial moisturizer enriched with Damascena rose flower water, rose oil, rosehip oil and selected botanical ingredients.</p>\n<p>With its soft, airy soufflé texture, the cream glides smoothly onto the skin and absorbs easily without feeling heavy, helping maintain hydration and softness.</p>\n<p>Suitable for all skin types and for both day and night use.</p>",
+    "handle": "rose-face-souffle-cream-50ml",
+    "id": "gid://shopify/Product/16431960621137",
+    "images": [
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Curved-LabelRosartRoseCreamSet.png?v=1793879081",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleStillLife.png?v=1793772602",
+        "width": 1122
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74451420545105",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Curved-LabelRosartRoseCreamSet.png?v=1793879081",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74412714033233",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleStillLife.png?v=1793772602",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only. Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water. Discontinue use and consult a doctor if irritation occurs. Keep out of reach of children.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, Rosart draws inspiration from the natural heritage of the Bulgarian Rose Valley.\n\nFormulated with Damascena rose flower water, rose oil and selected botanical ingredients.\n\nNo artificial fragrance added."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Apply an appropriate amount to clean facial skin and gently massage until absorbed.\n\nUse morning and evening as part of your daily skincare routine."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Damascena Rose Flower Water & Rose Oil – Rose-derived ingredients that complement the cream's botanical formula.\n\nRosehip Oil – Helps nourish and soften the skin.\n\nGrape Seed Oil & Avocado Oil – Help maintain skin softness and moisture.\n\nSodium Hyaluronate – Helps support skin hydration.\n\nFull Ingredients (INCI)\n\nRosa Damascena Flower Water, Aqua (Water), Rosa Canina Fruit Oil, Rosa Damascena Flower Wax, Vitis Vinifera (Grape) Seed Oil, Glyceryl Stearate, Oryza Sativa (Rice) Bran Oil, Caprylic/Capric Triglyceride, Butylene Glycol, Rosa Damascena Flower Oil, Persea Gratissima (Avocado) Oil, Sodium Hyaluronate, Rosa Canina Fruit Extract, Rosa Multiflora Fruit Extract, Phenoxyethanol, PEG-100 Stearate, Citronellol, Geraniol."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Face Soufflé Cream 50ml. A lightweight facial moisturizer with Damascena rose water, rosehip oil and hyaluronic acid for soft, hydrated skin."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Face Soufflé Cream 50ml | Lightweight Moisturizer"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19068182986833",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Moisturizer",
+    "publishedAt": "2026-11-04T11:52:03Z",
+    "seo": {
+      "description": "Discover Rosart Rose Face Soufflé Cream 50ml. A lightweight facial moisturizer with Damascena rose water, rosehip oil and hyaluronic acid for soft, hydrated skin.",
+      "title": "Rosart Rose Face Soufflé Cream 50ml | Lightweight Moisturizer"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "50ml",
+      "Bulgarian Rose",
+      "Face Care",
+      "Face Cream",
+      "Face Soufflé Cream",
+      "Moisturizer",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Rose Face Soufflé Cream 50ml",
+    "updatedAt": "2026-11-05T11:44:52Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63399443693649",
+        "position": 1,
+        "price": "80.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARFSC50",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T10:59:55Z",
+    "descriptionHtml": "<p>Rosart Rose Facial Toner is a refreshing facial toner formulated with Damask rose water, rose flower oil and selected botanical extracts.</p>\n<p>Enriched with sodium hyaluronate, it helps remove residual impurities after cleansing while moisturising and conditioning the skin.</p>\n<p>Leaves skin feeling refreshed, soft and smooth, ready for the next step in your skincare routine.</p>",
+    "handle": "rose-facial-toner-330ml",
+    "id": "gid://shopify/Product/16432859578449",
+    "images": [
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_65e67bcf-5d90-4538-8ea6-8383481d6367.png?v=1793882604",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseTonerStillLife.png?v=1793790134",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/1_e8d51abc-fa25-4a53-8000-2a109dc374e9.png?v=1793790133",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/2_3f29349c-2ca4-4df1-a6a4-11f29261cce9.png?v=1793790133",
+        "width": 1200
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74455763026001",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_65e67bcf-5d90-4538-8ea6-8383481d6367.png?v=1793882604",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74418953715793",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseTonerStillLife.png?v=1793790134",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74418953650257",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/1_e8d51abc-fa25-4a53-8000-2a109dc374e9.png?v=1793790133",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74418953683025",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/2_3f29349c-2ca4-4df1-a6a4-11f29261cce9.png?v=1793790133",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only. Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs. Keep out of reach of children.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, inspired by the natural heritage of the Bulgarian Rose Valley.\n\nFormulated with Damask rose water, rose flower oil and selected botanical extracts.\n\nDeveloped as part of Rosart's rose-inspired skincare collection."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Pour an appropriate amount onto a cotton pad and gently sweep over the face and neck.\n\nUse morning and evening after cleansing, before applying serum and moisturiser."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Damask Rose Water – Helps refresh, hydrate and condition the skin.\n\nDamask Rose Flower Oil – A rose-derived ingredient that complements the toner’s botanical formula.\n\nRosa Multiflora Fruit Extract – A botanical extract that helps condition the skin.\n\nAngelica Keiskei Extract – A botanical ingredient included in the formula.\n\nSodium Hyaluronate – Helps maintain skin hydration and softness.\n\nFull Ingredients (INCI)\n\nAqua (Water), Rose Water, Glycerin, Butylene Glycol, Rosa Centifolia Flower, Rosa Damascena Flower Water, Rosa Multiflora Fruit Extract, Angelica Keiskei Extract, Rosa Damascena Flower Oil, Sodium Hyaluronate, PEG-150, PPG-26-Buteth-26, PEG-40 Hydrogenated Castor Oil, Sodium Citrate, Xanthan Gum, Citric Acid, BHT, Parfum (Fragrance), Phenoxyethanol, Citronellol, Geraniol."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Facial Toner 330ml with Damask rose water, botanical extracts and sodium hyaluronate. Refreshes and hydrates skin. Made in Bulgaria."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Facial Toner 330ml | Hydrating Toner"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19069337436241",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Toner",
+    "publishedAt": "2026-11-04T11:52:04Z",
+    "seo": {
+      "description": "Discover Rosart Rose Facial Toner 330ml with Damask rose water, botanical extracts and sodium hyaluronate. Refreshes and hydrates skin. Made in Bulgaria.",
+      "title": "Rosart Rose Facial Toner 330ml | Hydrating Toner"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "Bulgarian Rose",
+      "Face Care",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Rose Facial Toner 330ml",
+    "updatedAt": "2026-11-05T12:43:36Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63403820056657",
+        "position": 1,
+        "price": "65.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARFT330",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T11:09:22Z",
+    "descriptionHtml": "<p>Rosart Rose Glycerin Soap is a handmade cleansing bar enriched with organic Bulgarian rose water, rose oil, rosehip oil and dried Damascena rose petals.</p>\n<p>Its glycerin-rich formula gently cleanses while helping the skin retain moisture, leaving it feeling soft, smooth and comfortable.</p>\n<p>Suitable for sensitive skin, with a delicate rose fragrance that lingers after use.</p>\n<p>Net Weight: 90g</p>",
+    "handle": "rose-glycerin-soap-90g",
+    "id": "gid://shopify/Product/16432893689937",
+    "images": [
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseGlycerinSoapSet.png?v=1793790615",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rose-GoldGlycerinSoapPackaging.png?v=1793790615",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSoapinSunlitGarden_3f7fc8b5-0d9f-477b-88d5-ba98bfe3eaa7.png?v=1793838507",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenwithAmberDisc.png?v=1793790615",
+        "width": 1122
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419133218897",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseGlycerinSoapSet.png?v=1793790615",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419133284433",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rose-GoldGlycerinSoapPackaging.png?v=1793790615",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74432052363345",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSoapinSunlitGarden_3f7fc8b5-0d9f-477b-88d5-ba98bfe3eaa7.png?v=1793838507",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419133317201",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenwithAmberDisc.png?v=1793790615",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only. Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs. Keep out of reach of children.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Do not expose to direct light and heat.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, inspired by the natural heritage of the Bulgarian Rose Valley.\n\nHandmade with rose water, rose oil, rosehip oil and dried Damascena rose petals.\n\nFormulated with glycerin to help maintain skin moisture and softness."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Apply the soap foam to pre-moistened skin and leave for approximately one minute.\n\nRinse thoroughly with water."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Rosa Damascena Flower Water – Helps refresh and condition the skin.\n\nGlycerin – A moisture-attracting ingredient that helps maintain skin hydration.\n\nRosa Damascena Flower – Dried rose petals that add a natural botanical element to the soap.\n\nRosehip Oil – Helps nourish and soften the skin.\n\nRosa Damascena Flower Oil – A fragrant rose-derived ingredient.\n\nFull Ingredients (INCI)\n\nRosa Damascena Flower Water, Glycerin, Sodium Stearate, Aqua (Water), Propylene Glycol, Sodium Laurate, Sorbitol, Sodium Laureth Sulfate, Disodium Cocoyl Glutamate, Sodium Cocoyl Glutamate, Sodium Chloride, Sodium Lauryl Sulfate, Parfum (Fragrance), Rosa Damascena Flower, Rosa Canina Fruit Oil, Stearic Acid, Lauric Acid, Pentasodium Pentetate, Tetrasodium Etidronate, Rosa Damascena Flower Oil, CI 45100."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Glycerin Soap 90g, handmade with Bulgarian rose water, rose petals and glycerin to gently cleanse and soften skin. Made in Bulgaria."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Glycerin Soap 90g | Handmade Rose Soap"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19069377183825",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Bar Soap",
+    "publishedAt": "2026-11-04T11:52:04Z",
+    "seo": {
+      "description": "Discover Rosart Rose Glycerin Soap 90g, handmade with Bulgarian rose water, rose petals and glycerin to gently cleanse and soften skin. Made in Bulgaria.",
+      "title": "Rosart Rose Glycerin Soap 90g | Handmade Rose Soap"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "Bulgarian Rose",
+      "Face Care",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Rose Glycerin Soap 90g",
+    "updatedAt": "2026-11-05T00:28:43Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63403932844113",
+        "position": 1,
+        "price": "22.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RSARSGCSP90",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T11:11:43Z",
+    "descriptionHtml": "<p>Rosart Rose Oil Revitalizing Essence is a concentrated facial oil treatment presented in convenient, individually sealed capsules.</p>\n<p>Formulated with Damascena rose oil, Centifolia rose oil, rosehip oil, grape seed oil, apricot kernel oil and vitamin E, the essence helps nourish and soften the skin while supporting a smoother, more radiant-looking complexion.</p>\n<p>Its antioxidant-rich botanical oil blend helps condition the skin and improve the appearance of dryness and dullness, leaving a delicate natural rose aroma.</p>\n<p>Each pack contains 30 capsules (350mg each) and a mini pair of scissors for easy opening.</p>",
+    "handle": "rose-oil-revitalizing-essence-30-capsules",
+    "id": "gid://shopify/Product/16432900898897",
+    "images": [
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GlossyGoldenSoftgelCapsules.png?v=1793791564",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1_c9e99047-71cb-42e8-86ac-bfdbad6c3da8.png?v=1793880975",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_a7c30e84-49fb-48b6-a53d-de7ec63c08d5.png?v=1793880975",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartGoldSkincareJarinBloomingGarden.png?v=1793790918",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenSkincarePortrait.png?v=1793790886",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GoldenCapsuleCuttingGuide.png?v=1793791393",
+        "width": 1122
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419416039505",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GlossyGoldenSoftgelCapsules.png?v=1793791564",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74453893972049",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1_c9e99047-71cb-42e8-86ac-bfdbad6c3da8.png?v=1793880975",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74453894004817",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_a7c30e84-49fb-48b6-a53d-de7ec63c08d5.png?v=1793880975",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419241287761",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartGoldSkincareJarinBloomingGarden.png?v=1793790918",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419230474321",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenSkincarePortrait.png?v=1793790886",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419382222929",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GoldenCapsuleCuttingGuide.png?v=1793791393",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"May cause an allergic reaction. Discontinue use and consult a doctor if irritation occurs.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Do not exceed the recommended daily dose.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Keep out of reach of children.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"This product is not a medicinal product.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Storage: Store in a closed, dry place at 15°C–30°C, protected from moisture and direct sunlight.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria.\n\nManufactured by Bulgarian Pharma Group Ltd.\n\nFormulated with a blend of rose-derived oils, botanical seed oils and vitamin E.\n\nIndividually sealed capsules help provide convenient, measured application.\n\nIncludes mini scissors for opening the capsules."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "1. Thoroughly cleanse the face and neck.\n2. Carefully cut open one capsule using the included mini scissors.\n3. Gently squeeze out the concentrated essence.\n4. Massage evenly onto the face and neck until absorbed."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Apricot Kernel Oil – Helps nourish and soften the skin.\n\nGrape Seed Oil – A botanical oil with antioxidant properties that helps condition the skin.\n\nRosehip Oil – Helps maintain skin softness and moisture.\n\nDamascena Rose Oil & Centifolia Rose Oil – Fragrant rose-derived oils that contribute to the essence's botanical formula.\n\nTocopherol (Vitamin E) – An antioxidant ingredient that helps protect the oils from oxidation.\n\nComposition Per Capsule (350mg)\n\nPrunus Armeniaca (Apricot) Kernel Oil – 288.4mg\n\nVitis Vinifera (Grape) Seed Oil – 37.8mg\n\nRosa Canina Fruit Oil – 17.5mg\n\nRosa Damascena Flower Oil – 3.5mg\n\nTocopherol – 1.75mg\n\nRosa Centifolia Flower Oil – 1.05mg\n\nCapsule Shell\n\nGelatin, Glycerin."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Oil Revitalizing Essence with rose oils, rosehip, grape seed oil and vitamin E. 30 facial oil capsules, made in Bulgaria."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Oil Revitalizing Essence | 30 Capsules"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19069385834577",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Serum",
+    "publishedAt": "2026-11-04T11:52:05Z",
+    "seo": {
+      "description": "Discover Rosart Rose Oil Revitalizing Essence with rose oils, rosehip, grape seed oil and vitamin E. 30 facial oil capsules, made in Bulgaria.",
+      "title": "Rosart Rose Oil Revitalizing Essence | 30 Capsules"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "Bulgarian Rose",
+      "Face Care",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "Rose Oil Revitalizing Essence 30 Capsules",
+    "updatedAt": "2026-11-05T12:16:35Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63403957944401",
+        "position": 1,
+        "price": "125.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARRORE30",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  },
+  {
+    "createdAt": "2026-11-04T11:19:09Z",
+    "descriptionHtml": "<p>Rosart Rose Water is a 100% natural floral water obtained through the distillation of Bulgarian Rosa Damascena rose petals.</p>\n<p>This pure, single-ingredient rose water helps soothe, hydrate and refresh the skin, leaving it feeling soft, comfortable and revitalised.</p>\n<p>Ideal for daily use as a refreshing facial toner or a gentle addition to your skincare routine.</p>\n<p>Made in Bulgaria.</p>",
+    "handle": "rose-water-100ml",
+    "id": "gid://shopify/Product/16432922165329",
+    "images": [
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseRosartWaterSet.png?v=1793791195",
+        "width": 1122
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST.png?v=1793880512",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_2.png?v=1793880511",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1500,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1.png?v=1793880511",
+        "width": 1200
+      },
+      {
+        "altText": "",
+        "height": 1402,
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterinaSunlitRoseGarden.png?v=1793791608",
+        "width": 1122
+      }
+    ],
+    "media": [
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419325010001",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseRosartWaterSet.png?v=1793791195",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74453223735377",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST.png?v=1793880512",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74453223800913",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_2.png?v=1793880511",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74453223768145",
+        "image": {
+          "altText": "",
+          "height": 1500,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1.png?v=1793880511",
+          "width": 1200
+        },
+        "mediaContentType": "IMAGE"
+      },
+      {
+        "alt": "",
+        "id": "gid://shopify/MediaImage/74419427278929",
+        "image": {
+          "altText": "",
+          "height": 1402,
+          "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterinaSunlitRoseGarden.png?v=1793791608",
+          "width": 1122
+        },
+        "mediaContentType": "IMAGE"
+      }
+    ],
+    "metafields": [
+      {
+        "key": "caution",
+        "namespace": "custom",
+        "type": "rich_text_field",
+        "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"For external use only.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Avoid direct contact with eyes. If contact occurs, rinse thoroughly with water.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Discontinue use and consult a doctor if irritation occurs.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Keep out of reach of children.\"}]},{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Storage: Keep in a cool place.\"}]}]}"
+      },
+      {
+        "key": "certifications_brand_values",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Made in Bulgaria, inspired by the natural heritage of the Bulgarian Rose Valley.\n\n100% natural rose water obtained through the distillation of Rosa Damascena flowers.\n\nSingle-ingredient formula."
+      },
+      {
+        "key": "how_to_use",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Spray directly onto the face or skin, or apply an appropriate amount and gently pat until absorbed.\n\nAlternatively, apply using a moistened cotton pad or as a wet compress."
+      },
+      {
+        "key": "the_ingredients",
+        "namespace": "custom",
+        "type": "multi_line_text_field",
+        "value": "Rosa Damascena Flower Water – Pure Bulgarian rose water obtained through the distillation of Rosa Damascena flowers. Helps soothe, moisturise and refresh the skin.\n\nFull Ingredients (INCI)\n\nRosa Damascena Flower Water."
+      },
+      {
+        "key": "description_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Discover Rosart Rose Water 100ml, made from 100% natural Bulgarian Rosa Damascena flower water. Gently soothes, hydrates and refreshes skin."
+      },
+      {
+        "key": "title_tag",
+        "namespace": "global",
+        "type": "string",
+        "value": "Rosart Rose Water 100ml | 100% Natural Bulgarian Rose Water"
+      }
+    ],
+    "options": [
+      {
+        "id": "gid://shopify/ProductOption/19069410639953",
+        "name": "Title",
+        "position": 1,
+        "values": [
+          "Default Title"
+        ]
+      }
+    ],
+    "productType": "Facial Toner",
+    "publishedAt": "2026-11-04T11:52:05Z",
+    "seo": {
+      "description": "Discover Rosart Rose Water 100ml, made from 100% natural Bulgarian Rosa Damascena flower water. Gently soothes, hydrates and refreshes skin.",
+      "title": "Rosart Rose Water 100ml | 100% Natural Bulgarian Rose Water"
+    },
+    "status": "ACTIVE",
+    "tags": [
+      "Bulgarian Rose",
+      "Face Care",
+      "Rosart"
+    ],
+    "templateSuffix": "product-catalogue",
+    "title": "100% Natural Damascena Rose Water 100ml",
+    "updatedAt": "2026-11-05T12:08:47Z",
+    "variants": [
+      {
+        "barcode": null,
+        "compareAtPrice": null,
+        "id": "gid://shopify/ProductVariant/63404042223697",
+        "position": 1,
+        "price": "30.00",
+        "selectedOptions": [
+          {
+            "name": "Title",
+            "value": "Default Title"
+          }
+        ],
+        "sku": "RARWT100",
+        "taxable": true,
+        "title": "Default Title"
+      }
+    ],
+    "vendor": "Rosart"
+  }
+]

@@ -1,0 +1,107 @@
+[
+  {
+    "descriptionHtml": "",
+    "handle": "face-care",
+    "id": "gid://shopify/Collection/705866661969",
+    "image": {
+      "altText": "",
+      "height": 1500,
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/1.png?v=1793763730",
+      "width": 1200
+    },
+    "productHandles": [
+      "rose-glycerin-soap-90g",
+      "rose-cleansing-balm-80ml",
+      "rose-face-souffle-cream-3g",
+      "rose-face-souffle-cream-50ml",
+      "rose-face-cream-3g",
+      "rose-face-cream-50ml"
+    ],
+    "ruleSet": null,
+    "seo": {
+      "description": null,
+      "title": null
+    },
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "title": "Face Care",
+    "updatedAt": "2026-11-05T11:57:22Z"
+  },
+  {
+    "descriptionHtml": "",
+    "handle": "face-care-copy",
+    "id": "gid://shopify/Collection/705866760273",
+    "image": {
+      "altText": "",
+      "height": 1500,
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/2.png?v=1793763712",
+      "width": 1200
+    },
+    "productHandles": [
+      "100-natural-damascena-rose-water-10ml",
+      "rose-water-100ml",
+      "rose-facial-toner-330ml"
+    ],
+    "ruleSet": null,
+    "seo": {
+      "description": null,
+      "title": null
+    },
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "title": "Rose Water & Toners",
+    "updatedAt": "2026-11-05T12:09:21Z"
+  },
+  {
+    "descriptionHtml": "",
+    "handle": "frontpage",
+    "id": "gid://shopify/Collection/702017011793",
+    "image": null,
+    "productHandles": [
+      "bulgarian-rose-hydrosol-essence-mask-5pcs",
+      "rose-facial-toner-330ml",
+      "rosart-rose-face-mask-80ml",
+      "rose-cleansing-balm-80ml",
+      "rose-face-souffle-cream-3g",
+      "rose-face-souffle-cream-50ml",
+      "rose-face-cream-3g",
+      "rose-face-cream-50ml"
+    ],
+    "ruleSet": null,
+    "seo": {
+      "description": null,
+      "title": null
+    },
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "title": "Home page",
+    "updatedAt": "2026-11-05T12:23:04Z"
+  },
+  {
+    "descriptionHtml": "",
+    "handle": "rose-water-toners-copy",
+    "id": "gid://shopify/Collection/705866793041",
+    "image": {
+      "altText": "",
+      "height": 1500,
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/3_e77f03d4-0767-4f83-939c-86d99bde2338.png?v=1793763697",
+      "width": 1200
+    },
+    "productHandles": [
+      "pure-face-rosehip-oil-2ml",
+      "pure-face-rosehip-oil-20ml",
+      "rose-oil-revitalizing-essence-30-capsules",
+      "bulgarian-rose-hydrosol-essence-mask-5pcs",
+      "rosart-rose-face-mask-80ml"
+    ],
+    "ruleSet": null,
+    "seo": {
+      "description": null,
+      "title": null
+    },
+    "sortOrder": "MOST_RELEVANT",
+    "templateSuffix": null,
+    "title": "Masks & Treatments",
+    "updatedAt": "2026-11-05T12:23:04Z"
+  }
+]
