@@ -1,0 +1,12 @@
+# Shopify-licensed theme code pulled for reference only: never commit it, never copy it into the site.
+export/theme/
+
+# Interrupted image downloads
+export/images/*.part
+
+node_modules/
+dist/
+.astro/
+.env*
+__pycache__/
+.pytest_cache/

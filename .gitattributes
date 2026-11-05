@@ -1,0 +1,7 @@
+# Exported images are stored byte-for-byte: manifest.json records each file's sha256 and size,
+# so git must never convert line endings in them (an SVG would otherwise be rewritten).
+export/images/* -text
+export/images/manifest.json text eol=lf
+
+# The exporter writes LF; keep it LF on checkout so re-runs produce no diff.
+export/**/*.json text eol=lf

@@ -1,0 +1,14 @@
+/*
+ * IMPORTANT: The contents of this file are auto-generated.
+ */
+{
+  "type": "header",
+  "name": "t:names.header",
+  "sections": {
+    "announce": {"type": "header-announcements", "disabled": true,
+                 "settings": {"speed": 5},
+                 "blocks": {"a": {"type": "announcement", "settings": {"text": "Free shipping"}}},
+                 "block_order": ["a"]}
+  },
+  "order": ["announce"]
+}

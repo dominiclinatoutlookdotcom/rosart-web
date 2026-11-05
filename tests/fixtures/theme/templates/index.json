@@ -1,0 +1,61 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "story": {
+      "type": "section",
+      "name": "Our story",
+      "settings": {"color_scheme": "scheme-1", "padding-block-start": 40},
+      "blocks": {
+        "group_1": {
+          "type": "group",
+          "settings": {"gap": 20},
+          "block_order": ["text_2", "text_1"],
+          "blocks": {
+            "text_1": {"type": "text", "name": "t:names.text", "settings": {"text": "<p>Second</p>"}},
+            "text_2": {"type": "text", "name": "Intro", "settings": {"text": "<p>First</p>"}}
+          }
+        },
+        "button_1": {"type": "button", "disabled": true,
+                     "settings": {"label": "Shop now", "link": "shopify://collections/all"}}
+      },
+      "block_order": ["button_1", "group_1"]
+    },
+    "hero": {
+      "type": "hero",
+      "custom_css": [".x { color: red; }"],
+      "settings": {
+        "image_1": "shopify://shop_images/bg3.png",
+        "image_1_mobile": "shopify://shop_images/bg3_mobile.png",
+        "media_type_1": "image",
+        "image_ratio": "adapt",
+        "background_color": "#00000026",
+        "custom_button_background": "rgba(0,0,0,0)",
+        "text_color": "{{ settings.color_palette.background }}",
+        "font": "var(--font-body--family)",
+        "font_size": "1rem",
+        "padding-inline-start": 60,
+        "toggle_overlay": false,
+        "heading": "From Soil to Skin",
+        "placeholder": "",
+        "instagram_url": "https://www.instagram.com/rosart",
+        "collection_list": ["face-care", "face-care-copy"],
+        "custom_liquid": "<div class=\"partners\">Our partners</div>"
+      },
+      "blocks": {
+        "header-logo": {"type": "logo", "static": true, "settings": {"padding-block-end": 0}},
+        "text_a": {"type": "text", "settings": {"text": "<h1>{{ closest.product.title }}</h1>"}}
+      },
+      "block_order": ["text_a"]
+    },
+    "unused": {"type": "divider", "settings": {"thickness": 1}}
+  },
+  "order": ["hero", "story"]
+}
