@@ -1,0 +1,70 @@
+---
+import '@fontsource/libre-baskerville/latin-400.css';
+import '@fontsource/libre-baskerville/latin-400-italic.css';
+import '@fontsource/libre-baskerville/latin-700.css';
+import '@fontsource-variable/cormorant/wght.css';
+import '@fontsource-variable/inter/wght.css';
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { getSite } from '../data/queries.ts';
+import { imageFor } from '../data/images.ts';
+import { jsonLdScript } from '../lib/commerce.ts';
+import type { ImageRef } from '../lib/images.ts';
+import { siteConfig } from '../site.config.ts';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Image for social previews; defaults to the site logo. */
+  ogImage?: ImageRef | null;
+  ogType?: 'website' | 'product';
+  jsonLd?: Record<string, unknown>;
+  /** The 404 page: no canonical URL, not indexed. */
+  notFound?: boolean;
+}
+
+const { title, description, ogImage, ogType = 'website', jsonLd, notFound = false } = Astro.props;
+const site = await getSite();
+const fullTitle = /rosart/i.test(title) ? title : `${title} | Rosart`;
+const canonical = new URL(Astro.url.pathname, siteConfig.siteUrl).href;
+
+const socialImage = ogImage ?? site.logo;
+const ogMeta = socialImage ? await imageFor(socialImage.file) : null;
+const og = ogMeta ? await getImage({ src: ogMeta, width: Math.min(1200, ogMeta.width), format: 'jpg', quality: 80 }) : null;
+const ogImageUrl = og ? new URL(og.src, siteConfig.siteUrl).href : null;
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {notFound ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:site_name" content="Rosart" />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    {!notFound && <meta property="og:url" content={canonical} />}
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    {ogImageUrl && socialImage?.alt && <meta property="og:image:alt" content={socialImage.alt} />}
+    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    {jsonLd && <script type="application/ld+json" set:html={jsonLdScript(jsonLd)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header announcement={site.announcement} logo={site.logo} navigation={site.navigation} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer footerText={site.footerText} logo={site.logo} navigation={site.navigation} showCopyright={site.showCopyright} />
+  </body>
+</html>

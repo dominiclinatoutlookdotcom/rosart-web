@@ -1,0 +1,21 @@
+---
+import Sections from '../components/Sections.astro';
+import Base from '../layouts/Base.astro';
+import { getPage, getThemePage } from '../data/queries.ts';
+import { describeSections } from '../lib/theme.ts';
+
+const page = await getPage('our-collection');
+const model = await getThemePage('our-collection');
+const hasH1 = model.sections.some((s) => s.kind === 'page-title' && s.showTitle);
+const list = model.sections.find((s) => s.kind === 'collection-list');
+const collections = list?.kind === 'collection-list' ? list.collections : [];
+const description =
+  page.seo.description ||
+  describeSections(model.sections) ||
+  `${page.title} from Rosart: ${collections.map((c) => c.title).join(', ')}. Bulgarian rose skincare.`;
+---
+
+<Base title={page.seo.title} description={description} ogImage={collections[0]?.image ?? null}>
+  {!hasH1 && <h1 class="sr-only">{page.title}</h1>}
+  <Sections sections={model.sections} page={page} />
+</Base>

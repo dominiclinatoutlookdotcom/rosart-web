@@ -1,0 +1,42 @@
+---
+/** A full-width banner image that switches to the mobile crop on small screens (`<picture>`). */
+import { getImage } from 'astro:assets';
+import { imageFor, widthsFor } from '../data/images.ts';
+import type { ImageRef } from '../lib/images.ts';
+
+interface Props {
+  image: ImageRef;
+  mobileImage?: ImageRef | null;
+  priority?: boolean;
+  class?: string;
+}
+
+const { image, mobileImage, priority = false, class: className } = Astro.props;
+const MOBILE_QUERY = '(max-width: 749px)';
+
+async function variant(ref: ImageRef, widths: number[]) {
+  const meta = await imageFor(ref.file);
+  const ws = widthsFor(meta, widths);
+  const width = ws[ws.length - 1] ?? meta.width;
+  const result = await getImage({ src: meta, widths: ws, width, format: 'webp', quality: 75 });
+  return { result, width, height: Math.round((meta.height * width) / meta.width) };
+}
+
+const desktop = await variant(image, [750, 1100, 1500, 1920]);
+const mobile = mobileImage ? await variant(mobileImage, [480, 750, 1000]) : null;
+---
+
+<picture class={className}>
+  {mobile && <source media={MOBILE_QUERY} srcset={mobile.result.srcSet.attribute} sizes="100vw" type="image/webp" width={mobile.width} height={mobile.height} />}
+  <img
+    src={desktop.result.src}
+    srcset={desktop.result.srcSet.attribute}
+    sizes="100vw"
+    width={desktop.width}
+    height={desktop.height}
+    alt={image.alt}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+    decoding="async"
+  />
+</picture>

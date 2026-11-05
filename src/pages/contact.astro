@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import { getPage } from '../data/queries.ts';
+import { siteConfig } from '../site.config.ts';
+
+const page = await getPage('contact');
+---
+
+<Base title={page.seo.title} description={page.seo.description}>
+  <section class="page-heading contact">
+    <h1 class="display">{page.title}</h1>
+    <div class="prose" set:html={page.bodyHtml} />
+    <p class="contact-email">
+      <a class="button" href={`mailto:${siteConfig.enquiryEmail}`}>Email {siteConfig.enquiryEmail}</a>
+    </p>
+  </section>
+</Base>

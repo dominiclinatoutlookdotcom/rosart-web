@@ -1,0 +1,37 @@
+---
+/** A responsive, optimised image from export/images (WebP, srcset, width/height, lazy by default). */
+import { Image } from 'astro:assets';
+import { imageFor, widthsFor } from '../data/images.ts';
+import type { ImageRef } from '../lib/images.ts';
+
+interface Props {
+  image: ImageRef;
+  widths: number[];
+  sizes: string;
+  /** Above-the-fold images load eagerly with high priority. */
+  priority?: boolean;
+  class?: string;
+  alt?: string;
+}
+
+const { image, widths, sizes, priority = false, class: className, alt } = Astro.props;
+const meta = await imageFor(image.file);
+const ws = widthsFor(meta, widths);
+const width = ws[ws.length - 1] ?? meta.width;
+const height = Math.round((meta.height * width) / meta.width);
+---
+
+<Image
+  src={meta}
+  alt={alt ?? image.alt}
+  widths={ws}
+  width={width}
+  height={height}
+  sizes={sizes}
+  format="webp"
+  quality={78}
+  loading={priority ? 'eager' : 'lazy'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  decoding="async"
+  class={className}
+/>

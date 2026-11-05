@@ -1,0 +1,21 @@
+---
+import type { Product } from '../lib/catalog.ts';
+import ProductCard from './ProductCard.astro';
+
+interface Props {
+  products: Product[];
+  headingLevel?: 2 | 3;
+}
+
+const { products, headingLevel = 3 } = Astro.props;
+---
+
+<ul class="product-grid" role="list">
+  {
+    products.map((product) => (
+      <li>
+        <ProductCard product={product} headingLevel={headingLevel} />
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,16 @@
+---
+import Sections from '../components/Sections.astro';
+import Base from '../layouts/Base.astro';
+import { getFeaturedProducts, getSite, getThemePage } from '../data/queries.ts';
+import { describeSections } from '../lib/theme.ts';
+
+const home = await getThemePage('home');
+const site = await getSite();
+const featured = await getFeaturedProducts();
+const hero = home.sections.find((s) => s.kind === 'hero');
+const ogImage = hero?.kind === 'hero' ? hero.image : null;
+---
+
+<Base title={`Rosart | ${site.footerText || 'Bulgarian Rose Skincare'}`} description={describeSections(home.sections)} ogImage={ogImage}>
+  <Sections sections={home.sections} products={featured} />
+</Base>

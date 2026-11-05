@@ -1,0 +1,96 @@
+---
+import type { NavItem } from '../lib/theme.ts';
+import type { ImageRef } from '../lib/images.ts';
+import Img from './Img.astro';
+
+interface Props {
+  announcement: string;
+  logo: ImageRef | null;
+  navigation: NavItem[];
+}
+
+const { announcement, logo, navigation } = Astro.props;
+const path = Astro.url.pathname;
+const isCurrent = (url: string) => url === path;
+const isSection = (item: NavItem) => item.url !== '/' && (path.startsWith(item.url) || item.children.some((c) => path.startsWith(c.url)));
+---
+
+<header class="site-header">
+  {announcement && <p class="announcement">{announcement}</p>}
+  <div class="header-bar">
+    <a class="logo" href="/">
+      {logo ? <Img image={logo} alt="Rosart, home" widths={[160, 240, 320]} sizes="160px" priority /> : <span>Rosart</span>}
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="menu-icon" aria-hidden="true"></span>
+      <span class="menu-label">Menu</span>
+    </button>
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      <ul class="nav-list" role="list">
+        {
+          navigation.map((item, index) => (
+            <li class:list={['nav-item', item.children.length > 0 && 'has-children']}>
+              <a href={item.url} aria-current={isCurrent(item.url) ? 'page' : isSection(item) ? 'true' : undefined}>
+                {item.title}
+              </a>
+              {item.children.length > 0 && (
+                <>
+                  <button class="submenu-toggle" type="button" aria-expanded="false" aria-controls={`submenu-${index}`}>
+                    <span class="sr-only">{item.title}: show the collections</span>
+                    <span class="chevron" aria-hidden="true" />
+                  </button>
+                  <ul class="submenu" id={`submenu-${index}`} role="list">
+                    {item.children.map((child) => (
+                      <li>
+                        <a href={child.url} aria-current={isCurrent(child.url) ? 'page' : undefined}>
+                          {child.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Mobile menu and the desktop submenu are disclosure buttons: aria-expanded drives the CSS.
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const menuToggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = header?.querySelector<HTMLElement>('.site-nav');
+
+  function setExpanded(button: HTMLButtonElement, open: boolean): void {
+    button.setAttribute('aria-expanded', String(open));
+  }
+
+  menuToggle?.addEventListener('click', () => {
+    setExpanded(menuToggle, menuToggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  header?.querySelectorAll<HTMLButtonElement>('.submenu-toggle').forEach((button) => {
+    button.addEventListener('click', () => setExpanded(button, button.getAttribute('aria-expanded') !== 'true'));
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !header) return;
+    const open = header.querySelector<HTMLButtonElement>('.submenu-toggle[aria-expanded="true"]');
+    if (open) {
+      setExpanded(open, false);
+      open.focus();
+    } else if (menuToggle?.getAttribute('aria-expanded') === 'true') {
+      setExpanded(menuToggle, false);
+      menuToggle.focus();
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (nav && event.target instanceof Node && !nav.contains(event.target)) {
+      nav.querySelectorAll<HTMLButtonElement>('.submenu-toggle[aria-expanded="true"]').forEach((b) => setExpanded(b, false));
+    }
+  });
+</script>

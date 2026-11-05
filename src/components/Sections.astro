@@ -1,0 +1,129 @@
+---
+/**
+ * Renders a page's theme sections in the owner's order. Layout follows the content: a section
+ * with an image beside a text group is a split, several image groups are tiles, a background
+ * image makes a band, anything else is a centred text block.
+ */
+import type { Product } from '../lib/catalog.ts';
+import type { Block, Section } from '../lib/theme.ts';
+import Blocks from './Blocks.astro';
+import HeroPicture from './HeroPicture.astro';
+import Img from './Img.astro';
+import ProductGrid from './ProductGrid.astro';
+
+interface Props {
+  sections: Section[];
+  /** Title and body for a `page-title` section (the Shopify page). */
+  page?: { title: string; bodyHtml: string };
+  /** Products for `featured-products` and `product-list` sections. */
+  products?: Product[];
+}
+
+const { sections, page, products = [] } = Astro.props;
+
+function layout(blocks: readonly Block[]): 'split' | 'tiles' | 'stack' {
+  const groups = blocks.filter((b) => b.kind === 'group');
+  if (groups.length >= 2 && groups.length === blocks.length) return 'tiles';
+  if (blocks.length === 2 && blocks.some((b) => b.kind === 'image') && blocks.some((b) => b.kind === 'group')) return 'split';
+  return 'stack';
+}
+const onlyImages = (blocks: readonly Block[]) => blocks.every((b) => b.kind === 'image');
+const firstHero = sections.findIndex((s) => s.kind === 'hero');
+---
+
+{
+  sections.map((section, index) => {
+    switch (section.kind) {
+      case 'hero':
+        return (
+          <section class:list={['hero', section.blocks.length > 0 && 'hero-with-text']} id={section.id}>
+            {section.image && (
+              <HeroPicture class="hero-picture" image={section.image} mobileImage={section.mobileImage} priority={index === firstHero && index === 0} />
+            )}
+            {section.blocks.length > 0 && (
+              <div class="hero-text">
+                <Blocks blocks={section.blocks} />
+              </div>
+            )}
+          </section>
+        );
+      case 'content': {
+        const kind = layout(section.blocks);
+        return (
+          <section
+            class:list={[
+              'content-section',
+              `layout-${kind}`,
+              section.background ? 'has-background' : kind === 'stack' && !onlyImages(section.blocks) && 'tone-blush',
+            ]}
+            id={section.id}
+          >
+            {section.background && <Img class="section-background" image={section.background} alt="" widths={[750, 1200, 1920]} sizes="100vw" />}
+            <div class="section-inner">
+              <Blocks blocks={section.blocks} imageSizes={kind === 'tiles' ? '(min-width: 900px) 33vw, 100vw' : kind === 'split' ? '(min-width: 900px) 50vw, 100vw' : '(min-width: 1100px) 1000px, 100vw'} />
+            </div>
+          </section>
+        );
+      }
+      case 'page-title':
+        return page && (section.showTitle || (section.showBody && page.bodyHtml)) ? (
+          <section class="page-heading" id={section.id}>
+            {section.showTitle && <h1 class="display">{page.title}</h1>}
+            {section.showBody && page.bodyHtml && <div class="prose" set:html={page.bodyHtml} />}
+          </section>
+        ) : null;
+      case 'collection-list':
+        return (
+          <section class="content-section collection-list" id={section.id}>
+            <div class="section-inner">
+              <Blocks blocks={section.blocks} />
+              <ul class="collection-cards" role="list">
+                {section.collections.map((collection) => (
+                  <li>
+                    <a class="tile" href={collection.url}>
+                      {collection.image && <Img image={collection.image} alt="" widths={[400, 600, 800]} sizes="(min-width: 900px) 33vw, 100vw" />}
+                      <h3>{collection.title}</h3>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        );
+      case 'product-list':
+      case 'featured-products':
+        return products.length > 0 ? (
+          <section class="content-section products-section" id={section.id} aria-label={section.kind === 'featured-products' ? 'Featured products' : undefined}>
+            <div class="section-inner">
+              {section.kind === 'product-list' && <Blocks blocks={section.blocks} />}
+              <ProductGrid products={products} />
+            </div>
+          </section>
+        ) : null;
+      case 'connections':
+        return (
+          <section class="content-section connections" id={section.id} aria-labelledby={`${section.id}-heading`}>
+            <div class="section-inner">
+              <h2 id={`${section.id}-heading`}>{section.heading}</h2>
+              {section.intro && <p class="intro">{section.intro}</p>}
+              <ul class="connection-list" role="list">
+                {section.items.map((item) => (
+                  <li class="connection">
+                    <p class="eyebrow">{item.role}</p>
+                    <Img class="connection-logo" image={item.logo} widths={[300, 600]} sizes="285px" />
+                    <h3>{item.name}</h3>
+                    {item.link && (
+                      <a href={item.link.href} rel="noopener noreferrer" class="text-link">
+                        {item.link.label}
+                        <span class="sr-only"> ({item.name}, external site)</span>
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        );
+    }
+  })
+}

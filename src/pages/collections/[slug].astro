@@ -1,0 +1,43 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Img from '../../components/Img.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import Base from '../../layouts/Base.astro';
+import { getProductsByHandle, getShopCollections, getSite } from '../../data/queries.ts';
+import type { Collection } from '../../lib/catalog.ts';
+
+export const getStaticPaths = (async () => {
+  const collections = await getShopCollections();
+  return collections.map((collection) => ({ params: { slug: collection.slug }, props: { collection } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  collection: Collection;
+}
+
+const { collection } = Astro.props;
+const site = await getSite();
+const products = await getProductsByHandle(collection.productHandles);
+---
+
+<Base title={collection.seo.title} description={collection.seo.description} ogImage={collection.image}>
+  <section class="collection-band has-background">
+    {site.collectionBand && <Img class="section-background" image={site.collectionBand} alt="" widths={[750, 1200, 1920]} sizes="100vw" priority />}
+    <div class="section-inner">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol role="list">
+          <li><a href="/">Home</a></li>
+          <li><a href="/our-collection/">Our Collection</a></li>
+          <li><span aria-current="page">{collection.title}</span></li>
+        </ol>
+      </nav>
+      <h1 class="display">{collection.title}</h1>
+      {collection.descriptionHtml && <div class="prose" set:html={collection.descriptionHtml} />}
+    </div>
+  </section>
+  <section class="content-section products-section" aria-label={`${collection.title} products`}>
+    <div class="section-inner">
+      <ProductGrid products={products} headingLevel={2} />
+    </div>
+  </section>
+</Base>

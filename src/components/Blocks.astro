@@ -1,0 +1,49 @@
+---
+/** Renders theme blocks (headings, text, images, buttons, groups). Groups render recursively. */
+import type { Block } from '../lib/theme.ts';
+import Img from './Img.astro';
+
+interface Props {
+  blocks: Block[];
+  /** `sizes` for images in these blocks. */
+  imageSizes?: string;
+}
+
+const { blocks, imageSizes = '(min-width: 900px) 50vw, 100vw' } = Astro.props;
+const headingTag = (level: number) => `h${Math.min(6, Math.max(1, level))}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+---
+
+{
+  blocks.map((block) => {
+    switch (block.kind) {
+      case 'heading': {
+        const Tag = headingTag(block.level);
+        return <Tag class:list={['block-heading', block.level === 1 && 'display']}>{block.text}</Tag>;
+      }
+      case 'eyebrow':
+        return <p class="eyebrow">{block.text}</p>;
+      case 'richtext':
+        return <div class="prose" set:html={block.html} />;
+      case 'image':
+        return <Img class="block-image" image={block.image} widths={[480, 800, 1200]} sizes={imageSizes} />;
+      case 'button':
+        return (
+          <p class="block-actions">
+            <a class="button" href={block.href}>
+              {block.label}
+            </a>
+          </p>
+        );
+      case 'group':
+        return block.href ? (
+          <a class="group tile" href={block.href}>
+            <Astro.self blocks={block.blocks} imageSizes={imageSizes} />
+          </a>
+        ) : (
+          <div class="group">
+            <Astro.self blocks={block.blocks} imageSizes={imageSizes} />
+          </div>
+        );
+    }
+  })
+}

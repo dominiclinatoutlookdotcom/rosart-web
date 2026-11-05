@@ -1,0 +1,119 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getImage } from 'astro:assets';
+import Img from '../../components/Img.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import Base from '../../layouts/Base.astro';
+import { imageFor } from '../../data/images.ts';
+import { getProducts, getProductsByHandle, getShopCollections, getSite } from '../../data/queries.ts';
+import type { Product } from '../../lib/catalog.ts';
+import { enquiryMailto, formatPrice, productJsonLd } from '../../lib/commerce.ts';
+import { siteConfig } from '../../site.config.ts';
+
+export const getStaticPaths = (async () => {
+  const products = await getProducts();
+  return products.map((product) => ({ params: { handle: product.handle }, props: { product } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const site = await getSite();
+const [main, ...rest] = product.images;
+
+// "You may also like": the other products of the same collection.
+const collection = (await getShopCollections()).find((c) => c.url === product.collection?.url);
+const related = collection
+  ? (await getProductsByHandle(collection.productHandles.filter((h) => h !== product.handle))).slice(0, 4)
+  : [];
+
+const jsonImages = await Promise.all(
+  product.images.map(async (image) => {
+    const meta = await imageFor(image.file);
+    const result = await getImage({ src: meta, width: Math.min(1200, meta.width), format: 'webp', quality: 78 });
+    return new URL(result.src, siteConfig.siteUrl).href;
+  }),
+);
+const jsonLd = productJsonLd({
+  name: product.title,
+  description: product.seo.description,
+  url: new URL(product.url, siteConfig.siteUrl).href,
+  images: jsonImages,
+  sku: product.sku,
+  category: product.productType,
+  brand: product.vendor || 'Rosart',
+});
+---
+
+<Base title={product.seo.title} description={product.seo.description} ogImage={main} ogType="product" jsonLd={jsonLd}>
+  <div class="product-page">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol role="list">
+        <li><a href="/">Home</a></li>
+        {product.collection && <li><a href={product.collection.url}>{product.collection.title}</a></li>}
+        <li><span aria-current="page">{product.title}</span></li>
+      </ol>
+    </nav>
+
+    <div class="product-layout">
+      <div class="product-gallery">
+        {main && <Img class="gallery-main" image={main} widths={[480, 720, 960, 1200]} sizes="(min-width: 900px) 50vw, 100vw" priority />}
+        {
+          rest.length > 0 && (
+            <ul class="gallery-more" role="list">
+              {rest.map((image, index) => (
+                <li>
+                  <Img
+                    image={image}
+                    alt={`${image.alt}, image ${index + 2} of ${product.images.length}`}
+                    widths={[360, 540, 720]}
+                    sizes="(min-width: 900px) 25vw, 50vw"
+                  />
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+
+      <div class="product-info">
+        {product.productType && <p class="eyebrow">{product.productType}</p>}
+        <h1 class="display product-title">{product.title}</h1>
+        {siteConfig.showPrices && <p class="price">{formatPrice(product.price)}</p>}
+        <div class="prose" set:html={product.descriptionHtml} />
+        <p class="block-actions">
+          <a class="button" href={enquiryMailto(siteConfig.enquiryEmail, product.title)}>Enquire</a>
+        </p>
+        <p class="enquire-note">Enquiries go to <a class="text-link" href={`mailto:${siteConfig.enquiryEmail}`}>{siteConfig.enquiryEmail}</a>.</p>
+
+        {
+          product.details.length > 0 && (
+            <div class="product-details">
+              {product.details.map((detail) => (
+                <details>
+                  <summary>
+                    <h2>{detail.heading}</h2>
+                  </summary>
+                  <div class="prose" set:html={detail.html} />
+                </details>
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+
+  {
+    related.length > 0 && (
+      <section class="content-section products-section" aria-labelledby="related-heading">
+        <div class="section-inner">
+          <h2 id="related-heading">{site.recommendationsHeading ?? 'You may also like'}</h2>
+          <ProductGrid products={related} />
+        </div>
+      </section>
+    )
+  }
+</Base>
