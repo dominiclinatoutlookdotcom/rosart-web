@@ -6,7 +6,7 @@ PUBLISH_FLAGS ?=
 # Astro's anonymous usage telemetry is an outbound call on every build; keep builds offline.
 export ASTRO_TELEMETRY_DISABLED := 1
 
-.PHONY: theme-pull export export-json test site check dev publish-config publish publish-only publish-dryrun
+.PHONY: theme-pull export export-json test site check dev publish-config publish publish-only publish-dryrun seo-apply-dryrun seo-apply
 
 ## Refresh export/theme/ from the live theme (read-only `shopify theme pull`)
 theme-pull:
@@ -60,3 +60,13 @@ publish-dryrun: publish-config
 	$(MAKE) export
 	$(MAKE) check
 	$(PYTHON) tools/publish.py --dry-run
+
+## SEO plan dry run: hash, seo_check, scope and drift checks (reads the store, writes nothing).
+## Pass APPROVED=<sha256> to also check the hash the owner approved.
+seo-apply-dryrun:
+	$(PYTHON) tools/seo_apply.py --plan seo/plan.json $(if $(APPROVED),--approved $(APPROVED))
+
+## Apply the approved SEO plan in batches with a rollback log: make seo-apply APPROVED=<sha256 of seo/plan.json>
+seo-apply:
+	@test -n "$(APPROVED)" || { echo "make seo-apply needs APPROVED=<sha256 of seo/plan.json>"; exit 1; }
+	$(PYTHON) tools/seo_apply.py --plan seo/plan.json --approved $(APPROVED) --write

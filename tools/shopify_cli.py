@@ -1,6 +1,9 @@
-"""Read-only access to the Shopify Admin GraphQL API through `shopify store execute`.
+"""Access to the Shopify Admin GraphQL API through `shopify store execute`.
 
-The export never talks to Shopify directly: it shells out to the authenticated Shopify CLI.
+The export never talks to Shopify directly: it shells out to the authenticated Shopify CLI, and
+its `ShopifyCliRunner` refuses mutations. `ShopifyCliFileRunner` is the file-only transport the
+owner-approved SEO apply step (tools/seo_apply.py) uses; it allows mutations only when opened
+with ``allow_mutations=True``.
 Everything here is built around a *runner*, a callable ``(query, variables) -> data dict``, so
 tests can inject a fake and never touch the network.
 """
@@ -155,3 +158,89 @@ class ShopifyCliRunner:
                     f"shopify store execute exited {completed.returncode}: {completed.stderr.strip()[-500:]}"
                 ) from exc
             raise
+
+
+def _is_mutation(query: str) -> bool:
+    try:
+        assert_read_only(query)
+    except ShopifyCliError:
+        return True
+    return False
+
+
+def _unwrap(result: dict) -> dict:
+    """Accept both the bare data document and a GraphQL ``{"data", "errors"}`` envelope."""
+    if "data" in result and set(result) <= {"data", "errors", "extensions"}:
+        if result.get("errors"):
+            messages = "; ".join(str(e.get("message", e)) if isinstance(e, dict) else str(e)
+                                 for e in result["errors"])
+            raise ShopifyCliError(f"GraphQL errors: {messages}")
+        if not isinstance(result["data"], dict):
+            raise ShopifyCliError("the GraphQL response has no data")
+        return result["data"]
+    return result
+
+
+class ShopifyCliFileRunner:
+    """Runs GraphQL through `shopify store execute` with files only, never a stdout pipe.
+
+    Windows encoding rule (a pipe once corrupted a live page): variables go in a file written as
+    ASCII-escaped JSON, the result comes back through ``--output-file`` and is decoded as strict
+    UTF-8, and stdout/stderr go to files that are read only to explain a failure. The CLI runs
+    from a fresh temporary directory so it never picks up a project config. Mutations are refused
+    locally unless ``allow_mutations`` is set, and only a mutation gets ``--allow-mutations``.
+    """
+
+    def __init__(self, store: str, executable: Optional[str] = None, timeout: int = 180,
+                 allow_mutations: bool = False, api_version: Optional[str] = None,
+                 run_process: Callable[..., Any] = subprocess.run) -> None:
+        self.store = store
+        self.executable = executable or shutil.which("shopify")
+        if not self.executable:
+            raise ShopifyCliError("the `shopify` CLI is not on PATH")
+        self.timeout = timeout
+        self.allow_mutations = allow_mutations
+        self.api_version = api_version
+        self.run_process = run_process
+
+    def __call__(self, query: str, variables: dict) -> dict:
+        mutation = _is_mutation(query)
+        if mutation and not self.allow_mutations:
+            raise ShopifyCliError("refusing to run a mutation: this runner was not opened for writes")
+        with tempfile.TemporaryDirectory(prefix="rosart-cli-") as tmp:
+            tmp_path = Path(tmp)
+            query_file = tmp_path / "query.graphql"
+            variables_file = tmp_path / "variables.json"
+            output_file = tmp_path / "result.json"
+            query_file.write_bytes(query.encode("utf-8"))
+            variables_file.write_bytes(json.dumps(variables, ensure_ascii=True).encode("ascii"))
+            command = [self.executable, "store", "execute", "--store", self.store,
+                       "--no-input", "--no-color", "--json",
+                       "--query-file", str(query_file), "--variable-file", str(variables_file),
+                       "--output-file", str(output_file)]
+            if self.api_version:
+                command += ["--version", self.api_version]
+            if mutation:
+                command.append("--allow-mutations")
+            with (tmp_path / "stdout.txt").open("wb") as stdout, (tmp_path / "stderr.txt").open("wb") as stderr:
+                try:
+                    completed = self.run_process(command, cwd=tmp, stdout=stdout, stderr=stderr,
+                                                 stdin=subprocess.DEVNULL, timeout=self.timeout)
+                except subprocess.TimeoutExpired as exc:
+                    raise ShopifyCliError(f"shopify store execute timed out after {self.timeout}s") from exc
+            console = ((tmp_path / "stdout.txt").read_bytes().decode("utf-8", errors="replace")
+                       + (tmp_path / "stderr.txt").read_bytes().decode("utf-8", errors="replace"))
+            raw = output_file.read_bytes() if output_file.exists() else b""
+            if completed.returncode != 0 or not raw.strip():
+                try:
+                    parse_cli_output(console)
+                except ShopifyCliError as exc:
+                    if "no result document" not in str(exc):
+                        raise
+                raise ShopifyCliError(f"shopify store execute exited {completed.returncode} "
+                                      f"without a result: {console.strip()[-500:]}")
+        try:
+            text = raw.decode("utf-8-sig")
+        except UnicodeDecodeError as exc:
+            raise ShopifyCliError(f"the CLI output file is not valid UTF-8 ({exc}); refusing to guess") from exc
+        return _unwrap(parse_cli_output(text))

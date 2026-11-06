@@ -303,6 +303,46 @@ read-only store commands on the store. The tool only runs GraphQL queries throug
 `shopify store execute` and refuses mutations. It is safe to re-run: images already on disk with
 the recorded sha256 and size are not fetched again.
 
+## SEO plan
+
+The SEO and AI-search fixes for the Shopify store go through one owner-approved file, following
+the listing checklist's "Writing in bulk" rules (dry run, approval by id, batches, rollback log,
+read-back).
+
+```sh
+python tools/seo_plan.py                 # 1. plan: writes seo/plan.json and seo/plan.md (local files only)
+python tools/seo_check.py seo/plan.json  # 2. check: limits, uniqueness, facts against sources
+sha256sum seo/plan.json                  # 3. approve: the owner reviews seo/plan.md and approves this hash
+make seo-apply-dryrun                    # 4. dry run: changes per field, scope and drift checks; writes nothing
+make seo-apply APPROVED=<sha256>         # 5. apply: batches of 10, rollback log, read-back
+python tools/seo_apply.py --rollback seo/apply-log-<UTC>.jsonl          # 6. rollback dry run
+python tools/seo_apply.py --rollback seo/apply-log-<UTC>.jsonl --write  #    rollback
+```
+
+- **Approve by hash.** `seo_apply.py` refuses unless the file's sha256 equals `--approved` exactly,
+  the plan names `rosart-mhfmyuxq.myshopify.com`, and `seo_check` passes. Regenerating or editing
+  the plan changes the hash and needs a new approval. The dry run prints the hash too.
+- **Scopes.** It reads `currentAppInstallation { accessScopes }` first. A write run refuses when
+  the CLI login lacks a scope the plan needs (`write_products`, `write_files`, `write_content`)
+  and names the missing ones. Re-run `shopify store auth` with those scopes.
+- **Drift.** Each batch re-reads its targets before writing. A field whose live value is not the
+  plan's `before` (someone edited it since) is skipped and reported, never overwritten. A field
+  already at `after` is skipped as done, so a stopped run can be re-run as is.
+- **Writes.** It uses `productUpdate`, `collectionUpdate`, `pageUpdate` (the `global.title_tag` and
+  `description_tag` metafields), and one `fileUpdate` per batch for alt text, with 2 s between
+  batches. Homepage (`manual`) entries are only listed: set them in the admin. A null payload or
+  `userErrors` counts as a failure, because Shopify can refuse silently.
+- **Rollback log.** Before each write, the exact live value is appended and synced to
+  `seo/apply-log-<UTC>.jsonl`. `--rollback` restores those values, with the same drift check
+  against the value the apply wrote. It writes its own log as well.
+- **Read-back.** After each batch it re-reads every written field and compares the whole value
+  with `after`. The run stops after the first batch with a failure or mismatch. Exit status 0
+  means clean; 1 means refused, drift, a failure or a mismatch (see the report).
+- **Encoding (Windows).** The CLI is never read through a stdout pipe. Variables go in an
+  ASCII-escaped JSON file, results come from `--output-file` decoded as strict UTF-8, and the CLI
+  runs from a temporary folder (`ShopifyCliFileRunner` in `tools/shopify_cli.py`).
+  `--allow-mutations` is passed only on a `--write` run, and only with a mutation.
+
 ## What lands where
 
 | Path | Content |
