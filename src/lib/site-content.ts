@@ -10,6 +10,7 @@ import { collectImageFiles } from './used-images.ts';
 import type { RawCollection, RawPage, RawProduct, RawThemeContent } from './shopify-types.ts';
 import {
   firstBackground,
+  productPurchaseNote,
   recommendationsHeading,
   siteChrome,
   toNavigation,
@@ -57,6 +58,8 @@ export interface SiteSettings extends SiteChrome {
   featuredProductHandles: string[];
   collectionBand: ImageRef | null;
   recommendationsHeading: string | null;
+  /** The theme's note under the product buy button ("You'll be redirected to ORIZEN..."). */
+  purchaseNote: string | null;
 }
 
 export function loadSiteSettings(): SiteSettings[] {
@@ -73,6 +76,7 @@ export function loadSiteSettings(): SiteSettings[] {
       featuredProductHandles: featuredProductHandles(rawExport.collections),
       collectionBand: collectionTemplate ? firstBackground(collectionTemplate, siteContext.images) : null,
       recommendationsHeading: productTemplate ? recommendationsHeading(productTemplate) : null,
+      purchaseNote: productTemplate ? productPurchaseNote(productTemplate) : null,
     },
   ];
 }

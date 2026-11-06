@@ -18,6 +18,7 @@ function goodSite(): void {
   put('index.html', page('<a href="/products/a/">A</a><img src="/_astro/a.webp" srcset="/_astro/a.webp 400w, /_astro/b.webp 800w">'));
   put('products/a/index.html', page('<link rel="canonical" href="https://rosart.com.au/products/a/"><a href="/">home</a>'));
   put('404.html', page('<a href="/">home</a>'));
+  put('contact/index.html', page('<a href="mailto:info@rosart.com.au?subject=Hi">info@rosart.com.au</a>'));
   put('_astro/a.webp', Buffer.alloc(1000));
   put('_astro/b.webp', Buffer.alloc(1000));
   put('_astro/site.css', '@font-face{src:url(/_astro/font.woff2)}');
@@ -29,6 +30,7 @@ const options = (overrides = {}) => ({
   siteUrl: 'https://rosart.com.au',
   forbiddenHashes: new Set<string>(),
   maxImageBytes: 600 * 1024,
+  allowedEmails: ['info@rosart.com.au'],
   ...overrides,
 });
 
@@ -102,5 +104,34 @@ describe('checkDist', () => {
     put('_astro/huge.png', Buffer.alloc(700 * 1024));
     put('_astro/big.js', Buffer.alloc(700 * 1024));
     expect(checkDist(dist, options())).toEqual(['_astro/huge.png: image is 700 KB, over the 600 KB limit']);
+  });
+
+  it('reports any email address other than the enquiry email, naming the page and the address', () => {
+    goodSite();
+    put('contact/index.html', page('<p>Write to info@deniva.com.au or <a href="mailto:info@rosart.com.au">us</a></p>'));
+    put('products/a/index.html', page('<a href="/">home</a><a href="mailto:sales%40example.com">x</a> hello&#64;example.org'));
+    expect(checkDist(dist, options()).sort()).toEqual([
+      'contact/index.html (page /contact/): email address info@deniva.com.au is not the site email info@rosart.com.au',
+      'products/a/index.html (page /products/a/): email address hello@example.org is not the site email info@rosart.com.au',
+      'products/a/index.html (page /products/a/): email address sales@example.com is not the site email info@rosart.com.au',
+    ]);
+  });
+
+  it('reports an address once per file and checks every text file, not only pages', () => {
+    goodSite();
+    put('index.html', page('<a href="/products/a/">A</a> x@other.com.au and again X@Other.com.au'));
+    put('robots.txt', 'Contact: admin@other.com.au');
+    expect(checkDist(dist, options()).sort()).toEqual([
+      'index.html (page /): email address x@other.com.au is not the site email info@rosart.com.au',
+      'robots.txt: email address admin@other.com.au is not the site email info@rosart.com.au',
+    ]);
+  });
+
+  it('accepts the enquiry email in any case and ignores CSS at-rules and @2x file names', () => {
+    goodSite();
+    put('index.html', page('<a href="/products/a/">A</a> INFO@Rosart.com.au <img src="/_astro/rose@2x.webp" alt="">'));
+    put('_astro/site.css', '@font-face{src:url(/_astro/font.woff2)}@media (min-width:1px){a{color:red}}');
+    put('_astro/rose@2x.webp', Buffer.alloc(10));
+    expect(checkDist(dist, options())).toEqual([]);
   });
 });

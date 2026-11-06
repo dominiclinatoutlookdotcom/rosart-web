@@ -142,6 +142,18 @@ def test_products_include_every_variant_page_media_and_metafields(exported):
     assert product["seo"]["title"] == "Cream SEO"
 
 
+def test_a_newly_defined_metafield_such_as_orizen_url_is_exported_without_code_changes(tmp_path):
+    """The owner adds `custom.orizen_url` (type url) in Shopify; the export takes every metafield."""
+    orizen = {"namespace": "custom", "key": "orizen_url", "type": "url",
+              "value": "https://orizen.com.au/products/rose-face-cream"}
+    shopify = FakeShopify()
+    product = dict(PRODUCT, metafields=connection([*PRODUCT["metafields"]["nodes"], orizen]))
+    shopify.paged["Products"] = ("products", {None: ([product], None)})
+    run_export(shopify, FakeFetch(), lambda s: None, tmp_path / "export", FIXTURE_THEME, download=False)
+    exported = read(tmp_path / "export" / "shopify" / "products.json")[0]
+    assert orizen in exported["metafields"]
+
+
 def test_collections_list_product_handles_in_order(exported):
     collection = read(exported[0] / "shopify" / "collections.json")[0]
     assert collection["productHandles"] == ["rose-face-cream"]

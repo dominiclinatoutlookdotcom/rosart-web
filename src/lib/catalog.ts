@@ -2,6 +2,7 @@
  * Reshapes the exported products, collections and pages into what the site renders. These run
  * as content layer parsers (`src/content.config.ts`); the export files themselves are never edited.
  */
+import { orizenUrl } from './commerce.ts';
 import type { SiteContext } from './export-data.ts';
 import { htmlToText, sanitizeHtml } from './html.ts';
 import type { ImageRef } from './images.ts';
@@ -36,6 +37,8 @@ export interface Product {
   details: ProductDetail[];
   /** The collection shown in the breadcrumb (never the homepage list). */
   collection: { title: string; url: string } | null;
+  /** The "Shop in Orizen" link: metafield `custom.orizen_url` if valid, else the ORIZEN search. */
+  orizenUrl: string;
 }
 
 export interface Collection {
@@ -109,6 +112,7 @@ export function toProducts(raw: readonly RawProduct[], ctx: SiteContext): Produc
         images: p.images.map((image) => ctx.images.fromUrl(image.url, image.altText, p.title)),
         details,
         collection: primaryCollection(p.handle, ctx),
+        orizenUrl: orizenUrl(metafield(p, 'custom', 'orizen_url')?.value, p.title),
       };
     });
 }

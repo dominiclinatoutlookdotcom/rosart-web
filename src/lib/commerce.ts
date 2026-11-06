@@ -7,6 +7,28 @@ export function enquiryMailto(email: string, productName: string): string {
   return `mailto:${email}?subject=${encodeURIComponent(`Enquiry: ${productName}`)}`;
 }
 
+const ORIZEN_HOSTS = new Set(['orizen.com.au', 'www.orizen.com.au']);
+
+/**
+ * Where a product's "Shop in Orizen" button goes: the product's `custom.orizen_url` metafield when
+ * it is an https URL on orizen.com.au (or www.), otherwise the ORIZEN search for the product title.
+ * The link is used as given: no tracking parameters are added.
+ */
+export function orizenUrl(metafieldValue: string | null | undefined, productTitle: string): string {
+  const candidate = metafieldValue?.trim();
+  if (candidate) {
+    try {
+      const url = new URL(candidate);
+      if (url.protocol === 'https:' && ORIZEN_HOSTS.has(url.hostname) && !url.port && !url.username && !url.password) {
+        return candidate;
+      }
+    } catch {
+      // Not a URL: fall back to the search.
+    }
+  }
+  return `https://orizen.com.au/search?q=${encodeURIComponent(productTitle)}`;
+}
+
 export function formatPrice(price: { amount: string; currencyCode: string }): string {
   return new Intl.NumberFormat('en-AU', { style: 'currency', currency: price.currencyCode }).format(Number(price.amount));
 }

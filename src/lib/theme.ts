@@ -299,6 +299,31 @@ export function recommendationsHeading(template: { sections: readonly RawThemeSe
   return null;
 }
 
+/**
+ * The note under the product template's buy button (the "SHOP NOW" button that sent shoppers to
+ * ORIZEN): the text of the enabled text block right after the first enabled button, if any.
+ */
+export function productPurchaseNote(template: { sections: readonly RawThemeSection[] }): string | null {
+  const search = (blocks: readonly RawThemeBlock[]): string | null => {
+    const enabled = enabledBlocks(blocks);
+    const button = enabled.findIndex((block) => block.type === 'button');
+    if (button !== -1) {
+      const next = enabled[button + 1];
+      return next?.type === 'text' ? htmlToText(stringSetting(next.settings, 'text')) || null : null;
+    }
+    for (const block of enabled) {
+      const found = search(block.blocks);
+      if (found !== null) return found;
+    }
+    return null;
+  };
+  for (const section of template.sections.filter((s) => !s.disabled && s.type === 'product-information')) {
+    const found = search(section.blocks);
+    if (found !== null) return found;
+  }
+  return null;
+}
+
 export interface SiteChrome {
   announcement: string;
   footerText: string;

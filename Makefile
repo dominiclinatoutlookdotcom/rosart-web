@@ -1,20 +1,26 @@
 PYTHON ?= python
 NPM ?= npm
+# Extra flags for tools/publish.py, e.g. `make publish PUBLISH_FLAGS="--yes --wait"`.
+PUBLISH_FLAGS ?=
 
 # Astro's anonymous usage telemetry is an outbound call on every build; keep builds offline.
 export ASTRO_TELEMETRY_DISABLED := 1
 
-.PHONY: export export-json test site check dev
+.PHONY: theme-pull export export-json test site check dev publish-config publish publish-only publish-dryrun
 
-## Export store content (JSON), theme copy and every referenced image into export/
-export:
+## Refresh export/theme/ from the live theme (read-only `shopify theme pull`)
+theme-pull:
+	$(PYTHON) tools/pull_theme.py
+
+## Pull the theme, then export store content (JSON), theme copy and every referenced image into export/
+export: theme-pull
 	$(PYTHON) tools/export_shopify.py
 
 ## Same, but write the JSON only and download no images
-export-json:
+export-json: theme-pull
 	$(PYTHON) tools/export_shopify.py --skip-images
 
-## Run the export tool's tests (no network, no Shopify)
+## Run the Python tests: export, theme pull and publish tools (no network, no Shopify, no AWS)
 test:
 	$(PYTHON) -m pytest -q tests
 
@@ -33,3 +39,24 @@ check:
 ## Local development server with live reload (http://localhost:4321/)
 dev:
 	$(NPM) run dev
+
+## Refuse early while deploy.config.json still holds placeholders (calls nothing)
+publish-config:
+	$(PYTHON) tools/publish.py --check-config
+
+## Export from Shopify, check, dry-run, confirm, then sync dist/ to S3 and invalidate CloudFront
+publish: publish-config
+	$(MAKE) export
+	$(MAKE) check
+	$(PYTHON) tools/publish.py $(PUBLISH_FLAGS)
+
+## Same without the export: check the current export/ and publish it
+publish-only: publish-config
+	$(MAKE) check
+	$(PYTHON) tools/publish.py $(PUBLISH_FLAGS)
+
+## Export, check and show the dry run; never uploads or invalidates
+publish-dryrun: publish-config
+	$(MAKE) export
+	$(MAKE) check
+	$(PYTHON) tools/publish.py --dry-run

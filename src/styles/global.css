@@ -916,6 +916,17 @@ html:not(.js) .menu-toggle {
   margin-inline: 0;
 }
 
+.product-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.purchase-note {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+}
+
 .enquire-note {
   margin-top: 0.8rem;
   color: var(--color-muted);

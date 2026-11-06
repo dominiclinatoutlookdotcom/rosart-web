@@ -58,6 +58,25 @@ describe('toProducts', () => {
     expect(bySlug('rosart-rose-face-mask-80ml').collection?.url).toBe('/collections/masks-treatments/');
   });
 
+  it('links every product to the ORIZEN search for its title while no orizen_url metafield is set', () => {
+    expect(bySlug('rose-face-cream-50ml').orizenUrl).toBe(
+      `https://orizen.com.au/search?q=${encodeURIComponent(bySlug('rose-face-cream-50ml').title)}`,
+    );
+  });
+
+  it('links to the custom.orizen_url metafield when it is set and on orizen.com.au', () => {
+    const raw = rawExport.products.find((p) => p.handle === 'rose-face-cream-50ml');
+    if (!raw) throw new Error('fixture product missing');
+    const withUrl = (value: string) => ({
+      ...raw,
+      metafields: [...raw.metafields, { namespace: 'custom', key: 'orizen_url', type: 'url', value }],
+    });
+    const [linked] = toProducts([withUrl('https://orizen.com.au/products/rose-face-cream-50ml')], ctx);
+    expect(linked?.orizenUrl).toBe('https://orizen.com.au/products/rose-face-cream-50ml');
+    const [elsewhere] = toProducts([withUrl('https://example.com/rose-face-cream')], ctx);
+    expect(elsewhere?.orizenUrl).toMatch(/^https:\/\/orizen\.com\.au\/search\?q=/);
+  });
+
   it('keeps descriptions as clean HTML with no store references', () => {
     for (const product of products) {
       expect(product.descriptionHtml).not.toMatch(/style=|cdn\.shopify|myshopify/);

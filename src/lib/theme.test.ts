@@ -5,6 +5,7 @@ import type { RawThemeSection } from './shopify-types.ts';
 import {
   describeSections,
   firstBackground,
+  productPurchaseNote,
   recommendationsHeading,
   siteChrome,
   toNavigation,
@@ -241,6 +242,28 @@ describe('template extras', () => {
   it('reads the product recommendations heading', () => {
     expect(recommendationsHeading(template('product.product-catalogue'))).toBe('You may also like');
     expect(recommendationsHeading(template('page'))).toBeNull();
+  });
+
+  it('reads the purchase note: the text block after the product template button, curly apostrophe intact', () => {
+    expect(productPurchaseNote(template('product.product-catalogue'))).toBe(
+      'You\u2019ll be redirected to ORIZEN, our Australian retail partner, to complete your purchase.',
+    );
+    expect(productPurchaseNote(template('page'))).toBeNull();
+  });
+
+  it('has no purchase note when the text after the button is disabled or not text', () => {
+    const block = (type: string, settings: Record<string, unknown> = {}, disabled = false) => ({
+      id: type, type, disabled, settings, blocks: [],
+    });
+    const product = (blocks: ReturnType<typeof block>[]) => ({
+      sections: [{ id: 'main', type: 'product-information', disabled: false, settings: {}, blocks: [
+        { ...block('_product-details'), blocks },
+      ] }],
+    });
+    expect(productPurchaseNote(product([block('button', { label: 'SHOP NOW' }), block('text', { text: '<h6>Note</h6>' }, true)]))).toBeNull();
+    expect(productPurchaseNote(product([block('button', { label: 'SHOP NOW' }), block('_divider')]))).toBeNull();
+    expect(productPurchaseNote(product([block('button', { label: 'SHOP NOW' }, true), block('text', { text: '<p>Note</p>' })]))).toBeNull();
+    expect(productPurchaseNote(product([block('button', { label: 'SHOP NOW' }), block('text', { text: '<p>Note</p>' })]))).toBe('Note');
   });
 });
 

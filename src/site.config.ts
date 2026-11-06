@@ -11,6 +11,12 @@ export const siteConfig = {
   /** Where the product "Enquire" button and the contact page send email. */
   enquiryEmail: 'info@rosart.com.au',
 
+  /**
+   * Label of the product page button to ORIZEN, the retail partner. The link is the product's
+   * `custom.orizen_url` metafield (https on orizen.com.au only), else an ORIZEN search for the title.
+   */
+  orizenButtonLabel: 'Shop in Orizen.com.au',
+
   /** Show product prices (AUD, from the export). Off: the site presents products, it does not sell them. */
   showPrices: false,
 

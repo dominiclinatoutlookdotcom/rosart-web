@@ -1,9 +1,9 @@
 /**
  * Checks a built `dist/` before it is uploaded to S3: every expected page exists, every internal
  * reference resolves to a file (a directory link to its index.html, as the CloudFront function
- * maps it), nothing points at the old Shopify store, no Shopify theme file was copied, and no
- * image is over the size limit. Runs under plain Node (type stripping), so it imports only `.ts`
- * files with no Vite-only features.
+ * maps it), nothing points at the old Shopify store, no Shopify theme file was copied, no image
+ * is over the size limit, and no email address other than the site's enquiry email appears.
+ * Runs under plain Node (type stripping), so it imports only `.ts` files with no Vite-only features.
  */
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -17,11 +17,16 @@ export interface DistCheckOptions {
   /** sha256 of every file in `export/theme/`: none may appear in dist. */
   forbiddenHashes: ReadonlySet<string>;
   maxImageBytes: number;
+  /** The only email addresses the site may show (the enquiry email); any other is reported. */
+  allowedEmails: readonly string[];
 }
 
 const TEXT_EXTENSIONS = new Set(['.html', '.css', '.js', '.mjs', '.xml', '.txt', '.json', '.svg', '.webmanifest']);
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg']);
 const FORBIDDEN_HOSTS = ['cdn.shopify.com', 'myshopify.com'];
+const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/g;
+/** `name@2x.webp` and similar file names look like addresses; their "domain" is a file name. */
+const FILE_NAME_DOMAIN = /\.(?:png|jpe?g|webp|avif|gif|svg|css|js|mjs|woff2?|ico|html|xml|txt|json)$/i;
 
 export function sha256(content: Buffer): string {
   return createHash('sha256').update(content).digest('hex');
@@ -88,6 +93,25 @@ function references(text: string, extension: string, siteUrl: string): string[] 
   return [...refs];
 }
 
+/** Email addresses in a text file, lower-cased and de-duplicated, including `%40` and `&#64;` forms. */
+function emailAddresses(text: string): string[] {
+  const decoded = text.replace(/&#0*64;|&#x0*40;|&commat;|%40/gi, '@');
+  const found = new Set<string>();
+  for (const match of decoded.matchAll(EMAIL)) {
+    const address = match[0].toLowerCase();
+    if (!FILE_NAME_DOMAIN.test(address)) found.add(address);
+  }
+  return [...found];
+}
+
+/** `contact/index.html (page /contact/)` for a page, the plain file name otherwise. */
+function describeFile(name: string): string {
+  if (name === 'index.html') return `${name} (page /)`;
+  if (name.endsWith('/index.html')) return `${name} (page /${name.slice(0, -'index.html'.length)})`;
+  if (name.endsWith('.html')) return `${name} (page /${name})`;
+  return name;
+}
+
 export function checkDist(dist: string, options: DistCheckOptions): string[] {
   const problems: string[] = [];
 
@@ -114,6 +138,12 @@ export function checkDist(dist: string, options: DistCheckOptions): string[] {
     const text = content.toString('utf8');
     for (const host of FORBIDDEN_HOSTS) {
       if (text.includes(host)) problems.push(`${name}: references ${host}`);
+    }
+    const allowed = new Set(options.allowedEmails.map((email) => email.toLowerCase()));
+    for (const address of emailAddresses(text)) {
+      if (!allowed.has(address)) {
+        problems.push(`${describeFile(name)}: email address ${address} is not the site email ${options.allowedEmails.join(', ')}`);
+      }
     }
     for (const ref of references(text, extension, options.siteUrl)) {
       const sitePath = ref.startsWith(options.siteUrl) ? ref.slice(options.siteUrl.length) || '/' : ref;

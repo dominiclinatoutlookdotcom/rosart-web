@@ -6,6 +6,7 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { resolveSiteUrl } from '../src/lib/commerce.ts';
 import { createUrlMap } from '../src/lib/urls.ts';
+import { siteConfig } from '../src/site.config.ts';
 import { checkDist, listFiles, sha256 } from './dist-check.ts';
 
 const root = join(import.meta.dirname, '..');
@@ -41,6 +42,8 @@ const problems = checkDist(dist, {
   siteUrl: resolveSiteUrl(process.env['SITE_URL']),
   forbiddenHashes: new Set(themeFiles.map((f) => sha256(readFileSync(f)))),
   maxImageBytes: 600 * 1024,
+  // One email for the whole site: an address in Shopify content is fixed in Shopify, not here.
+  allowedEmails: [siteConfig.enquiryEmail],
 });
 
 if (problems.length > 0) {
