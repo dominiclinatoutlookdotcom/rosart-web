@@ -1,0 +1,582 @@
+{
+  "access_scopes": [
+    "read_content",
+    "read_files",
+    "read_legal_policies",
+    "read_metaobjects",
+    "read_online_store_navigation",
+    "read_products",
+    "read_themes",
+    "write_content"
+  ],
+  "collections": {
+    "face-care": {
+      "descriptionHtml": "",
+      "id": "gid://shopify/Collection/705866661969",
+      "image": {
+        "altText": "",
+        "id": "gid://shopify/CollectionImage/2072308580433",
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/1.png?v=1793763730"
+      },
+      "seo": {
+        "description": null,
+        "title": null
+      }
+    },
+    "face-care-copy": {
+      "descriptionHtml": "",
+      "id": "gid://shopify/Collection/705866760273",
+      "image": {
+        "altText": "",
+        "id": "gid://shopify/CollectionImage/2072308547665",
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/2.png?v=1793763712"
+      },
+      "seo": {
+        "description": null,
+        "title": null
+      }
+    },
+    "frontpage": {
+      "descriptionHtml": "",
+      "id": "gid://shopify/Collection/702017011793",
+      "image": null,
+      "seo": {
+        "description": null,
+        "title": null
+      }
+    },
+    "rose-water-toners-copy": {
+      "descriptionHtml": "",
+      "id": "gid://shopify/Collection/705866793041",
+      "image": {
+        "altText": "",
+        "id": "gid://shopify/CollectionImage/2072308514897",
+        "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/3_e77f03d4-0767-4f83-939c-86d99bde2338.png?v=1793763697"
+      },
+      "seo": {
+        "description": null,
+        "title": null
+      }
+    }
+  },
+  "files": {
+    "gid://shopify/MediaImage/74389395308625": {
+      "alt": "",
+      "file": "ESPRIT_HONG_KONG.png"
+    },
+    "gid://shopify/MediaImage/74391044358225": {
+      "alt": "",
+      "file": "DSC06467.jpg"
+    },
+    "gid://shopify/MediaImage/74391738908753": {
+      "alt": "",
+      "file": "1.png"
+    },
+    "gid://shopify/MediaImage/74391743365201": {
+      "alt": "",
+      "file": "2.png"
+    },
+    "gid://shopify/MediaImage/74391749230673": {
+      "alt": "",
+      "file": "3.png"
+    },
+    "gid://shopify/MediaImage/74392448303185": {
+      "alt": "",
+      "file": "Untitled_design_8_7171c05c-c755-42c7-b662-fc397c08f2bb.png"
+    },
+    "gid://shopify/MediaImage/74392596611153": {
+      "alt": "",
+      "file": "USDA_and_EU_Organic_Certifications.png"
+    },
+    "gid://shopify/MediaImage/74392770183249": {
+      "alt": "",
+      "file": "ESPRIT_HONG_KONG_f0a060ae-af0e-4c30-b417-84e0f08f40c7.png"
+    },
+    "gid://shopify/MediaImage/74393615335505": {
+      "alt": "",
+      "file": "Untitled_design_7_f6c26f2b-ad40-440e-a57a-fb6da4fe0dcb.png"
+    },
+    "gid://shopify/MediaImage/74409211494481": {
+      "alt": "",
+      "file": "Rosart_Rose_Balm_in_a_Sunlit_Garden.png"
+    },
+    "gid://shopify/MediaImage/74409321889873": {
+      "alt": "",
+      "file": "bg1.png"
+    },
+    "gid://shopify/MediaImage/74409847423057": {
+      "alt": "",
+      "file": "bg3.png"
+    },
+    "gid://shopify/MediaImage/74433116078161": {
+      "alt": "",
+      "file": "DSC08666_Rosart_Mobile_1200x1500_e230edb1-8068-47e5-b216-efa8170e4f7e.jpg"
+    },
+    "gid://shopify/MediaImage/74433281982545": {
+      "alt": "",
+      "file": "Rosart_Distillery_in_Bulgaria_s_Valley_of_Roses.png"
+    },
+    "gid://shopify/MediaImage/74433807286353": {
+      "alt": "",
+      "file": "Rosart_s_Bulgarian_Valley_of_Roses_Map.png"
+    },
+    "gid://shopify/MediaImage/74433948680273": {
+      "alt": "",
+      "file": "Add_a_heading_fcec8aa5-9bda-44ce-96bc-7966b68e00f2.png"
+    },
+    "gid://shopify/MediaImage/74438877741137": {
+      "alt": "",
+      "file": "ORIZEN.png"
+    },
+    "gid://shopify/MediaImage/74438877937745": {
+      "alt": "",
+      "file": "ARTEC.png"
+    },
+    "gid://shopify/MediaImage/74438877970513": {
+      "alt": "",
+      "file": "ROSART.png"
+    }
+  },
+  "pages": {
+    "contact": {
+      "description_tag": null,
+      "id": "gid://shopify/Page/763576025169",
+      "title_tag": null
+    },
+    "data-sharing-opt-out": {
+      "description_tag": null,
+      "id": "gid://shopify/Page/763576057937",
+      "title_tag": null
+    },
+    "our-collection": {
+      "description_tag": null,
+      "id": "gid://shopify/Page/766614831185",
+      "title_tag": null
+    },
+    "our-story": {
+      "description_tag": null,
+      "id": "gid://shopify/Page/766614798417",
+      "title_tag": null
+    }
+  },
+  "products": {
+    "100-natural-damascena-rose-water-10ml": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16432947331153",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419497762897"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74452926726225"
+        }
+      ],
+      "productType": "Facial Toner",
+      "seo": {
+        "description": "Discover Rosart Rose Water 10ml, made from 100% natural Bulgarian Rosa Damascena flower water. Gently soothes, hydrates and refreshes skin.",
+        "title": "Rosart Rose Water 10ml | 100% Natural Bulgarian Rose Water"
+      },
+      "vendor": "Rosart"
+    },
+    "bulgarian-rose-hydrosol-essence-mask-5pcs": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16432873701457",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419025838161"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74454394142801"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74453937946705"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74454394110033"
+        }
+      ],
+      "productType": "Facial Sheet Mask",
+      "seo": {
+        "description": "Hydrate and refresh your skin with Rosart Bulgarian Rose Hydrosol Essence Mask. Featuring 93.3% organic rose water, hyaluronic acid and botanical extracts. 5pcs.",
+        "title": "Rosart Bulgarian Rose Hydrosol Essence Mask 5pcs"
+      },
+      "vendor": "Rosart"
+    },
+    "pure-face-rosehip-oil-20ml": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16432953065553",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419533742161"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419533807697"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419533774929"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419533840465"
+        }
+      ],
+      "productType": "Facial Oil",
+      "seo": {
+        "description": "Discover Rosart Pure Face Rosehip Oil 20ml with organic rosehip oil, Damask rose oil and vitamin E. Nourishes skin and improves the appearance of dullness.",
+        "title": "Rosart Pure Face Rosehip Oil 20ml | Nourishing Facial Oil"
+      },
+      "vendor": "Rosart"
+    },
+    "pure-face-rosehip-oil-2ml": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16432963649617",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419602587729"
+        }
+      ],
+      "productType": "Facial Oil",
+      "seo": {
+        "description": "Discover Rosart Pure Face Rosehip Oil 2ml with organic rosehip oil, Damask rose oil and vitamin E. Nourishes skin and improves the appearance of dullness.",
+        "title": "Rosart Pure Face Rosehip Oil 2ml | Nourishing Facial Oil"
+      },
+      "vendor": "Rosart"
+    },
+    "rosart-rose-face-mask-80ml": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16432837361745",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74418718212177"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74418718244945"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74418718277713"
+        }
+      ],
+      "productType": "Face Mask",
+      "seo": {
+        "description": "Discover Rosart Rose Face Mask with Bulgarian rose water, rose oil and marine polysaccharides. Hydrates, refreshes and softens skin. Made in Bulgaria.",
+        "title": "Rosart Rose Face Mask 80ml | Hydrating Facial Mask"
+      },
+      "vendor": "Rosart"
+    },
+    "rose-cleansing-balm-80ml": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16432829792337",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74418652086353"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74418652151889"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74418652119121"
+        }
+      ],
+      "productType": "Facial Cleanser",
+      "seo": {
+        "description": "Discover Rosart Rose Cleansing Balm with rosehip, jojoba and avocado oils. Gently removes makeup and impurities while leaving skin soft and nourished. Made in Bulgaria.",
+        "title": "Rosart Rose Cleansing Balm 80ml | Makeup Remover"
+      },
+      "vendor": "Rosart"
+    },
+    "rose-face-cream-3g": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16431958523985",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74412707905617"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74412708659281"
+        }
+      ],
+      "productType": "Facial Moisturizer",
+      "seo": {
+        "description": "Discover Rosart Rose Face Cream 3g, enriched with organic rose oil, rose water and rose concrete. A nourishing facial moisturizer for day and night use.",
+        "title": "Rosart Rose Face Cream 3g | Hydrating Facial Moisturizer"
+      },
+      "vendor": "Rosart"
+    },
+    "rose-face-cream-50ml": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16431658401873",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74412680839249"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74412645941329"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74412759351377"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74412600852561"
+        }
+      ],
+      "productType": "Facial Moisturizer",
+      "seo": {
+        "description": "Discover Rosart Rose Face Cream 50ml, formulated with organic rose oil, rose water and rose concrete to hydrate and nourish skin. For day and night use.",
+        "title": "Rosart Rose Face Cream 50ml | Bulgarian Rose Skincare"
+      },
+      "vendor": "Rosart"
+    },
+    "rose-face-souffle-cream-3g": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16431961309265",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74412718358609"
+        }
+      ],
+      "productType": "Facial Moisturizer",
+      "seo": {
+        "description": "Discover Rosart Rose Face Soufflé Cream 3g, a lightweight moisturiser with rose water, botanical oils and sodium hyaluronate. Made in Bulgaria.",
+        "title": "Rosart Rose Face Soufflé Cream 3g | Lightweight Moisturiser"
+      },
+      "vendor": "Rosart"
+    },
+    "rose-face-souffle-cream-50ml": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16431960621137",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74451420545105"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74412714033233"
+        }
+      ],
+      "productType": "Facial Moisturizer",
+      "seo": {
+        "description": "Discover Rosart Rose Face Soufflé Cream 50ml. A lightweight facial moisturizer with Damascena rose water, rosehip oil and hyaluronic acid for soft, hydrated skin.",
+        "title": "Rosart Rose Face Soufflé Cream 50ml | Lightweight Moisturizer"
+      },
+      "vendor": "Rosart"
+    },
+    "rose-facial-toner-330ml": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16432859578449",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74455763026001"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74418953715793"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74418953650257"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74418953683025"
+        }
+      ],
+      "productType": "Facial Toner",
+      "seo": {
+        "description": "Discover Rosart Rose Facial Toner 330ml with Damask rose water, botanical extracts and sodium hyaluronate. Refreshes and hydrates skin. Made in Bulgaria.",
+        "title": "Rosart Rose Facial Toner 330ml | Hydrating Toner"
+      },
+      "vendor": "Rosart"
+    },
+    "rose-glycerin-soap-90g": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16432893689937",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419133218897"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419133284433"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74432052363345"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419133317201"
+        }
+      ],
+      "productType": "Bar Soap",
+      "seo": {
+        "description": "Discover Rosart Rose Glycerin Soap 90g, handmade with Bulgarian rose water, rose petals and glycerin to gently cleanse and soften skin. Made in Bulgaria.",
+        "title": "Rosart Rose Glycerin Soap 90g | Handmade Rose Soap"
+      },
+      "vendor": "Rosart"
+    },
+    "rose-oil-revitalizing-essence-30-capsules": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16432900898897",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419416039505"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74453893972049"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74453894004817"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419241287761"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419230474321"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419382222929"
+        }
+      ],
+      "productType": "Facial Serum",
+      "seo": {
+        "description": "Discover Rosart Rose Oil Revitalizing Essence with rose oils, rosehip, grape seed oil and vitamin E. 30 facial oil capsules, made in Bulgaria.",
+        "title": "Rosart Rose Oil Revitalizing Essence | 30 Capsules"
+      },
+      "vendor": "Rosart"
+    },
+    "rose-water-100ml": {
+      "category": {
+        "fullName": "Health & Beauty > Personal Care > Cosmetics > Skin Care > Face Moisturizers",
+        "id": "gid://shopify/TaxonomyCategory/hb-3-2-9-20",
+        "name": "Face Moisturizers"
+      },
+      "id": "gid://shopify/Product/16432922165329",
+      "media": [
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419325010001"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74453223735377"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74453223800913"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74453223768145"
+        },
+        {
+          "alt": "",
+          "id": "gid://shopify/MediaImage/74419427278929"
+        }
+      ],
+      "productType": "Facial Toner",
+      "seo": {
+        "description": "Discover Rosart Rose Water 100ml, made from 100% natural Bulgarian Rosa Damascena flower water. Gently soothes, hydrates and refreshes skin.",
+        "title": "Rosart Rose Water 100ml | 100% Natural Bulgarian Rose Water"
+      },
+      "vendor": "Rosart"
+    }
+  },
+  "query": "read-only: currentAppInstallation.accessScopes, shop, products(category, seo, media), pages(global metafields), collections(seo, image), nodes(theme files), shopPolicies(type)",
+  "read_at": "2026-11-07",
+  "shop": {
+    "description": "",
+    "global_metafields": [],
+    "id": "gid://shopify/Shop/107566563409",
+    "name": "Rosart",
+    "policies": [
+      "PRIVACY_POLICY",
+      "TERMS_OF_SERVICE"
+    ],
+    "primary_domain": "rosart-mhfmyuxq.myshopify.com"
+  },
+  "store": "rosart-mhfmyuxq.myshopify.com"
+}
