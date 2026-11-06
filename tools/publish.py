@@ -239,6 +239,13 @@ class Aws:
 IMMUTABLE = "public, max-age=31536000, immutable"
 REVALIDATE = "public, max-age=0, must-revalidate"
 HTML_TYPE = "text/html; charset=utf-8"
+# Root files whose type is set explicitly, so browsers decode them as UTF-8 (llms.txt holds
+# non-ASCII text) whatever the local MIME map guesses: pattern -> Content-Type.
+TYPED_FILES = (
+    ("*.html", HTML_TYPE),
+    ("*.txt", "text/plain; charset=utf-8"),
+    ("*.xml", "application/xml; charset=utf-8"),
+)
 SYNC_LINE = re.compile(r"^(?:\(dryrun\) )?(upload|delete): (.+)$")
 
 
@@ -250,16 +257,25 @@ def sync_passes(config: DeployConfig, dist: Path) -> list[list[str]]:
     can only reach ``_astro/``; the root passes end their filters with ``--exclude _astro/*``
     (last match wins), so they never upload or delete under ``_astro/``. New assets go up first and
     old ones are pruned last, so no page ever points at an asset that is not in the bucket.
+
+    Each typed root pass owns its pattern outright: it uploads and deletes only those files, and
+    the general root pass excludes them. A general pass that still included them would upload them
+    again, with the CLI's guessed type, whenever the local clock runs ahead of S3 (the sync re-uploads
+    any file newer than its object), so the union of the root passes mirrors ``dist/`` with each
+    file uploaded by exactly one pass.
     """
     assets = [str(Path(dist) / ASSETS_DIR), f"{config.bucket_url}/{ASSETS_DIR}"]
     root = [str(Path(dist)), config.bucket_url]
     not_assets = ["--exclude", f"{ASSETS_DIR}/*"]
+    typed = [["s3", "sync", *root, "--delete", "--exclude", "*", "--include", pattern, *not_assets,
+              "--content-type", content_type, "--cache-control", REVALIDATE, "--no-progress"]
+             for pattern, content_type in TYPED_FILES]
+    not_typed = [arg for pattern, _ in TYPED_FILES for arg in ("--exclude", pattern)]
     return [
         ["s3", "sync", *assets, "--cache-control", IMMUTABLE, "--no-progress"],
-        # HTML on its own pass so its type is text/html; utf-8 whatever the local MIME map says.
-        ["s3", "sync", *root, "--exclude", "*", "--include", "*.html", *not_assets,
-         "--content-type", HTML_TYPE, "--cache-control", REVALIDATE, "--no-progress"],
-        ["s3", "sync", *root, "--delete", *not_assets, "--cache-control", REVALIDATE, "--no-progress"],
+        *typed,
+        ["s3", "sync", *root, "--delete", *not_typed, *not_assets, "--cache-control", REVALIDATE,
+         "--no-progress"],
         ["s3", "sync", *assets, "--delete", "--cache-control", IMMUTABLE, "--no-progress"],
     ]
 

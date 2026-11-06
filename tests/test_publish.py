@@ -1,6 +1,10 @@
 """Tests for the publish script with a fake `aws` runner: nothing here touches AWS."""
+import fnmatch
 import json
+import mimetypes
+import os
 import re
+import time
 import shutil
 import subprocess
 from pathlib import Path
@@ -314,7 +318,7 @@ def test_root_syncs_never_touch_astro_and_revalidate(site, tmp_path):
     aws = FakeAws()
     main([*site, "--yes"], runner=aws, ask=no_prompt)
     root = [c for c in aws.syncs(dryrun=False) if c[4] == "s3://rosart-site"]
-    assert len(root) == 2
+    assert len(root) == 4
     for command in root:
         assert Path(command[3]) == tmp_path / "dist"
         assert option(command, "--cache-control") == REVALIDATE
@@ -323,14 +327,30 @@ def test_root_syncs_never_touch_astro_and_revalidate(site, tmp_path):
         assert filters(command)[-1] == ("--exclude", "_astro/*")
 
 
-def test_html_is_uploaded_as_utf8_text_html(site):
+TYPED = [("*.html", "text/html; charset=utf-8"), ("*.txt", "text/plain; charset=utf-8"),
+         ("*.xml", "application/xml; charset=utf-8")]
+
+
+def test_html_text_and_xml_each_get_a_utf8_typed_pass_that_mirrors_its_own_files(site):
     aws = FakeAws()
     main([*site, "--yes"], runner=aws, ask=no_prompt)
-    html = [c for c in aws.syncs(dryrun=False) if option(c, "--content-type")]
-    assert len(html) == 1
-    assert option(html[0], "--content-type") == "text/html; charset=utf-8"
-    assert filters(html[0]) == [("--exclude", "*"), ("--include", "*.html"), ("--exclude", "_astro/*")]
-    assert "--delete" not in html[0]
+    typed = [c for c in aws.syncs(dryrun=False) if option(c, "--content-type")]
+    assert [(filters(c)[1][1], option(c, "--content-type")) for c in typed] == TYPED
+    for command, (pattern, _) in zip(typed, TYPED):
+        assert filters(command) == [("--exclude", "*"), ("--include", pattern), ("--exclude", "_astro/*")]
+        assert option(command, "--cache-control") == REVALIDATE
+        # Each typed pass deletes its own stale keys: the general pass excludes these patterns.
+        assert "--delete" in command
+
+
+def test_general_root_pass_leaves_typed_files_to_their_passes(site):
+    aws = FakeAws()
+    main([*site, "--yes"], runner=aws, ask=no_prompt)
+    [general] = [c for c in aws.syncs(dryrun=False)
+                 if c[4] == "s3://rosart-site" and not option(c, "--content-type")]
+    assert "--delete" in general
+    assert filters(general) == [("--exclude", "*.html"), ("--exclude", "*.txt"), ("--exclude", "*.xml"),
+                                ("--exclude", "_astro/*")]
 
 
 def test_real_sync_order_uploads_assets_first_and_prunes_them_last(site):
@@ -340,7 +360,8 @@ def test_real_sync_order_uploads_assets_first_and_prunes_them_last(site):
              for c in aws.syncs(dryrun=False)]
     # New assets go up before any page that uses them; old assets are deleted only after every
     # page has moved off them; root keys are deleted only by the pass that excludes _astro/.
-    assert shape == [("/_astro", False, False), ("", False, True), ("", True, False), ("/_astro", True, False)]
+    assert shape == [("/_astro", False, False), ("", True, True), ("", True, True), ("", True, True),
+                     ("", True, False), ("/_astro", True, False)]
 
 
 def test_dry_run_runs_the_same_syncs_before_any_real_sync(site):
@@ -393,7 +414,7 @@ def test_yes_at_the_prompt_publishes_and_shows_the_target(site):
     assert main(site, runner=aws, ask=lambda q: questions.append(q) or "yes") == 0
     assert len(questions) == 1
     assert "s3://rosart-site" in questions[0] and "123456789012" in questions[0]
-    assert len(aws.syncs(dryrun=False)) == 4
+    assert len(aws.syncs(dryrun=False)) == 6
 
 
 def test_invalidation_is_everything_on_the_configured_distribution(site, capsys):
@@ -428,7 +449,7 @@ def test_failed_dry_run_stops_before_the_real_sync(site):
     assert not aws.syncs(dryrun=False) and not aws.ran("cloudfront")
 
 
-@pytest.mark.parametrize("failing_pass", [0, 1, 2, 3])
+@pytest.mark.parametrize("failing_pass", [0, 1, 2, 3, 4, 5])
 def test_failed_real_sync_stops_the_flow_without_invalidating(site, failing_pass, capsys):
     real_seen = []
 
@@ -477,3 +498,122 @@ def test_failed_invalidation_is_reported(site, capsys):
     aws = FakeAws(fail=lambda c: c[1:3] == ["cloudfront", "create-invalidation"])
     assert main([*site, "--yes"], runner=aws, ask=no_prompt) == 1
     assert "create-invalidation" in capsys.readouterr().err
+
+
+# --- a simulated bucket: what the syncs leave behind ---------------------------------------
+
+def included(rel, command):
+    """The AWS CLI filter rule: everything starts included, filters apply in order, last match wins
+    (`*` matches across `/`, as fnmatch does)."""
+    keep = True
+    for flag, pattern in filters(command):
+        if fnmatch.fnmatchcase(rel, pattern):
+            keep = flag == "--include"
+    return keep
+
+
+class BucketSim(FakeAws):
+    """A fake aws whose `s3 sync` follows the CLI's default comparison against an in-memory bucket:
+    upload when the key is missing, the size differs or the local file is newer than the object
+    (its LastModified is the upload time), delete unmatched keys that pass the filters. Each object
+    keeps the Content-Type and Cache-Control it was uploaded with."""
+
+    def __init__(self, objects=None):
+        super().__init__()
+        self.objects = dict(objects or {})  # key -> {"size", "modified", "type", "cache"}
+        self.uploads: list[str] = []         # keys uploaded for real, once per upload
+        self.deletes: list[str] = []
+
+    def sync_output(self, command):
+        dryrun = "--dryrun" in command
+        source, dest = Path(command[3]), command[4]
+        prefix = dest.removeprefix("s3://rosart-site").lstrip("/")
+        prefix = f"{prefix}/" if prefix else ""
+        local = {p.relative_to(source).as_posix(): p for p in source.rglob("*") if p.is_file()}
+        local = {rel: p for rel, p in local.items() if included(rel, command)}
+        lines = []
+        for rel, path in sorted(local.items()):
+            key, stat = prefix + rel, path.stat()
+            current = self.objects.get(key)
+            if current and current["size"] == stat.st_size and stat.st_mtime <= current["modified"]:
+                continue
+            lines.append(f"upload: {path} to s3://rosart-site/{key}")
+            if not dryrun:
+                self.uploads.append(key)
+                self.objects[key] = {"size": stat.st_size, "modified": time.time(),
+                                     "type": option(command, "--content-type") or mimetypes.guess_type(rel)[0],
+                                     "cache": option(command, "--cache-control")}
+        if "--delete" in command:
+            for key in sorted(k for k in self.objects if k.startswith(prefix)):
+                rel = key[len(prefix):]
+                if included(rel, command) and rel not in local:
+                    lines.append(f"delete: s3://rosart-site/{key}")
+                    if not dryrun:
+                        self.deletes.append(key)
+                        del self.objects[key]
+        return "".join(("(dryrun) " if dryrun else "") + line + "\r\n" for line in lines)
+
+
+def stale_object():
+    return {"size": 1, "modified": 0.0, "type": "binary/octet-stream", "cache": None}
+
+
+@pytest.fixture
+def llms_site(site, tmp_path):
+    """The site plus an llms.txt with non-ASCII text, as the real build writes it."""
+    (tmp_path / "dist" / "llms.txt").write_text("# Rosart\n\n- Soufflé rose\n", encoding="utf-8")
+    return site
+
+
+def test_text_and_xml_land_as_utf8_with_revalidate_caching(llms_site):
+    bucket = BucketSim()
+    assert main([*llms_site, "--yes"], runner=bucket, ask=no_prompt) == 0
+    for key, content_type in [("robots.txt", "text/plain; charset=utf-8"),
+                              ("llms.txt", "text/plain; charset=utf-8"),
+                              ("sitemap-index.xml", "application/xml; charset=utf-8"),
+                              ("index.html", "text/html; charset=utf-8"),
+                              ("products/p0/index.html", "text/html; charset=utf-8")]:
+        assert bucket.objects[key]["type"] == content_type, key
+        assert bucket.objects[key]["cache"] == REVALIDATE, key
+    assert bucket.objects["_astro/site.Ab12Cd.css"]["cache"] == IMMUTABLE
+
+
+def test_typed_files_upload_once_and_keep_their_type_even_when_the_local_clock_runs_ahead(llms_site, tmp_path):
+    # With the local clock ahead of S3, every local file looks newer than its fresh object, so any
+    # later pass that included a typed file would upload it again with the CLI's guessed type.
+    future = time.time() + 3600
+    for path in (tmp_path / "dist").rglob("*"):
+        if path.is_file():
+            os.utime(path, (future, future))
+    bucket = BucketSim()
+    assert main([*llms_site, "--yes"], runner=bucket, ask=no_prompt) == 0
+    for key in ("robots.txt", "llms.txt", "sitemap-index.xml", "index.html"):
+        assert bucket.uploads.count(key) == 1, key
+    assert bucket.objects["robots.txt"]["type"] == "text/plain; charset=utf-8"
+    assert bucket.objects["sitemap-index.xml"]["type"] == "application/xml; charset=utf-8"
+    assert bucket.objects["index.html"]["type"] == "text/html; charset=utf-8"
+
+
+def test_publish_mirrors_dist_exactly_deleting_stale_keys_of_every_type(llms_site, tmp_path):
+    stale = ["old.txt", "old/sitemap-0.xml", "old-page/index.html", "feed.json", "_astro/old.Zz99.css"]
+    bucket = BucketSim({key: stale_object() for key in stale})
+    assert main([*llms_site, "--yes"], runner=bucket, ask=no_prompt) == 0
+    dist = tmp_path / "dist"
+    assert set(bucket.objects) == {p.relative_to(dist).as_posix() for p in dist.rglob("*") if p.is_file()}
+    assert sorted(bucket.deletes) == sorted(stale)
+
+
+def test_republishing_an_unchanged_dist_uploads_and_deletes_nothing(llms_site):
+    first = BucketSim()
+    assert main([*llms_site, "--yes"], runner=first, ask=no_prompt) == 0
+    again = BucketSim(first.objects)
+    assert main([*llms_site, "--yes"], runner=again, ask=no_prompt) == 0
+    assert again.uploads == [] and again.deletes == []
+    assert again.objects == first.objects
+
+
+def test_dry_run_leaves_the_bucket_untouched(llms_site, capsys):
+    bucket = BucketSim({"old.txt": stale_object()})
+    assert main([*llms_site, "--dry-run"], runner=bucket, ask=no_prompt) == 0
+    assert set(bucket.objects) == {"old.txt"} and bucket.uploads == []
+    assert "delete s3://rosart-site/old.txt" in capsys.readouterr().out

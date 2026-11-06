@@ -101,19 +101,28 @@ configured bucket and distribution. It never reads credential files: it strips `
 `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`, `AWS_PROFILE` and `AWS_DEFAULT_PROFILE` from the
 CLI's environment, so the named profile is the only credential source.
 
-The sync runs in four steps so caching is right and no page ever points at a missing asset:
+The sync runs in six steps so caching and content types are right and no page ever points at a
+missing asset:
 
 | Step | Source to target | Flags | Cache-Control |
 | --- | --- | --- | --- |
 | 1 | `dist/_astro` to `s3://<bucket>/_astro` | upload only | `public, max-age=31536000, immutable` |
-| 2 | `dist` to `s3://<bucket>` | `--exclude "*" --include "*.html" --exclude "_astro/*"`, `--content-type "text/html; charset=utf-8"` | `public, max-age=0, must-revalidate` |
-| 3 | `dist` to `s3://<bucket>` | `--delete --exclude "_astro/*"` | `public, max-age=0, must-revalidate` |
-| 4 | `dist/_astro` to `s3://<bucket>/_astro` | `--delete` (prunes old hashed assets) | `public, max-age=31536000, immutable` |
+| 2 | `dist` to `s3://<bucket>` | `--delete --exclude "*" --include "*.html" --exclude "_astro/*"`, `--content-type "text/html; charset=utf-8"` | `public, max-age=0, must-revalidate` |
+| 3 | `dist` to `s3://<bucket>` | `--delete --exclude "*" --include "*.txt" --exclude "_astro/*"`, `--content-type "text/plain; charset=utf-8"` | `public, max-age=0, must-revalidate` |
+| 4 | `dist` to `s3://<bucket>` | `--delete --exclude "*" --include "*.xml" --exclude "_astro/*"`, `--content-type "application/xml; charset=utf-8"` | `public, max-age=0, must-revalidate` |
+| 5 | `dist` to `s3://<bucket>` | `--delete --exclude "*.html" --exclude "*.txt" --exclude "*.xml" --exclude "_astro/*"` | `public, max-age=0, must-revalidate` |
+| 6 | `dist/_astro` to `s3://<bucket>/_astro` | `--delete` (prunes old hashed assets) | `public, max-age=31536000, immutable` |
 
 The root steps end their filters with `--exclude "_astro/*"` (the last matching filter wins, and
 `aws s3 sync --delete` never deletes excluded keys), so they cannot touch `_astro/`; the asset
-steps sync that folder to its own prefix, so their `--delete` cannot reach anything else. Other
-content types (CSS, WebP, fonts, XML, text) are inferred by the AWS CLI.
+steps sync that folder to its own prefix, so their `--delete` cannot reach anything else.
+
+Steps 2 to 4 set the type explicitly so HTML, `robots.txt`, `llms.txt` (which holds non-ASCII
+text) and the sitemaps are served as UTF-8. Each of them owns its pattern: it uploads and deletes
+only those files, and step 5 excludes them. Step 5 must not include them, because `aws s3 sync`
+uploads any file newer than its object, so with the local clock ahead of S3 it would upload them
+again with the CLI's guessed type (no charset). Together the root steps still mirror `dist/`. Other
+content types (CSS, WebP, fonts, JSON) are inferred by the AWS CLI.
 
 ### Deploy config
 
