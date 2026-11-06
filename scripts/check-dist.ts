@@ -36,7 +36,7 @@ const themeDir = join(root, 'export', 'theme');
 const themeFiles = listFiles(themeDir).filter((f) => statSync(f).size > 0);
 if (themeFiles.length === 0) console.warn('export/theme/ is absent: skipping the copied-theme-file check');
 
-const requiredPages = [...urls.allUrls(), '/404.html', '/robots.txt', '/sitemap-index.xml'];
+const requiredPages = [...urls.allUrls(), '/404.html', '/robots.txt', '/llms.txt', '/sitemap-index.xml'];
 const problems = checkDist(dist, {
   requiredPages,
   siteUrl: resolveSiteUrl(process.env['SITE_URL']),

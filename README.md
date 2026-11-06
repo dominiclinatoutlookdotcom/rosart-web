@@ -32,15 +32,21 @@ directly, set it yourself (`ASTRO_TELEMETRY_DISABLED=1 npm run build`) or run
 `npx astro telemetry disable` once.
 
 `npm run check:dist` checks the built site before upload: every page in the URL map plus
-`404.html`, `robots.txt` and `sitemap-index.xml` exists; every internal link, image, `srcset`
-entry, CSS `url()` and absolute site URL resolves to a file in `dist/` (a directory link to its
-`index.html`); nothing mentions `cdn.shopify.com` or `myshopify.com`; no file is byte-identical to
+`404.html`, `robots.txt`, `llms.txt` and `sitemap-index.xml` exists; every internal link, image,
+`srcset` entry, CSS `url()` and absolute site URL resolves to a file in `dist/` (a directory link to
+its `index.html`); every link in `llms.txt` to this site is an absolute site URL of a page; nothing mentions `cdn.shopify.com` or `myshopify.com`; no file is byte-identical to
 a file in `export/theme/` (skipped when that folder is absent); no image is over 600 KB; and no
 email address other than `enquiryEmail` appears in any text file (page text, `mailto:` links,
 `%40` and `&#64;` forms included). The site has one email address: an address in Shopify content
 is fixed in Shopify and re-exported, never rewritten by the site, so until then the check fails
 and names the page and the address (for example
 `contact/index.html (page /contact/): email address info@deniva.com.au is not the site email info@rosart.com.au`).
+
+`/llms.txt` ([llmstxt.org](https://llmstxt.org) proposal) is a plain Markdown index of the site for
+language models: a summary, then links to the pages, collections and products with one-line
+summaries, and where to buy. It is generated at build time (`src/pages/llms.txt.ts`, builder
+`src/lib/llms.ts`) from the same content as the pages, so it is never edited by hand. Expect little
+from it: as of 2026-11-07 no major AI search engine has confirmed it reads the file.
 
 ### Settings
 

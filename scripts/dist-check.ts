@@ -2,7 +2,8 @@
  * Checks a built `dist/` before it is uploaded to S3: every expected page exists, every internal
  * reference resolves to a file (a directory link to its index.html, as the CloudFront function
  * maps it), nothing points at the old Shopify store, no Shopify theme file was copied, no image
- * is over the size limit, and no email address other than the site's enquiry email appears.
+ * is over the size limit, no email address other than the site's enquiry email appears, and every
+ * llms.txt link is an absolute site URL of a page.
  * Runs under plain Node (type stripping), so it imports only `.ts` files with no Vite-only features.
  */
 import { createHash } from 'node:crypto';
@@ -104,6 +105,27 @@ function emailAddresses(text: string): string[] {
   return [...found];
 }
 
+/**
+ * `llms.txt` links must be absolute site URLs of pages (an HTML file in dist), so a model that
+ * reads it lands on a real page. Links to other hosts (the retailer) and `mailto:` are not checked.
+ */
+function llmsLinkProblems(dist: string, text: string, siteUrl: string): string[] {
+  const problems: string[] = [];
+  for (const match of text.matchAll(/\]\(([^)\s]+)\)/g)) {
+    const link = match[1] ?? '';
+    const isSiteUrl = link === siteUrl || link.startsWith(`${siteUrl}/`);
+    if (!isSiteUrl && /^[a-z][a-z0-9+.-]*:/i.test(link)) continue;
+    if (!isSiteUrl) {
+      problems.push(`llms.txt: link ${link} is not an absolute ${siteUrl} URL`);
+      continue;
+    }
+    const file = servedFile(dist, link.slice(siteUrl.length) || '/');
+    if (!file) problems.push(`llms.txt: link ${link} does not resolve to a page in dist`);
+    else if (!file.endsWith('.html')) problems.push(`llms.txt: link ${link} is not a page`);
+  }
+  return problems;
+}
+
 /** `contact/index.html (page /contact/)` for a page, the plain file name otherwise. */
 function describeFile(name: string): string {
   if (name === 'index.html') return `${name} (page /)`;
@@ -144,6 +166,10 @@ export function checkDist(dist: string, options: DistCheckOptions): string[] {
       if (!allowed.has(address)) {
         problems.push(`${describeFile(name)}: email address ${address} is not the site email ${options.allowedEmails.join(', ')}`);
       }
+    }
+    if (name === 'llms.txt') {
+      problems.push(...llmsLinkProblems(dist, text, options.siteUrl));
+      continue;
     }
     for (const ref of references(text, extension, options.siteUrl)) {
       const sitePath = ref.startsWith(options.siteUrl) ? ref.slice(options.siteUrl.length) || '/' : ref;

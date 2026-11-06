@@ -127,6 +127,30 @@ describe('checkDist', () => {
     ]);
   });
 
+  it('passes an llms.txt whose site links all resolve to pages', () => {
+    goodSite();
+    put(
+      'llms.txt',
+      '# Rosart\n\n> Roses.\n\n## Products\n\n- [A](https://rosart.com.au/products/a/): A.\n- [Home](https://rosart.com.au/)\n\n' +
+        '## Where to buy\n\nBuy from [ORIZEN](https://orizen.com.au/). Enquiries: info@rosart.com.au\n',
+    );
+    expect(checkDist(dist, options())).toEqual([]);
+  });
+
+  it('reports llms.txt links that do not resolve to a page, or are not absolute site URLs', () => {
+    goodSite();
+    put(
+      'llms.txt',
+      '# Rosart\n\n- [Gone](https://rosart.com.au/products/gone/): x\n- [Image](https://rosart.com.au/_astro/a.webp)\n' +
+        '- [Relative](/products/a/)\n- [Ok](https://rosart.com.au/products/a)\n',
+    );
+    expect(checkDist(dist, options()).sort()).toEqual([
+      'llms.txt: link /products/a/ is not an absolute https://rosart.com.au URL',
+      'llms.txt: link https://rosart.com.au/_astro/a.webp is not a page',
+      'llms.txt: link https://rosart.com.au/products/gone/ does not resolve to a page in dist',
+    ]);
+  });
+
   it('accepts the enquiry email in any case and ignores CSS at-rules and @2x file names', () => {
     goodSite();
     put('index.html', page('<a href="/products/a/">A</a> INFO@Rosart.com.au <img src="/_astro/rose@2x.webp" alt="">'));
