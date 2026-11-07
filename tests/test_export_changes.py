@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+import export_changes
 from export_changes import main, summarise
 
 TODAY = date(2026, 11, 7)
@@ -158,6 +159,21 @@ def test_commit_records_only_the_export_with_a_counted_message(repo, capsys):
     assert sorted(files) == ["export/images/c.jpg", "export/shopify/products.json"]
     assert git(repo, "status", "--porcelain") == ""
     assert "never push" in capsys.readouterr().out.lower()
+
+
+def test_commit_message_takes_the_name_of_the_publishing_person(repo):
+    # The box service has no git user.name: the person comes from the sign-in identity (R-3).
+    edit_products(repo)
+    message = export_changes.commit_message(summarise(repo), TODAY, name="Ada Lovelace")
+    assert message.splitlines()[0] == "Publish 2026-11-07 by Ada Lovelace"
+    assert "Test Staff" not in message
+
+
+def test_the_cli_passes_the_git_user_name_as_the_name(repo):
+    edit_products(repo)
+    git(repo, "config", "user.name", "Someone Else")
+    assert main(["--commit"], repo=repo, today=TODAY) == 0
+    assert git(repo, "log", "-1", "--format=%s").strip() == "Publish 2026-11-07 by Someone Else"
 
 
 def test_commit_with_nothing_changed_makes_no_commit(repo, capsys):
