@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""A fake `aws` executable for process-level publisher tests (spec 006 T026).
+
+Reads the JSON scenario named by FAKE_AWS_SCENARIO: ``profile``, ``bucket``, ``region``,
+``distribution_id`` (the deploy config the guard checks against) plus optional ``identity_arn``,
+``wait_exit``, ``fail_passes``, ``get_error``, ``log`` (file that gets one JSON argv per line),
+``block_on_pass`` (the Nth real sync starts, writes ``started_file``, then never returns),
+``ignore_sigterm`` and ``append_file`` (a line appended every 100 ms while blocked, to prove a
+killed child stopped writing). The marker and pass count persist in ``<scenario>.state``.
+"""
+import json
+import os
+import signal
+import sys
+import time
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+sys.path[:0] = [str(HERE.parent), str(HERE.parent.parent.parent / "tools")]
+
+from fake_aws import FakeAws  # noqa: E402
+from publish import DeployConfig  # noqa: E402
+
+
+def main() -> int:
+    scenario_path = Path(os.environ["FAKE_AWS_SCENARIO"])
+    scenario = json.loads(scenario_path.read_text(encoding="utf-8"))
+    state_path = scenario_path.with_suffix(".state")
+    state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else {}
+    command = ["aws", *sys.argv[1:]]
+    if scenario.get("log"):
+        with open(scenario["log"], "a", encoding="utf-8") as log:
+            log.write(json.dumps(command) + "\n")
+
+    config = DeployConfig(scenario["profile"], scenario["bucket"], scenario["region"], scenario["distribution_id"])
+    options = {"identity_arn": scenario["identity_arn"]} if "identity_arn" in scenario else {}
+    fake = FakeAws(config, marker=state.get("marker"), get_error=scenario.get("get_error"),
+                   wait_exit=scenario.get("wait_exit", 0), fail_passes=set(scenario.get("fail_passes", [])),
+                   **options)
+    fake.real_syncs = state.get("real_syncs", 0)
+    result = fake(command)
+    state_path.write_text(json.dumps({"marker": fake.marker, "real_syncs": fake.real_syncs}), encoding="utf-8")
+
+    is_real_sync = command[1:3] == ["s3", "sync"] and "--dryrun" not in command
+    if is_real_sync and fake.real_syncs == scenario.get("block_on_pass"):
+        if scenario.get("ignore_sigterm"):
+            signal.signal(signal.SIGTERM, signal.SIG_IGN)
+        if scenario.get("started_file"):
+            Path(scenario["started_file"]).write_text(str(os.getpid()), encoding="utf-8")
+        while True:
+            if scenario.get("append_file"):
+                with open(scenario["append_file"], "a", encoding="utf-8") as out:
+                    out.write(f"{time.time()}\n")
+            time.sleep(0.1)
+
+    sys.stdout.write(result.stdout)
+    sys.stderr.write(result.stderr)
+    return result.returncode
+
+
+if __name__ == "__main__":
+    sys.exit(main())

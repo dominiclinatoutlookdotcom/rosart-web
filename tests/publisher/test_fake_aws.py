@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from fake_aws import FakeAws, MARKER_KEY
+from .fake_aws import FakeAws, MARKER_KEY
 from publish import Aws, DeployConfig, PublishError
 
 CONFIG = DeployConfig("rosart-deploy", "rosart-site", "ap-southeast-2", "E2ABCDEF123456")
@@ -22,9 +22,9 @@ MARKER = {"site": "rosart", "publish_id": "box-7", "published_at": "2026-11-08T0
           "content_hash": "a" * 64, "publisher": "box"}
 
 
-def make(**kwargs) -> tuple[FakeAws, Aws]:
+def make(temp_dir=None, **kwargs) -> tuple[FakeAws, Aws]:
     fake = FakeAws(CONFIG, **kwargs)
-    return fake, Aws(CONFIG, fake)
+    return fake, Aws(CONFIG, fake, temp_dir=temp_dir)
 
 
 def test_identity_answers_the_deploy_user_by_default_and_can_be_overridden():
@@ -44,28 +44,28 @@ def test_dry_run_sync_output_is_prefixed_and_the_real_one_is_not():
 
 
 def test_get_object_writes_the_marker_to_the_local_file(tmp_path):
-    _, aws = make(marker=MARKER)
+    _, aws = make(tmp_path, marker=MARKER)
     target = tmp_path / "marker.json"
     aws.run(["s3api", "get-object", "--bucket", "rosart-site", "--key", MARKER_KEY, str(target)])
     assert json.loads(target.read_text(encoding="utf-8")) == MARKER
 
 
 def test_get_object_with_no_marker_fails_with_nosuchkey(tmp_path):
-    _, aws = make()
+    _, aws = make(tmp_path)
     with pytest.raises(PublishError, match="NoSuchKey"):
         aws.run(["s3api", "get-object", "--bucket", "rosart-site", "--key", MARKER_KEY,
                  str(tmp_path / "m.json")])
 
 
 def test_get_object_can_fail_with_another_error(tmp_path):
-    _, aws = make(get_error="AccessDenied")
+    _, aws = make(tmp_path, get_error="AccessDenied")
     with pytest.raises(PublishError, match="AccessDenied"):
         aws.run(["s3api", "get-object", "--bucket", "rosart-site", "--key", MARKER_KEY,
                  str(tmp_path / "m.json")])
 
 
 def test_put_object_stores_the_body_and_a_later_get_returns_it(tmp_path):
-    fake, aws = make()
+    fake, aws = make(tmp_path)
     body = tmp_path / "body.json"
     body.write_text(json.dumps(MARKER), encoding="utf-8")
     aws.run(["s3api", "put-object", "--bucket", "rosart-site", "--key", MARKER_KEY, "--body", str(body),
@@ -137,7 +137,8 @@ def test_executable_keeps_the_marker_between_invocations(tmp_path):
               "--region", "ap-southeast-2", "--output", "json"]
     missing = run_aws(env, "s3api", "get-object", str(tmp_path / "a.json"), *common)
     assert missing.returncode != 0 and "NoSuchKey" in missing.stderr
-    assert run_aws(env, "s3api", "put-object", "--body", str(body), *common).returncode == 0
+    assert run_aws(env, "s3api", "put-object", "--body", str(body), "--content-type", "application/json",
+                   "--cache-control", "no-store", *common).returncode == 0
     assert run_aws(env, "s3api", "get-object", str(tmp_path / "b.json"), *common).returncode == 0
     assert json.loads((tmp_path / "b.json").read_text(encoding="utf-8")) == MARKER
 
