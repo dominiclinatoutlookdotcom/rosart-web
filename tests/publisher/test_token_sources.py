@@ -112,6 +112,7 @@ def test_a_mutation_is_refused_before_any_request(mode, fake, clock):
 @pytest.mark.parametrize("mode", MODES)
 def test_graphql_errors_raise_and_the_url_carries_the_pinned_version(mode, fake, clock):
     runner, _ = build(mode, fake, clock)
+    runner(SHOP_QUERY, {})
     fake.errors_next(["Field nope does not exist"])
     with pytest.raises(ShopifyCliError, match="GraphQL errors"):
         runner(SHOP_QUERY, {})

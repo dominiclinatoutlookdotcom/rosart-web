@@ -19,8 +19,9 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from typing import Any, Callable, Optional, Protocol
+from typing import Any, Callable, Mapping, Optional, Protocol
 
+from pull_theme import DEFAULT_STORE
 from shopify_cli import ShopifyCliError, _unwrap, assert_read_only
 
 log = logging.getLogger("rosart.shopify_admin")
@@ -107,6 +108,14 @@ def graphql_url(shop: str) -> str:
     return f"https://{shop}/admin/api/{API_VERSION}/graphql.json"
 
 
+def _graphql_request(shop: str, token: Secret, query: str, variables: dict) -> urllib.request.Request:
+    return urllib.request.Request(
+        graphql_url(shop), data=json.dumps({"query": query, "variables": variables}).encode("utf-8"),
+        method="POST",
+        headers={"Content-Type": "application/json", "Accept": "application/json",
+                 "User-Agent": USER_AGENT, "X-Shopify-Access-Token": token.reveal()})
+
+
 def _error_code_of(exc: urllib.error.HTTPError) -> str:
     try:
         body = json.loads(exc.read().decode("utf-8", errors="replace"))
@@ -171,6 +180,107 @@ class ClientCredentialsTokenSource:
         expires_in = float(body.get("expires_in") or 0)
         log.info("shopify token granted for %s, valid %.0f s", self._shop, expires_in)
         return Secret(token), self._clock() + expires_in
+
+
+SCOPES_QUERY = "query RosartAccessScopes { currentAppInstallation { accessScopes { handle } } }"
+
+MODE_CLIENT_CREDENTIALS = "client-credentials"
+MODE_STORED_TOKEN = "stored-token"
+
+
+class StoredTokenSource:
+    """An existing admin-created app's access token: never refreshed, scopes read on first use.
+
+    The fallback when the client credentials grant answers ``shop_not_permitted`` (C4). A 401
+    fails ``shopify-access`` for good: there is no way to get another token.
+    """
+
+    def __init__(self, shop: str, token: Secret, opener: Opener) -> None:
+        self._shop = shop
+        self._token = token
+        self._opener = opener
+        self._scopes_checked = False
+        self._refused = False
+
+    def __repr__(self) -> str:
+        return f"StoredTokenSource(shop={self._shop!r})"
+
+    def get(self) -> Secret:
+        if self._refused:
+            raise ShopifyAdminError("shopify-access",
+                                    "Shopify refused the website's stored access token: contact the owner")
+        if not self._scopes_checked:
+            check_scopes(self._read_scopes())
+            self._scopes_checked = True
+        return self._token
+
+    def invalidate(self) -> None:
+        self._refused = True
+
+    def _read_scopes(self) -> list[str]:
+        request = _graphql_request(self._shop, self._token, SCOPES_QUERY, {})
+        try:
+            with self._opener.open(request, timeout=30) as response:
+                body = json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            raise ShopifyAdminError(
+                "shopify-access",
+                f"Shopify refused the website's stored access token (HTTP {exc.code}): contact the owner"
+            ) from None
+        except (urllib.error.URLError, OSError, ValueError) as exc:
+            raise ShopifyAdminError("shopify-access", f"could not read the token's scopes ({type(exc).__name__})") from None
+        try:
+            nodes = body["data"]["currentAppInstallation"]["accessScopes"]
+            return [node["handle"] for node in nodes]
+        except (KeyError, TypeError):
+            raise ShopifyAdminError("shopify-access", "Shopify did not list the token's scopes") from None
+
+
+class TokenConfigError(ValueError):
+    """The token configuration is unusable; the message names keys, never values."""
+
+
+def token_source_from_config(cfg: Mapping[str, str], shop: str = DEFAULT_STORE, opener: Optional[Opener] = None,
+                             clock: Callable[[], float] = time.monotonic) -> TokenSource:
+    """Build the token source for ``ROSART_SHOPIFY_TOKEN_MODE``; each mode needs only its own keys."""
+    def value(key: str) -> str:
+        return (cfg.get(key) or "").strip()
+
+    mode = value("ROSART_SHOPIFY_TOKEN_MODE") or MODE_CLIENT_CREDENTIALS
+    if mode == MODE_CLIENT_CREDENTIALS:
+        keys = ("ROSART_SHOPIFY_CLIENT_ID", "ROSART_SHOPIFY_CLIENT_SECRET")
+    elif mode == MODE_STORED_TOKEN:
+        keys = ("ROSART_SHOPIFY_ACCESS_TOKEN",)
+    else:
+        raise TokenConfigError(f"ROSART_SHOPIFY_TOKEN_MODE must be {MODE_CLIENT_CREDENTIALS} or "
+                               f"{MODE_STORED_TOKEN}, not an unknown value")
+    missing = [key for key in keys if not value(key)]
+    if missing:
+        raise TokenConfigError(f"mode {mode} needs {', '.join(missing)}")
+    if opener is None:
+        opener = default_opener(shop)
+    if mode == MODE_STORED_TOKEN:
+        return StoredTokenSource(shop, Secret(value(keys[0])), opener)
+    return ClientCredentialsTokenSource(shop, value(keys[0]), Secret(value(keys[1])), opener, clock)
+
+
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: D102 - urllib hook
+        raise ShopifyAdminError("shopify-access", "Shopify answered with a redirect: refusing to follow it")
+
+
+def default_opener(shop: str) -> Opener:
+    """A real HTTPS opener for ``shop`` only: no redirects, no other host."""
+    inner = urllib.request.build_opener(_NoRedirect())
+
+    class _ShopOnly:
+        def open(self, request, data=None, timeout=None):
+            host = urllib.parse.urlparse(request.full_url).netloc
+            if host != shop:
+                raise ShopifyAdminError("egress-refused", f"refusing to contact {host}: only {shop} is allowed")
+            return inner.open(request, data, timeout=timeout)
+
+    return _ShopOnly()
 
 
 class AdminApiRunner:
@@ -238,11 +348,7 @@ class AdminApiRunner:
 
     def _post(self, token: Secret, query: str, variables: dict) -> tuple[int, dict]:
         """One request; returns ``(status, body)``. Status 0 means the network failed."""
-        request = urllib.request.Request(
-            graphql_url(self._shop), data=json.dumps({"query": query, "variables": variables}).encode("utf-8"),
-            method="POST",
-            headers={"Content-Type": "application/json", "Accept": "application/json",
-                     "User-Agent": USER_AGENT, "X-Shopify-Access-Token": token.reveal()})
+        request = _graphql_request(self._shop, token, query, variables)
         timeout = max(1.0, min(REQUEST_TIMEOUT_S, self._deadline - self._clock()))
         try:
             with self._opener.open(request, timeout=timeout) as response:
