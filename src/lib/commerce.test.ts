@@ -1,23 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { enquiryMailto, formatPrice, orizenUrl, productJsonLd, resolveSiteUrl } from './commerce.ts';
-
-describe('enquiryMailto', () => {
-  it('addresses the enquiry email with the product name in the subject', () => {
-    expect(enquiryMailto('info@rosart.com.au', 'Rose Face Soufflé Cream 3g')).toBe(
-      'mailto:info@rosart.com.au?subject=Enquiry%3A%20Rose%20Face%20Souffl%C3%A9%20Cream%203g',
-    );
-  });
-
-  it('encodes characters that would break the mailto URL', () => {
-    expect(enquiryMailto('info@rosart.com.au', 'A & B?')).toBe('mailto:info@rosart.com.au?subject=Enquiry%3A%20A%20%26%20B%3F');
-  });
-});
+import { formatPrice, orizenUrl, productJsonLd, resolveSiteUrl } from './commerce.ts';
 
 describe('orizenUrl', () => {
   const title = 'Rose Face Soufflé Cream 3g';
   const search = 'https://orizen.com.au/search?q=Rose%20Face%20Souffl%C3%A9%20Cream%203g';
 
-  it('uses the custom.orizen_url metafield when it is https on orizen.com.au', () => {
+  it('uses the custom.orizen_product_url metafield when it is https on orizen.com.au', () => {
     expect(orizenUrl('https://orizen.com.au/products/rose-face-souffle-cream-3g', title)).toBe(
       'https://orizen.com.au/products/rose-face-souffle-cream-3g',
     );

@@ -37,7 +37,7 @@ export interface Product {
   details: ProductDetail[];
   /** The collection shown in the breadcrumb (never the homepage list). */
   collection: { title: string; url: string } | null;
-  /** The "Shop in Orizen" link: metafield `custom.orizen_url` if valid, else the ORIZEN search. */
+  /** The ORIZEN link: metafield `custom.orizen_product_url` (the one the theme's button reads) if valid, else the ORIZEN search. */
   orizenUrl: string;
 }
 
@@ -112,7 +112,7 @@ export function toProducts(raw: readonly RawProduct[], ctx: SiteContext): Produc
         images: p.images.map((image) => ctx.images.fromUrl(image.url, image.altText, p.title)),
         details,
         collection: primaryCollection(p.handle, ctx),
-        orizenUrl: orizenUrl(metafield(p, 'custom', 'orizen_url')?.value, p.title),
+        orizenUrl: orizenUrl(metafield(p, 'custom', 'orizen_product_url')?.value, p.title),
       };
     });
 }
@@ -141,11 +141,6 @@ export function toCollections(raw: readonly RawCollection[], ctx: SiteContext): 
         },
       };
     });
-}
-
-/** Handles of the products in Shopify's homepage collection, in order. */
-export function featuredProductHandles(raw: readonly RawCollection[]): string[] {
-  return raw.find((c) => c.handle === HOMEPAGE_COLLECTION_HANDLE)?.productHandles ?? [];
 }
 
 export function toPages(raw: readonly RawPage[], ctx: SiteContext): Page[] {

@@ -2,7 +2,9 @@
 
 The theme itself is Shopify-licensed reference material; what we keep is the merchant's own
 content held in it: section and block order, text, headings, labels, links and image picks.
-Styling values (colours, fonts, spacing, CSS variables, Liquid expressions) are dropped.
+Styling values (colours, fonts, spacing, CSS variables, Liquid expressions) are dropped. A content
+setting bound to the page's own data with Liquid (a text block showing ``{{ closest.product.title }}``)
+is kept apart under ``bindings``, so the site can show the same source the theme names.
 """
 from __future__ import annotations
 
@@ -22,6 +24,8 @@ _CONTENT_KEY = re.compile(
     # Not `_link$`: Horizon's `type_case_primary_link` / `type_font_primary_link` are styling.
     r"|_url$|_label$"
 )
+# How many items a list section shows: a content choice although it is a number.
+_LIMIT_KEY = re.compile(r"^(max_products|max_collections|products_per_page)$")
 
 
 def strip_comment_header(text: str) -> str:
@@ -42,6 +46,8 @@ def is_content_setting(key: str, value: Any) -> bool:
     """True for owner-written content (copy, links, image picks); False for styling or empty."""
     if value is None or value == "" or value == [] or value == {}:
         return False
+    if isinstance(value, int) and not isinstance(value, bool) and _LIMIT_KEY.match(key):
+        return True
     if isinstance(value, (bool, int, float, dict)):
         return False
     if isinstance(value, list):
@@ -61,6 +67,18 @@ def _content_settings(settings: Any) -> dict:
     return {k: v for k, v in settings.items() if is_content_setting(k, v)}
 
 
+def is_binding(key: str, value: Any) -> bool:
+    """True for a content setting filled by Liquid from the page's data (``closest.product`` ...)."""
+    return (isinstance(value, str) and "{{" in value and "closest." in value
+            and bool(_CONTENT_KEY.search(key)))
+
+
+def _bindings(settings: Any) -> dict:
+    if not isinstance(settings, dict):
+        return {}
+    return {k: v for k, v in settings.items() if is_binding(k, v)}
+
+
 def _ordered_ids(children: dict, order: Any) -> list[tuple[str, bool]]:
     """``(id, in_order)`` pairs: ids from ``order`` first, the rest after in file order."""
     listed = [i for i in (order or []) if i in children]
@@ -77,6 +95,9 @@ def _node(node_id: str, node: dict) -> dict:
     if node.get("static"):
         out["static"] = True
     out["settings"] = _content_settings(node.get("settings"))
+    bindings = _bindings(node.get("settings"))
+    if bindings:
+        out["bindings"] = bindings
     blocks = node.get("blocks") or {}
     out["blocks"] = [_node(bid, blocks[bid]) for bid, _ in _ordered_ids(blocks, node.get("block_order"))]
     return out

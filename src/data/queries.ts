@@ -36,9 +36,3 @@ export async function getThemePage(id: string): Promise<ThemePage> {
   if (!entry) throw new Error(`Theme page ${id} is missing`);
   return entry.data;
 }
-
-export async function getFeaturedProducts(limit?: number): Promise<Product[]> {
-  const site = await getSite();
-  const featured = await getProductsByHandle(site.featuredProductHandles);
-  return limit === undefined ? featured : featured.slice(0, limit);
-}

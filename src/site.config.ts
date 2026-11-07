@@ -8,12 +8,14 @@ export const siteConfig = {
   /** Canonical origin for canonical tags, Open Graph, the sitemap and robots.txt. Env `SITE_URL` overrides. */
   siteUrl: resolveSiteUrl(process.env['SITE_URL']),
 
-  /** Where the product "Enquire" button and the contact page send email. */
+  /** The site's one email address: the contact page's email link (in place of Shopify's form). */
   enquiryEmail: 'info@rosart.com.au',
 
   /**
-   * Label of the product page button to ORIZEN, the retail partner. The link is the product's
-   * `custom.orizen_url` metafield (https on orizen.com.au only), else an ORIZEN search for the title.
+   * Label of the product page button to ORIZEN, the retail partner (owner decision 2026-11-07; the
+   * theme says "SHOP NOW"). The link is the product's `custom.orizen_product_url` metafield, the one
+   * the theme's button reads (https on orizen.com.au only), else an ORIZEN search for the title.
+   * An allowed theme difference: see `src/lib/allowed-differences.ts`.
    */
   orizenButtonLabel: 'Shop in Orizen.com.au',
 

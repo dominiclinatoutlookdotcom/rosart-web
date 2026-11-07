@@ -11,8 +11,9 @@ This repo holds two things:
   of the content and images;
 - the **static website** (Astro, `src/`), built from that export into plain files in `dist/` for a
   private S3 bucket behind CloudFront. The site presents the brand and its products; it does not
-  sell (no cart, checkout or accounts). Product pages have an "Enquire" email button and a
-  "Shop in Orizen.com.au" button to ORIZEN, the Australian retail partner.
+  sell (no cart, checkout or accounts). Every page renders exactly what its Shopify theme
+  template renders (see "Theme fidelity"); product pages link to ORIZEN, the Australian retail
+  partner, with a "Shop in Orizen.com.au" button.
 
 ## Website
 
@@ -21,12 +22,13 @@ Needs Node 24 and npm 11. Dependencies are pinned to exact versions in `package.
 
 ```sh
 make site            # npm ci + build into dist/
-make check           # site tests, type check, build, then the dist/ check
+make check           # build, site tests, type check, then the dist/ check
 make dev             # dev server with live reload: http://localhost:4321/
 npm run preview      # serve the built dist/ locally: http://localhost:4321/
 ```
 
-Without `make`: `npm ci`, `npm test`, `npm run typecheck`, `npm run build`, `npm run check:dist`.
+Without `make`: `npm ci`, `npm run build`, `npm test`, `npm run typecheck`, `npm run check:dist`
+(build before the tests: the theme fidelity tests read `dist/`).
 The Makefile sets `ASTRO_TELEMETRY_DISABLED=1` so builds make no outbound calls; when running npm
 directly, set it yourself (`ASTRO_TELEMETRY_DISABLED=1 npm run build`) or run
 `npx astro telemetry disable` once.
@@ -41,6 +43,44 @@ email address other than `enquiryEmail` appears in any text file (page text, `ma
 is fixed in Shopify and re-exported, never rewritten by the site, so until then the check fails
 and names the page and the address (for example
 `contact/index.html (page /contact/): email address info@deniva.com.au is not the site email info@rosart.com.au`).
+It also runs the theme fidelity check below on every built page.
+
+### Theme fidelity
+
+The site must render what the Shopify theme renders: nothing more, nothing less. Each page is
+built from its theme template in `export/theme-content.json` (home `index.json`; Our Story,
+Our Collection and contact `page.<handle>.json`; collections `collection.json`; products the
+template their `templateSuffix` names, `product.product-catalogue.json`; and `404.json`), with the
+header and footer section groups around it:
+
+- every enabled section and block appears, in theme order, and disabled ones do not; a section
+  with no blocks is an empty spacer, never content;
+- each block shows the text, images and links the theme gives it; a setting the theme binds with
+  Liquid (`{{ closest.product.title }}`, `{{ closest.collection.description }}`, a product
+  metafield) shows the data that binding names; a product list shows the collection its setting
+  names, up to its limit;
+- nothing else appears on the page: no extra sections, products, links or text.
+
+The components emit `data-theme-section`, `data-theme-block` and `data-theme-type` on every theme
+node and `data-image` on every image. `src/lib/fidelity.ts` builds the theme's outline straight
+from the template and reads the site's outline back from the built HTML; the two must be equal.
+It runs in `npm test` (`scripts/fidelity-dist.test.ts`, one test per page, skipped while `dist/`
+is absent, so build first) and in `npm run check:dist`.
+
+Every intended difference is listed once, with its reason, in
+**`src/lib/allowed-differences.ts`** (`ALLOWED_DIFFERENCES`): prices (`showPrices` is off), the
+contact form (an email link instead), product recommendations (other products of the same
+collection instead), the ORIZEN button label and its search fallback (owner decision 2026-11-07),
+the placeholder social links, shop policies (not exported), the header's cart, account and
+country selectors, and site-only markup such as the skip link and the menu buttons. To add one:
+
+1. add an entry with a `reason` that says why the static site differs;
+2. for a theme node, give `theme: { effect, type, template?, id? }`: `absent` (the site leaves it
+   out), `opaque` (the site shows its own substitute in its place; only id and type are checked),
+   `replaced-label` (with `label`), `fallback-link`, `first-image-only` or `not-modelled`;
+3. for markup only the site has, mark the element `data-allowed="<key>"`: the check skips it, and
+   fails on any key that is not in the list;
+4. add a test for it and rebuild; `npm test` and `npm run check:dist` must pass.
 
 `/llms.txt` ([llmstxt.org](https://llmstxt.org) proposal) is a plain Markdown index of the site for
 language models: a summary, then links to the pages, collections and products with one-line
@@ -55,8 +95,8 @@ All site settings are in `src/site.config.ts`:
 | Setting | Default | Meaning |
 | --- | --- | --- |
 | `siteUrl` | env `SITE_URL`, else `https://rosart.com.au` | Canonical origin: canonical tags, Open Graph URLs, sitemap, robots.txt. Must be an origin (no path) |
-| `enquiryEmail` | `info@rosart.com.au` | The product "Enquire" mailto (subject `Enquiry: <product name>`), the contact page and the footer |
-| `orizenButtonLabel` | `Shop in Orizen.com.au` | Label of the product button to ORIZEN (see "ORIZEN button" below) |
+| `enquiryEmail` | `info@rosart.com.au` | The site's one email address: the contact page's email link, shown in place of Shopify's contact form |
+| `orizenButtonLabel` | `Shop in Orizen.com.au` | Label of the product button to ORIZEN (owner decision 2026-11-07; the theme says "SHOP NOW"; see "ORIZEN button" below) |
 | `showPrices` | `false` | Show the AUD price from the export on product cards and pages |
 | `announcement` | `undefined` (the theme's text) | Header bar text; a string replaces it, `''` hides the bar |
 | `imageAlt` | five entries | Alt text for exported images Shopify has none for (it has none for any image); only images that carry words or meaning are listed, the rest are decorative, product images use the product title |
@@ -216,28 +256,30 @@ Hosting assumptions the build relies on (set up in AWS, no code for them in this
 
 ### ORIZEN button
 
-Each product page has, beside "Enquire", a button labelled `orizenButtonLabel` that opens ORIZEN
-in a new tab (`target="_blank" rel="noopener noreferrer"`), with no tracking parameters added:
+Each product page shows the product template's button (`button_z9EEwn`) where the theme puts it,
+labelled `orizenButtonLabel` ("Shop in Orizen.com.au", owner decision 2026-11-07, in place of the
+theme's "SHOP NOW"). It opens ORIZEN in a new tab (`target="_blank" rel="noopener noreferrer"`),
+with no tracking parameters added:
 
-- the product's **`custom.orizen_url`** metafield (a URL metafield defined in Shopify), used only
-  when it is `https://` on `orizen.com.au` or `www.orizen.com.au` (no other host, port or
-  user info);
+- the product's **`custom.orizen_product_url`** metafield ("ORIZEN Product URL", type URL), the
+  one the theme's button reads, used only when it is `https://` on `orizen.com.au` or
+  `www.orizen.com.au` (no other host, port or user info);
 - otherwise, including while the metafield is unset, `https://orizen.com.au/search?q=<product
   title, URL-encoded>`.
 
-Under the buttons is the theme's purchase note, taken from the product template (the text block
-after its "SHOP NOW" button), so the owner edits it in the theme editor. Rules and tests:
-`src/lib/commerce.ts` (`orizenUrl`), `src/lib/theme.ts` (`productPurchaseNote`).
+The label and the fallback are allowed theme differences (`src/lib/allowed-differences.ts`). The
+note under the button is the template's next text block, edited in the theme editor. Rules and
+tests: `src/lib/commerce.ts` (`orizenUrl`), `src/lib/theme.ts`, `src/lib/theme.test.ts`.
 
 ### URL map
 
 Clean URLs, all with a trailing slash. `src/lib/urls.ts` is the one module that turns Shopify
-handles and links into site URLs; menus, collection tiles, theme buttons and breadcrumbs all
-resolve through it.
+handles and links into site URLs; menus, collection cards, theme buttons and links all resolve
+through it.
 
 | Shopify | Site |
 | --- | --- |
-| Home (`/`, collection `frontpage`) | `/` (the `frontpage` collection is the homepage's featured products) |
+| Home (`/`, collection `frontpage`) | `/` (a link to the `frontpage` collection goes home; the homepage shows only its theme sections, never that collection) |
 | Page `our-story` | `/our-story/` |
 | Page `our-collection`, and "all products" (`/collections`, `/collections/all`) | `/our-collection/` |
 | Page `contact` | `/contact/` |
@@ -258,13 +300,11 @@ reshaped by tested modules in `src/lib/`; the export files are never edited by h
 
 | Site | Source |
 | --- | --- |
-| Products (14 active) | `products.json`: description, SEO fields, type, images, metafields `custom.how_to_use`, `the_ingredients`, `certifications_brand_values`, `caution` (headings and order from the product template's accordion in `theme-content.json`), and `custom.orizen_url` for the ORIZEN button |
-| Product purchase note | `theme-content.json`, product template: the text block after its button ("You’ll be redirected to ORIZEN, …") |
-| 404 page, including its button label ("Continue shopping") | `theme-content.json` 404 template, edited in the theme editor |
-| Collections | `collections.json` (product order, image) |
-| Homepage, Our Story, Our Collection, 404 | `theme-content.json` templates, in the owner's section order; disabled sections and blocks are skipped |
+| Product pages (14 active) | `product.product-catalogue.json` in `theme-content.json` (block order, accordion headings, the note under the button) filled from `products.json`: title, description, images, SEO fields, the metafields each accordion row binds (`custom.how_to_use`, `the_ingredients`, `certifications_brand_values`, `caution`), and `custom.orizen_product_url` for the ORIZEN button |
+| Collection pages | `collection.json` (band with the collection title and description, product grid) filled from `collections.json` (product order, image) |
+| Homepage, Our Story, Our Collection, contact, 404 | `theme-content.json` templates, in the owner's section order; disabled sections and blocks are skipped; the 404 product list shows the first 4 active products (`collection: all`, `max_products: 4`) |
 | Header, footer, navigation | `theme-content.json` header/footer groups and logo; `menus.json` main menu |
-| Contact | `pages.json` body plus the enquiry email |
+| Contact | `page.contact.json`: the page title and body from `pages.json`, then the enquiry email link in place of the contact form |
 | Images | `export/images/` via `manifest.json`, resized to WebP by Astro at build time; only images a page uses are built |
 
 Fonts are the theme's (Cormorant, Libre Baskerville, Inter), self-hosted from `@fontsource`
@@ -276,9 +316,10 @@ packages; the site makes no requests to other hosts.
 | --- | --- |
 | `src/site.config.ts` | Site settings |
 | `src/content.config.ts` | Content layer collections over `export/` |
-| `src/lib/` | Tested, framework-free modules: URL map, HTML sanitiser, rich text, catalog, theme section model, image references (`*.test.ts` beside each) |
+| `src/lib/` | Tested, framework-free modules: URL map, HTML sanitiser, rich text, catalog, theme section model, theme fidelity check and its allowlist (`allowed-differences.ts`), image references (`*.test.ts` beside each) |
 | `src/pages/`, `src/components/`, `src/layouts/`, `src/styles/` | The Astro site |
 | `scripts/check-dist.ts`, `scripts/dist-check.ts` | The post-build check (runs under plain Node) |
+| `scripts/fidelity-dist.test.ts` | Theme fidelity of every built page (part of `npm test`) |
 | `tools/publish.py`, `deploy.config.json` | The publish script and its deploy target |
 
 ## Export
@@ -354,7 +395,7 @@ python tools/seo_apply.py --rollback seo/apply-log-<UTC>.jsonl --write  #    rol
 | `export/shopify/menus.json` | Menus with nested items and the handle of the page/collection each item links to |
 | `export/shopify/blogs.json` | Blogs and their articles |
 | `export/shopify/files.json` | Every file in Shopify Files: id, alt, url, filename, size, mime |
-| `export/theme-content.json` | Owner-written copy from the theme: per JSON template and section group, the ordered sections and blocks with their text, headings, labels, links and image picks (styling dropped) |
+| `export/theme-content.json` | Owner-written copy from the theme: per JSON template and section group, the ordered sections and blocks with their text, headings, labels, links, image picks and list limits (styling dropped); settings the theme fills with Liquid from the page (`{{ closest.product.title }}`) are kept apart under `bindings` |
 | `export/images/` | Every image used by products, collections, files, page/product HTML and the theme, under its original filename |
 | `export/images/manifest.json` | Filename to source URL, sha256, bytes and who references it; CDN URL to filename; theme `shopify://shop_images/<name>` to filename; unresolved references |
 

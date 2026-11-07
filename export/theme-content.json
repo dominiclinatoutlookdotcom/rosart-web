@@ -204,7 +204,8 @@
           "disabled": false,
           "id": "product_list_iA96Tq",
           "settings": {
-            "collection": "all"
+            "collection": "all",
+            "max_products": 4
           },
           "type": "product-list"
         }
@@ -255,6 +256,9 @@
         {
           "blocks": [
             {
+              "bindings": {
+                "text": "<h1>{{ closest.blog.title }}</h1>"
+              },
               "blocks": [],
               "disabled": false,
               "id": "title",
@@ -401,7 +405,8 @@
           "disabled": false,
           "id": "product_list_NNFgcy",
           "settings": {
-            "collection": "all"
+            "collection": "all",
+            "max_products": 4
           },
           "type": "product-list"
         }
@@ -412,6 +417,9 @@
         {
           "blocks": [
             {
+              "bindings": {
+                "text": "<h1>{{ closest.collection.title }}</h1>"
+              },
               "blocks": [],
               "disabled": false,
               "id": "text_tqQTNE",
@@ -419,6 +427,9 @@
               "type": "text"
             },
             {
+              "bindings": {
+                "text": "{{ closest.collection.description }}"
+              },
               "blocks": [],
               "disabled": false,
               "id": "text_twGGkJ",
@@ -476,7 +487,9 @@
           ],
           "disabled": false,
           "id": "main",
-          "settings": {},
+          "settings": {
+            "products_per_page": 24
+          },
           "type": "main-collection"
         }
       ]
@@ -800,7 +813,9 @@
           ],
           "disabled": false,
           "id": "collection_list_Wfgh3m",
-          "settings": {},
+          "settings": {
+            "max_collections": 4
+          },
           "type": "main-collection-list"
         }
       ]
@@ -810,6 +825,9 @@
         {
           "blocks": [
             {
+              "bindings": {
+                "text": "<h1>{{ closest.page.title }}</h1>"
+              },
               "blocks": [],
               "disabled": false,
               "id": "title",
@@ -817,6 +835,9 @@
               "type": "text"
             },
             {
+              "bindings": {
+                "text": "{{ closest.page.content }}"
+              },
               "blocks": [],
               "disabled": false,
               "id": "content",
@@ -862,6 +883,9 @@
         {
           "blocks": [
             {
+              "bindings": {
+                "text": "<h1>{{ closest.page.title }}</h1>"
+              },
               "blocks": [],
               "disabled": false,
               "id": "heading",
@@ -888,6 +912,9 @@
         {
           "blocks": [
             {
+              "bindings": {
+                "text": "<h1>{{ closest.page.title }}</h1>"
+              },
               "blocks": [],
               "disabled": false,
               "id": "heading",
@@ -958,7 +985,8 @@
               "face-care",
               "face-care-copy",
               "rose-water-toners-copy"
-            ]
+            ],
+            "max_collections": 4
           },
           "type": "collection-list"
         }
@@ -969,6 +997,9 @@
         {
           "blocks": [
             {
+              "bindings": {
+                "text": "<h1>{{ closest.page.title }}</h1>"
+              },
               "blocks": [],
               "disabled": false,
               "id": "heading",
@@ -1248,6 +1279,9 @@
                 {
                   "blocks": [
                     {
+                      "bindings": {
+                        "text": "<h1>{{ closest.product.title }}</h1>"
+                      },
                       "blocks": [],
                       "disabled": false,
                       "id": "text_xrnftG",
@@ -1314,6 +1348,9 @@
                   "type": "buy-buttons"
                 },
                 {
+                  "bindings": {
+                    "text": "{{ closest.product.description }}"
+                  },
                   "blocks": [],
                   "disabled": false,
                   "id": "text_aEtTtq",
@@ -1334,6 +1371,9 @@
           "type": "product-information"
         },
         {
+          "bindings": {
+            "product": "{{ closest.product }}"
+          },
           "blocks": [
             {
               "blocks": [],
@@ -1377,7 +1417,9 @@
           ],
           "disabled": false,
           "id": "product_recommendations_qggXJq",
-          "settings": {},
+          "settings": {
+            "max_products": 4
+          },
           "type": "product-recommendations"
         }
       ]
@@ -1408,6 +1450,9 @@
                 {
                   "blocks": [
                     {
+                      "bindings": {
+                        "text": "<h1>{{ closest.product.title }}</h1>"
+                      },
                       "blocks": [],
                       "disabled": false,
                       "id": "text_xrnftG",
@@ -1428,6 +1473,9 @@
                   "type": "group"
                 },
                 {
+                  "bindings": {
+                    "text": "{{ closest.product.description }}"
+                  },
                   "blocks": [],
                   "disabled": false,
                   "id": "text_aEtTtq",
@@ -1446,6 +1494,9 @@
                     {
                       "blocks": [
                         {
+                          "bindings": {
+                            "text": "<p>{{ closest.product.metafields.custom.how_to_use | metafield_tag }}</p>"
+                          },
                           "blocks": [],
                           "disabled": false,
                           "id": "text_7gFpPP",
@@ -1463,6 +1514,9 @@
                     {
                       "blocks": [
                         {
+                          "bindings": {
+                            "text": "<p><br/>{{ closest.product.metafields.custom.the_ingredients | metafield_tag }}</p>"
+                          },
                           "blocks": [],
                           "disabled": false,
                           "id": "text_WTyd4j",
@@ -1480,6 +1534,9 @@
                     {
                       "blocks": [
                         {
+                          "bindings": {
+                            "text": "<p>{{ closest.product.metafields.custom.certifications_brand_values | metafield_tag }}</p>"
+                          },
                           "blocks": [],
                           "disabled": false,
                           "id": "text_qAghDy",
@@ -1497,6 +1554,9 @@
                     {
                       "blocks": [
                         {
+                          "bindings": {
+                            "text": "{{ closest.product.metafields.custom.caution | metafield_tag }}"
+                          },
                           "blocks": [],
                           "disabled": false,
                           "id": "text_dUBgxb",
@@ -1518,6 +1578,9 @@
                   "type": "accordion"
                 },
                 {
+                  "bindings": {
+                    "link": "{{ closest.product.metafields.custom.orizen_product_url.value }}"
+                  },
                   "blocks": [],
                   "disabled": false,
                   "id": "button_z9EEwn",
@@ -1595,6 +1658,9 @@
           "type": "product-information"
         },
         {
+          "bindings": {
+            "product": "{{ closest.product }}"
+          },
           "blocks": [
             {
               "blocks": [],
@@ -1638,7 +1704,9 @@
           ],
           "disabled": false,
           "id": "product_recommendations_qggXJq",
-          "settings": {},
+          "settings": {
+            "max_products": 4
+          },
           "type": "product-recommendations"
         }
       ]

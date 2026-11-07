@@ -1,6 +1,11 @@
 ---
-/** Renders theme blocks (headings, text, images, buttons, groups). Groups render recursively. */
+/**
+ * Renders theme blocks in the theme's order. Every block carries its theme id and type
+ * (`data-theme-block`, `data-theme-type`) so the fidelity check can compare the built page with
+ * the template. Containers render recursively.
+ */
 import type { Block } from '../lib/theme.ts';
+import { siteConfig } from '../site.config.ts';
 import Img from './Img.astro';
 
 interface Props {
@@ -11,38 +16,98 @@ interface Props {
 
 const { blocks, imageSizes = '(min-width: 900px) 50vw, 100vw' } = Astro.props;
 const headingTag = (level: number) => `h${Math.min(6, Math.max(1, level))}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+const external = { target: '_blank', rel: 'noopener noreferrer' };
 ---
 
 {
   blocks.map((block) => {
+    const theme = { 'data-theme-block': block.id, 'data-theme-type': block.type };
     switch (block.kind) {
       case 'heading': {
         const Tag = headingTag(block.level);
-        return <Tag class:list={['block-heading', block.level === 1 && 'display']}>{block.text}</Tag>;
+        return (
+          <Tag class:list={['block-heading', block.level === 1 && 'display', block.level >= 5 && 'small-heading']} {...theme}>
+            {block.text}
+          </Tag>
+        );
       }
       case 'eyebrow':
-        return <p class="eyebrow">{block.text}</p>;
+        return (
+          <p class="eyebrow" {...theme}>
+            {block.text}
+          </p>
+        );
       case 'richtext':
-        return <div class="prose" set:html={block.html} />;
+        return <div class="prose" set:html={block.html} {...theme} />;
       case 'image':
-        return <Img class="block-image" image={block.image} widths={[480, 800, 1200]} sizes={imageSizes} />;
+        return block.href ? (
+          <a class="block-image-link" href={block.href} {...theme}>
+            <Img class="block-image" image={block.image} widths={[480, 800, 1200]} sizes={imageSizes} />
+          </a>
+        ) : (
+          <div class="block-image-wrap" {...theme}>
+            <Img class="block-image" image={block.image} widths={[480, 800, 1200]} sizes={imageSizes} />
+          </div>
+        );
       case 'button':
         return (
-          <p class="block-actions">
-            <a class="button" href={block.href}>
+          <p class="block-actions" {...theme}>
+            <a class="button" href={block.href} {...(block.external ? external : {})}>
               {block.label}
             </a>
           </p>
         );
       case 'group':
         return block.href ? (
-          <a class="group tile" href={block.href}>
+          <a class:list={['group', `group-${block.type.replace(/^_/, '')}`]} href={block.href} {...theme}>
             <Astro.self blocks={block.blocks} imageSizes={imageSizes} />
           </a>
         ) : (
-          <div class="group">
+          <div class:list={['group', `group-${block.type.replace(/^_/, '')}`]} {...theme}>
             <Astro.self blocks={block.blocks} imageSizes={imageSizes} />
           </div>
+        );
+      case 'accordion-row':
+        return (
+          <details class="accordion-row" {...theme}>
+            <summary>
+              <h2>{block.heading}</h2>
+            </summary>
+            <Astro.self blocks={block.blocks} imageSizes={imageSizes} />
+          </details>
+        );
+      case 'media-gallery': {
+        const [main, ...rest] = block.images;
+        return (
+          <div class="product-gallery" {...theme}>
+            {main && <Img class="gallery-main" image={main} widths={[480, 720, 960, 1200]} sizes="(min-width: 900px) 50vw, 100vw" priority />}
+            {rest.length > 0 && (
+              <ul class="gallery-more" role="list">
+                {rest.map((image, index) => (
+                  <li>
+                    <Img
+                      image={image}
+                      alt={`${image.alt}, image ${index + 2} of ${block.images.length}`}
+                      widths={[360, 540, 720]}
+                      sizes="(min-width: 900px) 25vw, 50vw"
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      }
+      case 'divider':
+        return <hr class="block-divider" {...theme} />;
+      case 'contact-form':
+        // The allowed substitute for Shopify's contact form: an email link to the enquiry address.
+        return (
+          <p class="block-actions contact-email" {...theme}>
+            <a class="button" href={`mailto:${siteConfig.enquiryEmail}`}>
+              Email {siteConfig.enquiryEmail}
+            </a>
+          </p>
         );
     }
   })

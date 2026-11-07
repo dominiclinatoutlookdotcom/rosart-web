@@ -2,15 +2,10 @@
 
 export const DEFAULT_SITE_URL = 'https://rosart.com.au';
 
-/** A `mailto:` link to the enquiry address with the product name in the subject. */
-export function enquiryMailto(email: string, productName: string): string {
-  return `mailto:${email}?subject=${encodeURIComponent(`Enquiry: ${productName}`)}`;
-}
-
 const ORIZEN_HOSTS = new Set(['orizen.com.au', 'www.orizen.com.au']);
 
 /**
- * Where a product's "Shop in Orizen" button goes: the product's `custom.orizen_url` metafield when
+ * Where a product's "Shop in Orizen" button goes: the product's `custom.orizen_product_url` metafield (the theme's SHOP NOW link) when
  * it is an https URL on orizen.com.au (or www.), otherwise the ORIZEN search for the product title.
  * The link is used as given: no tracking parameters are added.
  */

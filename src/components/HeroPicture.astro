@@ -27,7 +27,7 @@ const mobile = mobileImage ? await variant(mobileImage, [480, 750, 1000]) : null
 ---
 
 <picture class={className}>
-  {mobile && <source media={MOBILE_QUERY} srcset={mobile.result.srcSet.attribute} sizes="100vw" type="image/webp" width={mobile.width} height={mobile.height} />}
+  {mobile && <source media={MOBILE_QUERY} srcset={mobile.result.srcSet.attribute} sizes="100vw" type="image/webp" width={mobile.width} height={mobile.height} data-image={mobileImage?.file} />}
   <img
     src={desktop.result.src}
     srcset={desktop.result.srcSet.attribute}
@@ -38,5 +38,6 @@ const mobile = mobileImage ? await variant(mobileImage, [480, 750, 1000]) : null
     loading={priority ? 'eager' : 'lazy'}
     fetchpriority={priority ? 'high' : 'auto'}
     decoding="async"
+    data-image={image.file}
   />
 </picture>

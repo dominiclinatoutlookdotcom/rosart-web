@@ -1,8 +1,9 @@
 ---
 /**
- * Renders a page's theme sections in the owner's order. Layout follows the content: a section
- * with an image beside a text group is a split, several image groups are tiles, a background
- * image makes a band, anything else is a centred text block.
+ * Renders a page's theme sections in the theme's order, each with its theme id and type
+ * (`data-theme-section`, `data-theme-type`) for the fidelity check. Layout follows the content: a
+ * section with an image beside a text group is a split, several image groups are tiles, a
+ * background image makes a band, anything else is a centred text block.
  */
 import type { Product } from '../lib/catalog.ts';
 import type { Block, Section } from '../lib/theme.ts';
@@ -13,13 +14,15 @@ import ProductGrid from './ProductGrid.astro';
 
 interface Props {
   sections: Section[];
-  /** Title and body for a `page-title` section (the Shopify page). */
-  page?: { title: string; bodyHtml: string };
-  /** Products for `featured-products` and `product-list` sections. */
+  /** Every product, for the lists the theme names (they pick theirs by handle). */
   products?: Product[];
+  /** The related products that stand in for Shopify's recommendations (an allowed difference). */
+  related?: Product[];
 }
 
-const { sections, page, products = [] } = Astro.props;
+const { sections, products = [], related = [] } = Astro.props;
+const byHandle = new Map(products.map((p) => [p.handle, p]));
+const pick = (handles: readonly string[]) => handles.flatMap((h) => byHandle.get(h) ?? []);
 
 function layout(blocks: readonly Block[]): 'split' | 'tiles' | 'stack' {
   const groups = blocks.filter((b) => b.kind === 'group');
@@ -29,14 +32,16 @@ function layout(blocks: readonly Block[]): 'split' | 'tiles' | 'stack' {
 }
 const onlyImages = (blocks: readonly Block[]) => blocks.every((b) => b.kind === 'image');
 const firstHero = sections.findIndex((s) => s.kind === 'hero');
+const isFirstSectionH1 = (blocks: readonly Block[]) => blocks.some((b) => b.kind === 'heading' && b.level === 1);
 ---
 
 {
   sections.map((section, index) => {
+    const theme = { id: section.id, 'data-theme-section': section.id, 'data-theme-type': section.type };
     switch (section.kind) {
       case 'hero':
         return (
-          <section class:list={['hero', section.blocks.length > 0 && 'hero-with-text']} id={section.id}>
+          <section class:list={['hero', section.blocks.length > 0 && 'hero-with-text']} {...theme}>
             {section.image && (
               <HeroPicture class="hero-picture" image={section.image} mobileImage={section.mobileImage} priority={index === firstHero && index === 0} />
             )}
@@ -54,55 +59,88 @@ const firstHero = sections.findIndex((s) => s.kind === 'hero');
             class:list={[
               'content-section',
               `layout-${kind}`,
+              section.type === 'main-page' && isFirstSectionH1(section.blocks) && 'page-heading',
               section.background ? 'has-background' : kind === 'stack' && !onlyImages(section.blocks) && 'tone-blush',
             ]}
-            id={section.id}
+            {...theme}
           >
-            {section.background && <Img class="section-background" image={section.background} alt="" widths={[750, 1200, 1920]} sizes="100vw" />}
+            {section.background && (
+              <Img class="section-background" image={section.background} alt="" widths={[750, 1200, 1920]} sizes="100vw" priority={index === 0} />
+            )}
             <div class="section-inner">
-              <Blocks blocks={section.blocks} imageSizes={kind === 'tiles' ? '(min-width: 900px) 33vw, 100vw' : kind === 'split' ? '(min-width: 900px) 50vw, 100vw' : '(min-width: 1100px) 1000px, 100vw'} />
+              <Blocks
+                blocks={section.blocks}
+                imageSizes={kind === 'tiles' ? '(min-width: 900px) 33vw, 100vw' : kind === 'split' ? '(min-width: 900px) 50vw, 100vw' : '(min-width: 1100px) 1000px, 100vw'}
+              />
             </div>
           </section>
         );
       }
-      case 'page-title':
-        return page && (section.showTitle || (section.showBody && page.bodyHtml)) ? (
-          <section class="page-heading" id={section.id}>
-            {section.showTitle && <h1 class="display">{page.title}</h1>}
-            {section.showBody && page.bodyHtml && <div class="prose" set:html={page.bodyHtml} />}
-          </section>
-        ) : null;
+      case 'spacer':
+        return <div class="theme-spacer" aria-hidden="true" {...theme} />;
       case 'collection-list':
         return (
-          <section class="content-section collection-list" id={section.id}>
+          <section class="content-section collection-list" {...theme}>
             <div class="section-inner">
-              <Blocks blocks={section.blocks} />
+              <Blocks blocks={section.before} />
               <ul class="collection-cards" role="list">
-                {section.collections.map((collection) => (
-                  <li>
-                    <a class="tile" href={collection.url}>
-                      {collection.image && <Img image={collection.image} alt="" widths={[400, 600, 800]} sizes="(min-width: 900px) 33vw, 100vw" />}
-                      <h3>{collection.title}</h3>
-                    </a>
-                  </li>
-                ))}
+                {section.card &&
+                  section.collections.map((collection) => (
+                    <li>
+                      <a class="tile" href={collection.url} data-theme-block={section.card?.id} data-theme-type={section.card?.type}>
+                        {section.card?.blocks.map((block) =>
+                          block.type === '_collection-card-image' ? (
+                            <div class="tile-media" data-theme-block={block.id} data-theme-type={block.type}>
+                              {collection.image && <Img image={collection.image} alt="" widths={[400, 600, 800]} sizes="(min-width: 900px) 33vw, 100vw" />}
+                            </div>
+                          ) : block.type === 'collection-title' ? (
+                            <h3 data-theme-block={block.id} data-theme-type={block.type}>
+                              {collection.title}
+                            </h3>
+                          ) : null,
+                        )}
+                      </a>
+                    </li>
+                  ))}
               </ul>
+              <Blocks blocks={section.after} />
             </div>
           </section>
         );
       case 'product-list':
-      case 'featured-products':
-        return products.length > 0 ? (
-          <section class="content-section products-section" id={section.id} aria-label={section.kind === 'featured-products' ? 'Featured products' : undefined}>
+        return (
+          <section class="content-section products-section" {...theme}>
             <div class="section-inner">
-              {section.kind === 'product-list' && <Blocks blocks={section.blocks} />}
-              <ProductGrid products={products} />
+              <Blocks blocks={section.before} />
+              {section.card && <ProductGrid products={pick(section.productHandles)} card={section.card} />}
+              <Blocks blocks={section.after} />
             </div>
           </section>
-        ) : null;
+        );
+      case 'product':
+        return (
+          <section class="product-page" {...theme}>
+            <div class="product-layout">
+              <Blocks blocks={section.blocks} />
+            </div>
+          </section>
+        );
+      case 'recommendations':
+        return (
+          <section class="content-section products-section" {...theme}>
+            <div class="section-inner">
+              <Blocks blocks={section.blocks} />
+              {related.length > 0 && (
+                <div data-allowed="related-products">
+                  <ProductGrid products={related} />
+                </div>
+              )}
+            </div>
+          </section>
+        );
       case 'connections':
         return (
-          <section class="content-section connections" id={section.id} aria-labelledby={`${section.id}-heading`}>
+          <section class="content-section connections" aria-labelledby={`${section.id}-heading`} {...theme}>
             <div class="section-inner">
               <h2 id={`${section.id}-heading`}>{section.heading}</h2>
               {section.intro && <p class="intro">{section.intro}</p>}
@@ -115,7 +153,10 @@ const firstHero = sections.findIndex((s) => s.kind === 'hero');
                     {item.link && (
                       <a href={item.link.href} rel="noopener noreferrer" class="text-link">
                         {item.link.label}
-                        <span class="sr-only"> ({item.name}, external site)</span>
+                        <span class="sr-only" data-allowed="external-link-note">
+                          {' '}
+                          ({item.name}, external site)
+                        </span>
                       </a>
                     )}
                   </li>

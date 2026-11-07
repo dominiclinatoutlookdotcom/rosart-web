@@ -2,11 +2,10 @@
 import Sections from '../components/Sections.astro';
 import Base from '../layouts/Base.astro';
 import { getPage, getThemePage } from '../data/queries.ts';
-import { describeSections } from '../lib/theme.ts';
+import { describeSections, hasH1 } from '../lib/theme.ts';
 
 const page = await getPage('our-story');
 const story = await getThemePage('our-story');
-const hasH1 = story.sections.some((s) => s.kind === 'page-title' && s.showTitle);
 const hero = story.sections.find((s) => s.kind === 'hero');
 ---
 
@@ -15,6 +14,6 @@ const hero = story.sections.find((s) => s.kind === 'hero');
   description={page.seo.description || describeSections(story.sections)}
   ogImage={hero?.kind === 'hero' ? hero.image : null}
 >
-  {!hasH1 && <h1 class="sr-only">{page.title}</h1>}
-  <Sections sections={story.sections} page={page} />
+  {!hasH1(story.sections) && <h1 class="sr-only" data-allowed="screen-reader-h1">{page.title}</h1>}
+  <Sections sections={story.sections} />
 </Base>

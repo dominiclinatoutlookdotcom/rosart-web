@@ -29,11 +29,12 @@ site:
 	$(NPM) ci
 	$(NPM) run build
 
-## Site tests, type check, build, then check dist/ (pages, links, no store references, image sizes)
+## Build, then site tests (the theme fidelity tests read the fresh dist/), type check, and check
+## dist/ (pages, links, theme fidelity, no store references, image sizes)
 check:
+	$(NPM) run build
 	$(NPM) test
 	$(NPM) run typecheck
-	$(NPM) run build
 	$(NPM) run check:dist
 
 ## Local development server with live reload (http://localhost:4321/)

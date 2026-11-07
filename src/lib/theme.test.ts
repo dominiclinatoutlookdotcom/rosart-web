@@ -4,32 +4,54 @@ import { createSiteContext, rawExport } from './export-data.ts';
 import type { RawThemeSection } from './shopify-types.ts';
 import {
   describeSections,
-  firstBackground,
-  productPurchaseNote,
-  recommendationsHeading,
+  productDetailSections,
   siteChrome,
   toNavigation,
   toSectionModel,
-  withFeaturedProducts,
   type Block,
+  type ModelOptions,
   type Section,
 } from './theme.ts';
 
 const ctx = createSiteContext(rawExport, { imageAlt: {} });
-const themeCtx = { ...ctx, siteCollections: toCollections(rawExport.collections, ctx) };
+const themeCtx = {
+  ...ctx,
+  siteCollections: toCollections(rawExport.collections, ctx),
+  allProductHandles: ctx.products.map((p) => p.handle),
+};
 const template = (name: string) => {
   const found = rawExport.theme.templates[`templates/${name}.json`];
   if (!found) throw new Error(name);
+  return found;
+};
+const model = (name: string, options: Partial<ModelOptions> = {}) =>
+  toSectionModel(template(name), themeCtx, { firstHeadingIsH1: true, template: `templates/${name}.json`, ...options });
+const page = (handle: string) => {
+  const found = rawExport.pages.find((p) => p.handle === handle);
+  if (!found) throw new Error(handle);
+  return found;
+};
+const product = (handle: string) => {
+  const found = rawExport.products.find((p) => p.handle === handle);
+  if (!found) throw new Error(handle);
   return found;
 };
 const kinds = (sections: Section[]) => sections.map((s) => s.kind);
 const blocksOf = (section: Section | undefined): Block[] => (section && 'blocks' in section ? section.blocks : []);
 
 describe('toSectionModel: homepage', () => {
-  const { sections, skipped } = toSectionModel(template('index'), themeCtx, { firstHeadingIsH1: true });
+  const { sections, skipped } = model('index');
 
-  it('keeps the owner section order and drops the empty spacer', () => {
-    expect(kinds(sections)).toEqual(['hero', 'content', 'content', 'content', 'content', 'content']);
+  it('keeps every enabled section in theme order, the empty one as a spacer', () => {
+    expect(sections.map((s) => `${s.id} ${s.kind}`)).toEqual([
+      'hero_jVaWmY hero',
+      'section_hQaLzP content',
+      'section_mKDAGQ content',
+      'section_n4eLBK content',
+      'section_t4EcwA content',
+      'section_kFXkyX spacer',
+      'section_GPKnxM content',
+    ]);
     expect(skipped).toEqual([]);
   });
 
@@ -39,13 +61,13 @@ describe('toSectionModel: homepage', () => {
     expect(hero.image?.file).toBe('Untitled_design_7_f6c26f2b-ad40-440e-a57a-fb6da4fe0dcb.png');
     expect(hero.mobileImage?.file).toBe('DSC08666_Rosart_Mobile_1200x1500_e230edb1-8068-47e5-b216-efa8170e4f7e.jpg');
     expect(hero.blocks).toEqual([
-      { kind: 'heading', text: 'From Soil to Skin', level: 1 },
-      { kind: 'richtext', html: '<p>From Our Rose Fields to Your Skin.</p>' },
+      { id: 'text_YLPk4p', type: 'text', kind: 'heading', text: 'From Soil to Skin', level: 1 },
+      { id: 'text_DUhktp', type: 'text', kind: 'richtext', html: '<p>From Our Rose Fields to Your Skin.</p>' },
     ]);
   });
 
   it('turns later headings into h2 and keeps body text', () => {
-    expect(blocksOf(sections[1])[0]).toEqual({ kind: 'heading', text: 'Rooted in the Valley of Roses', level: 2 });
+    expect(blocksOf(sections[1])[0]).toEqual({ id: 'text_KWpnqx', type: 'text', kind: 'heading', text: 'Rooted in the Valley of Roses', level: 2 });
     expect(blocksOf(sections[1])[1]).toMatchObject({ kind: 'richtext' });
   });
 
@@ -57,45 +79,36 @@ describe('toSectionModel: homepage', () => {
     expect(certifications.blocks[0]).toMatchObject({ kind: 'image', image: { file: 'USDA_and_EU_Organic_Certifications.png' } });
   });
 
-  it('links the three collection tiles to their collection pages', () => {
+  it('keeps the three collection tiles unlinked, as the theme has no link on them', () => {
     const tiles = blocksOf(sections[4]);
-    expect(tiles.map((b) => (b.kind === 'group' ? b.href : undefined))).toEqual([
-      '/collections/face-care/',
-      '/collections/rose-water-toners/',
-      '/collections/masks-treatments/',
+    expect(tiles.map((b) => [b.id, b.kind, b.kind === 'group' ? b.href : undefined])).toEqual([
+      ['group_DnPwbh', 'group', undefined],
+      ['group_4B9m9J', 'group', undefined],
+      ['group_NHAVXA', 'group', undefined],
     ]);
   });
 
   it('builds the closing band with eyebrow, heading and the Our Story button', () => {
-    const band = sections[5];
+    const band = sections[6];
     if (band?.kind !== 'content') throw new Error('no band');
     expect(band.background?.file).toBe('bg3.png');
     expect(band.blocks.map((b) => b.kind)).toEqual(['eyebrow', 'heading', 'richtext', 'button']);
-    expect(band.blocks[0]).toEqual({ kind: 'eyebrow', text: 'ROSART · BULGARIAN ROSE SKINCARE' });
-    expect(band.blocks[3]).toEqual({ kind: 'button', label: 'Discover Our Story', href: '/our-story/' });
-  });
-});
-
-describe('withFeaturedProducts', () => {
-  it('places the featured products right after the collection tiles', () => {
-    const { sections } = toSectionModel(template('index'), themeCtx, { firstHeadingIsH1: true });
-    expect(kinds(withFeaturedProducts(sections))).toEqual([
-      'hero', 'content', 'content', 'content', 'content', 'featured-products', 'content',
-    ]);
-  });
-
-  it('appends them when there are no tiles', () => {
-    expect(kinds(withFeaturedProducts([]))).toEqual(['featured-products']);
+    expect(band.blocks[0]).toEqual({ id: 'text_zf64fr', type: 'text', kind: 'eyebrow', text: 'ROSART · BULGARIAN ROSE SKINCARE' });
+    expect(band.blocks[3]).toEqual({ id: 'button_3zVejn', type: 'button', kind: 'button', label: 'Discover Our Story', href: '/our-story/' });
   });
 });
 
 describe('toSectionModel: Our Story', () => {
-  const { sections, skipped } = toSectionModel(template('page.our-story'), themeCtx, { firstHeadingIsH1: false });
+  const { sections, skipped } = model('page.our-story', { firstHeadingIsH1: false, scope: { page: page('our-story') } });
 
   it('skips the disabled page title section and the disabled heading block', () => {
     expect(kinds(sections)).toEqual(['hero', 'content', 'hero', 'content', 'content', 'hero', 'content', 'connections']);
     expect(blocksOf(sections[1]).map((b) => b.kind)).toEqual(['richtext']);
     expect(skipped).toEqual([]);
+  });
+
+  it('keeps the theme heading level below the h1 (an h3 stays an h3)', () => {
+    expect(blocksOf(sections[4])[0]).toMatchObject({ kind: 'heading', text: 'FROM NATURE TO FORMULATION', level: 3 });
   });
 
   it('keeps the map hero with its mobile image', () => {
@@ -108,6 +121,8 @@ describe('toSectionModel: Our Story', () => {
   it('resolves the Explore Our Collection button', () => {
     const group = blocksOf(sections[6])[1];
     expect(group?.kind === 'group' && group.blocks.at(-1)).toEqual({
+      id: 'button_TKgfF7',
+      type: 'button',
       kind: 'button',
       label: 'Explore Our Collection',
       href: '/our-collection/',
@@ -119,36 +134,37 @@ describe('toSectionModel: Our Story', () => {
     if (connections?.kind !== 'connections') throw new Error('no connections');
     expect(connections.heading).toBe('Our Global Connections');
     expect(connections.intro).toMatch(/^Rooted in Bulgaria's Valley of Roses, Rosart's story continues/);
-    expect(connections.items).toEqual([
-      {
-        role: 'Parent Company',
-        name: 'Artec Chemical Group',
-        logo: { file: 'ARTEC.png', alt: 'Artec Chemical Group' },
-        link: { label: 'Visit Website', href: 'https://artechem.com/en/' },
-      },
-      {
-        role: 'Brand Origin',
-        name: 'Rosart · Bulgaria',
-        logo: { file: 'ROSART.png', alt: 'Rosart Bulgaria' },
-        link: { label: 'Visit Website', href: 'https://rosart-bg.com/home' },
-      },
-      {
-        role: 'Australian Retail Partner',
-        name: 'ORIZEN · Australia',
-        logo: { file: 'ORIZEN.png', alt: 'ORIZEN Australia' },
-        link: { label: 'Shop Rosart', href: 'https://orizen.com.au/' },
-      },
+    expect(connections.items.map((i) => [i.role, i.name, i.logo.file, i.link?.href])).toEqual([
+      ['Parent Company', 'Artec Chemical Group', 'ARTEC.png', 'https://artechem.com/en/'],
+      ['Brand Origin', 'Rosart · Bulgaria', 'ROSART.png', 'https://rosart-bg.com/home'],
+      ['Australian Retail Partner', 'ORIZEN · Australia', 'ORIZEN.png', 'https://orizen.com.au/'],
     ]);
   });
 });
 
-describe('toSectionModel: Our Collection and 404', () => {
-  it('shows the page title and the three collection cards in the theme order', () => {
-    const { sections } = toSectionModel(template('page.our-collection'), themeCtx, { firstHeadingIsH1: false });
-    expect(sections[0]).toEqual({ kind: 'page-title', id: 'main', showTitle: true, showBody: true });
+describe('toSectionModel: Our Collection, contact and 404', () => {
+  it('shows the page title the theme binds ({{ closest.page.title }}), then the collection cards in theme order', () => {
+    const { sections } = model('page.our-collection', { scope: { page: page('our-collection') } });
+    expect(sections[0]).toEqual({
+      id: 'main',
+      type: 'main-page',
+      kind: 'content',
+      background: null,
+      blocks: [{ id: 'heading', type: 'text', kind: 'heading', text: 'Our Collection', level: 1 }],
+    });
     const list = sections[1];
     if (list?.kind !== 'collection-list') throw new Error('no collection list');
-    expect(list.blocks).toEqual([{ kind: 'heading', text: 'Shop by collection', level: 2 }]);
+    expect(list.before).toEqual([
+      { id: 'group_j6ne7b', type: 'group', kind: 'group', blocks: [{ id: 'text_gzcb9h', type: 'text', kind: 'heading', text: 'Shop by collection', level: 3 }] },
+    ]);
+    expect(list.card).toEqual({
+      id: 'static-collection-card',
+      type: '_collection-card',
+      blocks: [
+        { id: 'collection-card-image', type: '_collection-card-image' },
+        { id: 'collection_title_wPhi9K', type: 'collection-title' },
+      ],
+    });
     expect(list.collections.map((c) => c.url)).toEqual([
       '/collections/face-care/',
       '/collections/rose-water-toners/',
@@ -156,15 +172,108 @@ describe('toSectionModel: Our Collection and 404', () => {
     ]);
   });
 
-  it('maps the 404 page copy and sends "all products" to Our Collection', () => {
-    const { sections } = toSectionModel(template('404'), themeCtx, { firstHeadingIsH1: true });
+  it('builds the contact page from its template: bound title and body, then the form substitute', () => {
+    const { sections } = model('page.contact', { scope: { page: page('contact') } });
+    expect(sections.map((s) => `${s.id} ${s.kind}`)).toEqual(['main content', 'form content']);
+    expect(blocksOf(sections[0]).map((b) => `${b.id} ${b.kind}`)).toEqual(['title heading', 'content richtext']);
+    expect(blocksOf(sections[1])).toEqual([{ id: 'contact_form_UwiCkQ', type: 'contact-form', kind: 'contact-form' }]);
+  });
+
+  it('maps the 404 copy and lists the first 4 products of the `all` collection the theme names', () => {
+    const { sections } = model('404');
     expect(kinds(sections)).toEqual(['content', 'product-list']);
-    expect(blocksOf(sections[0])).toEqual([
-      { kind: 'heading', text: 'Page not found', level: 1 },
-      { kind: 'richtext', html: '<p>The link may be incorrect, or the page has been removed.</p>' },
-      { kind: 'button', label: 'Continue shopping', href: '/our-collection/' },
+    expect(blocksOf(sections[0]).map((b) => b.kind)).toEqual(['heading', 'richtext', 'button']);
+    expect(blocksOf(sections[0])[2]).toMatchObject({ label: 'Continue shopping', href: '/our-collection/' });
+    const list = sections[1];
+    if (list?.kind !== 'product-list') throw new Error('no product list');
+    expect(list.before).toEqual([
+      {
+        id: 'static-header',
+        type: '_product-list-content',
+        kind: 'group',
+        blocks: [{ id: 'text_WJEa9Q', type: 'text', kind: 'richtext', html: '<p>Discover something new</p>' }],
+      },
     ]);
-    expect(blocksOf(sections[1])).toEqual([{ kind: 'richtext', html: '<p>Discover something new</p>' }]);
+    // Price is an allowed difference: the card shows the image and the title.
+    expect(list.card?.blocks.map((b) => b.type)).toEqual(['_product-card-gallery', 'product-title']);
+    expect(list.productHandles).toEqual(ctx.products.slice(0, 4).map((p) => p.handle));
+  });
+});
+
+describe('toSectionModel: collection and product templates', () => {
+  it('binds the collection band to the collection title and description, then lists its products', () => {
+    const collection = rawExport.collections.find((c) => c.handle === 'face-care-copy');
+    const { sections } = model('collection', { scope: { collection } });
+    const band = sections[0];
+    if (band?.kind !== 'content') throw new Error('no band');
+    expect(band.background?.file).toBe('bg3.png');
+    expect(band.blocks[0]).toMatchObject({ id: 'text_tqQTNE', kind: 'heading', text: 'Rose Water & Toners', level: 1 });
+    const grid = sections[1];
+    if (grid?.kind !== 'product-list') throw new Error('no grid');
+    expect(grid.productHandles).toEqual(collection?.productHandles);
+  });
+
+  it('renders the product details in theme order with the bound title, description and metafields', () => {
+    const { sections, skipped } = model('product.product-catalogue', { scope: { product: product('rose-face-cream-50ml') } });
+    expect(skipped).toEqual([]);
+    expect(kinds(sections)).toEqual(['product', 'recommendations']);
+    const [gallery, details] = blocksOf(sections[0]);
+    expect(gallery).toMatchObject({ id: 'media-gallery', kind: 'media-gallery' });
+    if (details?.kind !== 'group') throw new Error('no details');
+    expect(details.blocks.map((b) => `${b.id} ${b.kind}`)).toEqual([
+      'group_icgrde group',
+      'text_aEtTtq richtext',
+      'accordion_Ygf6jp group',
+      'button_z9EEwn button',
+      'text_pY4eBT heading',
+      'divider_VJhene divider',
+    ]);
+    expect(details.blocks[0]).toMatchObject({ blocks: [{ kind: 'heading', text: 'Rose Face Cream 50ml', level: 1 }] });
+    const accordion = details.blocks[2];
+    if (accordion?.kind !== 'group') throw new Error('no accordion');
+    expect(accordion.blocks.map((r) => (r.kind === 'accordion-row' ? r.heading : r.kind))).toEqual([
+      'HOW TO USE',
+      'THE INGREDIENTS',
+      'CERTIFICATIONS & BRAND VALUES',
+      'CAUTION',
+    ]);
+    // Owner decision 2026-11-07: the label is "Shop in Orizen.com.au", not the theme's "SHOP NOW".
+    expect(details.blocks[3]).toMatchObject({
+      label: 'Shop in Orizen.com.au',
+      external: true,
+      href: expect.stringMatching(/^https:\/\/orizen\.com\.au\/search\?q=/),
+    });
+    expect(blocksOf(sections[1])).toEqual([{ id: 'text_cbcgyb', type: 'text', kind: 'heading', text: 'You may also like', level: 3 }]);
+  });
+
+  it('links the ORIZEN button to the custom.orizen_product_url the theme binds, only when it is https on orizen.com.au', () => {
+    const raw = product('rose-face-cream-50ml');
+    const withUrl = (value: string) => ({
+      ...raw,
+      metafields: [...raw.metafields, { namespace: 'custom', key: 'orizen_product_url', type: 'url', value }],
+    });
+    const button = (value: string) => {
+      const { sections } = model('product.product-catalogue', { scope: { product: withUrl(value) } });
+      const details = blocksOf(sections[0])[1];
+      return details?.kind === 'group' ? details.blocks.find((b) => b.kind === 'button') : undefined;
+    };
+    expect(button('https://orizen.com.au/products/rose-face-cream-50ml')).toMatchObject({
+      label: 'Shop in Orizen.com.au',
+      href: 'https://orizen.com.au/products/rose-face-cream-50ml',
+    });
+    expect(button('https://www.orizen.com.au/products/x')).toMatchObject({ href: 'https://www.orizen.com.au/products/x' });
+    for (const other of ['https://example.com/rose', 'http://orizen.com.au/products/x', 'https://orizen.com.au.evil.example/x']) {
+      expect(button(other)).toMatchObject({ href: expect.stringMatching(/^https:\/\/orizen\.com\.au\/search\?q=Rose%20Face%20Cream%2050ml$/) });
+    }
+  });
+
+  it('reads the detail metafields from the accordion bindings, not from the headings', () => {
+    expect(productDetailSections(template('product.product-catalogue'))).toEqual([
+      { key: 'how_to_use', heading: 'HOW TO USE' },
+      { key: 'the_ingredients', heading: 'THE INGREDIENTS' },
+      { key: 'certifications_brand_values', heading: 'CERTIFICATIONS & BRAND VALUES' },
+      { key: 'caution', heading: 'CAUTION' },
+    ]);
   });
 });
 
@@ -178,6 +287,7 @@ describe('toSectionModel: rules', () => {
     ...overrides,
   });
   const text = (id: string, html: string, disabled = false) => ({ id, type: 'text', disabled, settings: { text: html }, blocks: [] });
+  const options = { firstHeadingIsH1: false, template: 'templates/test.json' };
 
   it('skips disabled blocks nested inside groups', () => {
     const { sections } = toSectionModel(
@@ -189,9 +299,11 @@ describe('toSectionModel: rules', () => {
         ],
       },
       themeCtx,
-      { firstHeadingIsH1: false },
+      options,
     );
-    expect(blocksOf(sections[0])).toEqual([{ kind: 'group', blocks: [{ kind: 'richtext', html: '<p>kept</p>' }] }]);
+    expect(blocksOf(sections[0])).toEqual([
+      { id: 'g', type: 'group', kind: 'group', blocks: [{ id: 'a', type: 'text', kind: 'richtext', html: '<p>kept</p>' }] },
+    ]);
   });
 
   it('reports what it cannot place instead of guessing', () => {
@@ -204,9 +316,9 @@ describe('toSectionModel: rules', () => {
         ],
       },
       themeCtx,
-      { firstHeadingIsH1: false },
+      options,
     );
-    expect(sections).toEqual([]);
+    expect(sections).toEqual([{ id: 'z', type: 'section', kind: 'spacer' }]);
     expect(skipped).toEqual([
       'section x (slideshow): no site equivalent',
       'section y (custom-liquid): not a recognised layout',
@@ -217,15 +329,14 @@ describe('toSectionModel: rules', () => {
 
 describe('describeSections', () => {
   it('uses the first body text of the page, shortened for a meta description', () => {
-    const { sections } = toSectionModel(template('page.our-story'), themeCtx, { firstHeadingIsH1: false });
+    const { sections } = model('page.our-story', { firstHeadingIsH1: false, scope: { page: page('our-story') } });
     const description = describeSections(sections);
     expect(description).toMatch(/^From Our Fields, With Care\. Nestled in Bulgaria's renowned Valley of Roses/);
     expect(description.length).toBeLessThanOrEqual(160);
   });
 
   it('skips one-line body text such as the hero strapline', () => {
-    const { sections } = toSectionModel(template('index'), themeCtx, { firstHeadingIsH1: true });
-    expect(describeSections(sections)).toMatch(/^Born in Bulgaria's renowned Valley of Roses/);
+    expect(describeSections(model('index').sections)).toMatch(/^Born in Bulgaria's renowned Valley of Roses/);
   });
 
   it('returns an empty string when the page has no body text', () => {
@@ -233,48 +344,21 @@ describe('describeSections', () => {
   });
 });
 
-describe('template extras', () => {
-  it('reads the collection page band image', () => {
-    expect(firstBackground(template('collection'), ctx.images)?.file).toBe('bg3.png');
-    expect(firstBackground(template('page'), ctx.images)).toBeNull();
-  });
-
-  it('reads the product recommendations heading', () => {
-    expect(recommendationsHeading(template('product.product-catalogue'))).toBe('You may also like');
-    expect(recommendationsHeading(template('page'))).toBeNull();
-  });
-
-  it('reads the purchase note: the text block after the product template button, curly apostrophe intact', () => {
-    expect(productPurchaseNote(template('product.product-catalogue'))).toBe(
-      'You\u2019ll be redirected to ORIZEN, our Australian retail partner, to complete your purchase.',
-    );
-    expect(productPurchaseNote(template('page'))).toBeNull();
-  });
-
-  it('has no purchase note when the text after the button is disabled or not text', () => {
-    const block = (type: string, settings: Record<string, unknown> = {}, disabled = false) => ({
-      id: type, type, disabled, settings, blocks: [],
-    });
-    const product = (blocks: ReturnType<typeof block>[]) => ({
-      sections: [{ id: 'main', type: 'product-information', disabled: false, settings: {}, blocks: [
-        { ...block('_product-details'), blocks },
-      ] }],
-    });
-    expect(productPurchaseNote(product([block('button', { label: 'SHOP NOW' }), block('text', { text: '<h6>Note</h6>' }, true)]))).toBeNull();
-    expect(productPurchaseNote(product([block('button', { label: 'SHOP NOW' }), block('_divider')]))).toBeNull();
-    expect(productPurchaseNote(product([block('button', { label: 'SHOP NOW' }, true), block('text', { text: '<p>Note</p>' })]))).toBeNull();
-    expect(productPurchaseNote(product([block('button', { label: 'SHOP NOW' }), block('text', { text: '<p>Note</p>' })]))).toBe('Note');
-  });
-});
-
 describe('siteChrome', () => {
-  it('reads the announcement, footer text, logo and copyright switch', () => {
-    expect(siteChrome(rawExport.theme, ctx)).toEqual({
-      announcement: "From Bulgaria's Valley of Roses, with Care",
-      footerText: 'Bulgarian Rose Skincare · Naturally Inspired',
-      logo: { file: 'ESPRIT_HONG_KONG.png', alt: '' },
-      showCopyright: true,
-    });
+  it('reads the header and footer groups in theme order, without the allowed absences', () => {
+    const chrome = siteChrome(rawExport.theme, ctx);
+    expect(chrome.header.map((s) => [s.id, s.type, s.blocks.map((b) => `${b.id} ${b.type}`)])).toEqual([
+      ['header_announcements_9jGBFp', 'header-announcements', ['announcement_BxgCk9 _announcement']],
+      ['header_section', 'header', ['header-logo _header-logo', 'header-menu _header-menu']],
+    ]);
+    expect(chrome.header[0]?.blocks[0]?.html).toContain('From Bulgaria');
+    // Policy links and the placeholder social links are allowed differences.
+    expect(chrome.footer).toEqual([
+      { id: 'footer_m9NzUG', type: 'footer', blocks: [{ id: 'text_dGnm6k', type: 'text', html: '<p>Bulgarian Rose Skincare · Naturally Inspired</p>' }] },
+      { id: 'footer_utilities_jLGE8U', type: 'footer-utilities', blocks: [{ id: 'footer_copyright_jweRK8', type: 'footer-copyright' }] },
+    ]);
+    expect(chrome.logo).toEqual({ file: 'ESPRIT_HONG_KONG.png', alt: '' });
+    expect(chrome.footerText).toBe('Bulgarian Rose Skincare · Naturally Inspired');
   });
 });
 

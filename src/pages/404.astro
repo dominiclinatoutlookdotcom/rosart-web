@@ -1,14 +1,15 @@
 ---
 import Sections from '../components/Sections.astro';
 import Base from '../layouts/Base.astro';
-import { getFeaturedProducts, getThemePage } from '../data/queries.ts';
+import { getProducts, getThemePage } from '../data/queries.ts';
 import { htmlToText } from '../lib/html.ts';
 
 const model = await getThemePage('not-found');
-const products = await getFeaturedProducts(4);
+const products = await getProducts();
 const first = model.sections[0];
-const heading = first && 'blocks' in first ? first.blocks.find((b) => b.kind === 'heading') : undefined;
-const body = first && 'blocks' in first ? first.blocks.find((b) => b.kind === 'richtext') : undefined;
+const blocks = first?.kind === 'content' ? first.blocks : [];
+const heading = blocks.find((b) => b.kind === 'heading');
+const body = blocks.find((b) => b.kind === 'richtext');
 ---
 
 <Base

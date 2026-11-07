@@ -1,20 +1,23 @@
 ---
 import type { Product } from '../lib/catalog.ts';
+import type { CardTemplate } from '../lib/theme.ts';
 import ProductCard from './ProductCard.astro';
 
 interface Props {
   products: Product[];
+  /** The theme's card template; absent for the related products. */
+  card?: CardTemplate | null;
   headingLevel?: 2 | 3;
 }
 
-const { products, headingLevel = 3 } = Astro.props;
+const { products, card = null, headingLevel = 3 } = Astro.props;
 ---
 
 <ul class="product-grid" role="list">
   {
     products.map((product) => (
       <li>
-        <ProductCard product={product} headingLevel={headingLevel} />
+        <ProductCard product={product} card={card} headingLevel={headingLevel} />
       </li>
     ))
   }

@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createSiteContext, rawExport } from './export-data.ts';
-import { featuredProductHandles, toCollections, toPages, toProducts } from './catalog.ts';
+import { toCollections, toPages, toProducts } from './catalog.ts';
 
 const ctx = createSiteContext(rawExport, { imageAlt: {} });
 const products = toProducts(rawExport.products, ctx);
@@ -58,18 +58,18 @@ describe('toProducts', () => {
     expect(bySlug('rosart-rose-face-mask-80ml').collection?.url).toBe('/collections/masks-treatments/');
   });
 
-  it('links every product to the ORIZEN search for its title while no orizen_url metafield is set', () => {
+  it('links every product to the ORIZEN search for its title while no orizen_product_url metafield is set', () => {
     expect(bySlug('rose-face-cream-50ml').orizenUrl).toBe(
       `https://orizen.com.au/search?q=${encodeURIComponent(bySlug('rose-face-cream-50ml').title)}`,
     );
   });
 
-  it('links to the custom.orizen_url metafield when it is set and on orizen.com.au', () => {
+  it('links to the custom.orizen_product_url metafield (the link the theme SHOP NOW button reads) when it is set and on orizen.com.au', () => {
     const raw = rawExport.products.find((p) => p.handle === 'rose-face-cream-50ml');
     if (!raw) throw new Error('fixture product missing');
     const withUrl = (value: string) => ({
       ...raw,
-      metafields: [...raw.metafields, { namespace: 'custom', key: 'orizen_url', type: 'url', value }],
+      metafields: [...raw.metafields, { namespace: 'custom', key: 'orizen_product_url', type: 'url', value }],
     });
     const [linked] = toProducts([withUrl('https://orizen.com.au/products/rose-face-cream-50ml')], ctx);
     expect(linked?.orizenUrl).toBe('https://orizen.com.au/products/rose-face-cream-50ml');
@@ -97,14 +97,6 @@ describe('toCollections', () => {
     const masks = collections.find((c) => c.slug === 'masks-treatments');
     expect(masks?.productHandles[0]).toBe('pure-face-rosehip-oil-2ml');
     expect(masks?.image?.file).toBe('3_e77f03d4-0767-4f83-939c-86d99bde2338-2.png');
-  });
-});
-
-describe('featuredProductHandles', () => {
-  it('returns the homepage collection products in order', () => {
-    const featured = featuredProductHandles(rawExport.collections);
-    expect(featured).toHaveLength(8);
-    expect(featured[0]).toBe('bulgarian-rose-hydrosol-essence-mask-5pcs');
   });
 });
 

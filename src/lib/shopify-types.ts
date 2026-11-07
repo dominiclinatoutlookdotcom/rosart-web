@@ -21,6 +21,8 @@ export interface RawSeo {
 
 export interface RawProduct {
   handle: string;
+  /** The product template suffix: `product-catalogue` renders with `templates/product.product-catalogue.json`. */
+  templateSuffix?: string | null;
   title: string;
   status: string;
   descriptionHtml: string;
@@ -35,6 +37,7 @@ export interface RawProduct {
 
 export interface RawCollection {
   handle: string;
+  templateSuffix?: string | null;
   title: string;
   descriptionHtml: string;
   image: RawImage | null;
@@ -44,6 +47,7 @@ export interface RawCollection {
 
 export interface RawPage {
   handle: string;
+  templateSuffix?: string | null;
   title: string;
   bodyHtml: string;
   isPublished: boolean;
@@ -89,6 +93,8 @@ export interface RawThemeBlock {
   disabled: boolean;
   static?: boolean;
   settings: Record<string, unknown>;
+  /** Content settings the theme fills with Liquid from the page's data (`{{ closest.product.title }}`). */
+  bindings?: Record<string, string>;
   blocks: RawThemeBlock[];
 }
 
@@ -97,6 +103,7 @@ export interface RawThemeSection {
   type: string;
   disabled: boolean;
   settings: Record<string, unknown>;
+  bindings?: Record<string, string>;
   blocks: RawThemeBlock[];
 }
 

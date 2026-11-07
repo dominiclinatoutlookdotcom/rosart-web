@@ -7,6 +7,8 @@ import { join } from 'node:path';
 import { resolveSiteUrl } from '../src/lib/commerce.ts';
 import { createUrlMap } from '../src/lib/urls.ts';
 import { siteConfig } from '../src/site.config.ts';
+import { checkPageFidelity, fidelityData, fidelityPages } from '../src/lib/fidelity-pages.ts';
+import type { RawExport } from '../src/lib/shopify-types.ts';
 import { checkDist, listFiles, sha256 } from './dist-check.ts';
 
 const root = join(import.meta.dirname, '..');
@@ -46,6 +48,21 @@ const problems = checkDist(dist, {
   allowedEmails: [siteConfig.enquiryEmail],
 });
 
+// Theme fidelity: every theme-driven page renders exactly what its Shopify template renders.
+const rawExport: RawExport = {
+  shop: readJson('export/shopify/shop.json'),
+  products: readJson('export/shopify/products.json'),
+  collections: readJson('export/shopify/collections.json'),
+  pages: readJson('export/shopify/pages.json'),
+  menus: readJson('export/shopify/menus.json'),
+  files: readJson('export/shopify/files.json'),
+  manifest: readJson('export/images/manifest.json'),
+  theme: readJson('export/theme-content.json'),
+};
+const fidelity = fidelityData(rawExport, new Date().getFullYear());
+const themePages = fidelityPages(rawExport, fidelity);
+for (const page of themePages) problems.push(...checkPageFidelity(dist, rawExport, fidelity, page));
+
 if (problems.length > 0) {
   console.error(`dist check failed with ${problems.length} problem(s):`);
   for (const problem of problems) console.error(`  - ${problem}`);
@@ -54,5 +71,5 @@ if (problems.length > 0) {
 const files = listFiles(dist);
 const bytes = files.reduce((sum, f) => sum + statSync(f).size, 0);
 console.log(
-  `dist check passed: ${requiredPages.length} required pages, ${files.length} files, ${(bytes / 1024 / 1024).toFixed(1)} MB`,
+  `dist check passed: ${requiredPages.length} required pages, ${themePages.length} pages match the theme, ${files.length} files, ${(bytes / 1024 / 1024).toFixed(1)} MB`,
 );

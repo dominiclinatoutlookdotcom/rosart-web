@@ -1,39 +1,37 @@
 ---
-import { siteConfig } from '../site.config.ts';
-import type { ImageRef } from '../lib/images.ts';
-import type { NavItem } from '../lib/theme.ts';
-import Img from './Img.astro';
+/**
+ * The theme's footer group in theme order: the footer text, then the utilities (copyright). Policy
+ * links and the placeholder social links are allowed differences (see allowed-differences.ts).
+ */
+import type { ChromeSection } from '../lib/theme.ts';
 
 interface Props {
-  footerText: string;
-  logo: ImageRef | null;
-  navigation: NavItem[];
-  showCopyright: boolean;
+  sections: ChromeSection[];
+  shopName: string;
 }
 
-const { footerText, logo, navigation, showCopyright } = Astro.props;
-const links = navigation.flatMap((item) => [item, ...item.children]);
+const { sections, shopName } = Astro.props;
 const year = new Date().getFullYear();
+const theme = (source: { id: string; type: string }, kind: 'section' | 'block') => ({
+  [`data-theme-${kind}`]: source.id,
+  'data-theme-type': source.type,
+});
 ---
 
 <footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      {logo && <Img class="footer-logo" image={logo} alt="Rosart" widths={[160, 240, 320]} sizes="140px" />}
-      {footerText && <p>{footerText}</p>}
-      <p><a class="text-link" href={`mailto:${siteConfig.enquiryEmail}`}>{siteConfig.enquiryEmail}</a></p>
-    </div>
-    <nav aria-label="Footer">
-      <ul class="footer-links" role="list">
-        {
-          links.map((item) => (
-            <li>
-              <a href={item.url}>{item.title}</a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-  </div>
-  {showCopyright && <p class="copyright">&copy; {year} Rosart</p>}
+  {
+    sections.map((section) => (
+      <div class:list={['footer-section', `footer-${section.type}`]} {...theme(section, 'section')}>
+        {section.blocks.map((block) =>
+          block.type === 'footer-copyright' ? (
+            <p class="copyright" {...theme(block, 'block')}>
+              &copy; {year}, {shopName}
+            </p>
+          ) : block.html ? (
+            <div class="footer-text" set:html={block.html} {...theme(block, 'block')} />
+          ) : null,
+        )}
+      </div>
+    ))
+  }
 </footer>

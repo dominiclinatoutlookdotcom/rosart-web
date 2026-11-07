@@ -41,6 +41,9 @@ def test_load_theme_json_reads_a_commented_template():
     ("menu", "main-menu"),
     ("custom_liquid", "<div>Partners</div>"),
     ("some_new_key", "shopify://pages/our-story"),
+    ("max_products", 4),                              # how many products a list shows
+    ("max_collections", 4),
+    ("products_per_page", 16),
 ])
 def test_content_settings_are_kept(key, value):
     assert is_content_setting(key, value)
@@ -114,6 +117,14 @@ def test_blocks_follow_block_order_recursively_with_static_blocks_after(content)
     assert "name" not in group["blocks"][1]          # t:names.* is a theme translation key
     assert [(b["id"], b.get("static", False)) for b in hero["blocks"]] == [("text_a", False), ("header-logo", True)]
     assert hero["blocks"][0]["settings"] == {}        # Liquid-only text is not owner copy
+
+
+def test_liquid_bound_content_is_kept_apart_as_bindings(content):
+    hero, story, _ = content["templates"]["templates/index.json"]["sections"]
+    # The text block shows the product title: the site must resolve the same source.
+    assert hero["blocks"][0]["bindings"] == {"text": "<h1>{{ closest.product.title }}</h1>"}
+    # A Liquid styling value (text_color) is not a binding, and nodes without any carry no key.
+    assert "bindings" not in hero and "bindings" not in story
 
 
 def test_section_group_carries_its_type_and_disabled_sections(content):

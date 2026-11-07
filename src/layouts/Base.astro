@@ -60,11 +60,11 @@ const ogImageUrl = og ? new URL(og.src, siteConfig.siteUrl).href : null;
     {jsonLd && <script type="application/ld+json" set:html={jsonLdScript(jsonLd)} />}
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <Header announcement={site.announcement} logo={site.logo} navigation={site.navigation} />
+    <a class="skip-link" href="#main" data-allowed="skip-link">Skip to content</a>
+    <Header sections={site.header} logo={site.logo} navigation={site.navigation} />
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer footerText={site.footerText} logo={site.logo} navigation={site.navigation} showCopyright={site.showCopyright} />
+    <Footer sections={site.footer} shopName={site.shopName} />
   </body>
 </html>
