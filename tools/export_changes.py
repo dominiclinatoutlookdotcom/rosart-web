@@ -241,8 +241,8 @@ def format_summary(changes: ExportChanges) -> str:
     return "\n".join(lines)
 
 
-def commit_message(changes: ExportChanges, today: date, author: str) -> str:
-    lines = [f"Publish {today.isoformat()} by {author}", "",
+def commit_message(changes: ExportChanges, today: date, name: str) -> str:
+    lines = [f"Publish {today.isoformat()} by {name}", "",
              f"Store content exported from Shopify and published to {SITE_URL}.", ""]
     for kind, record in changes.records.items():
         if not record.total:
