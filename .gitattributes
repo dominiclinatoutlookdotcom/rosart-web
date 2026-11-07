@@ -5,3 +5,7 @@ export/images/manifest.json text eol=lf
 
 # The exporter writes LF; keep it LF on checkout so re-runs produce no diff.
 export/**/*.json text eol=lf
+
+# Read by sh and docker inside the Linux image: never CRLF, whatever core.autocrlf says.
+Dockerfile text eol=lf
+*.sh text eol=lf

@@ -409,6 +409,24 @@ python tools/seo_apply.py --rollback seo/apply-log-<UTC>.jsonl --write  #    rol
   runs from a temporary folder (`ShopifyCliFileRunner` in `tools/shopify_cli.py`).
   `--allow-mutations` is passed only on a `--write` run, and only with a mutation.
 
+## Publisher image: the V-0 probe
+
+The box publisher (sgs-server spec 006) runs this repo in a container built from `Dockerfile`. So
+far it has two stages: `build` (the Harbor `frozen/python` base with Node and npm copied from
+`frozen/node`, both pinned by digest; `npm ci` from the lockfile; `src/`, `public/` and the
+committed `export/` without `export/theme/`) and `probe` (default command
+`scripts/probe-build.sh`: copies `/app` to `/tmp/work`, runs `npm run build` offline and prints
+the duration and the peak resident memory of the build). `.dockerignore` keeps `.env*`,
+`node_modules`, `dist`, `.astro` and `export/theme` out of the build context.
+
+- `make image-probe` builds the probe stage for `linux/amd64`, pushes
+  `harbor.int.solagratia.com.au/demo/rosart-publisher-probe:<commit>` and prints its digest and
+  the `docker run` line for the box (V-0, the owner's run, `--network none`, read-only root,
+  uid 10001). It refuses while the Dockerfile's `NODE_SHA256`/`PYTHON_SHA256` ARGs still hold
+  `PENDING-T001`: the frozen base digests come from the owner's Harbor freeze (spec 006 T001).
+- Tests: `tests/test_image.py` (static checks, `make image-probe` against a fake `docker`, and the
+  probe script against a fake `npm` on Linux only). No Docker needed.
+
 ## What lands where
 
 | Path | Content |

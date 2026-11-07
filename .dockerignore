@@ -1,0 +1,13 @@
+# Never in the image's build context: secrets, local build output and caches, the Shopify-licensed
+# theme copy (export/theme/ is reference only), interrupted image downloads, git and agent folders.
+.env*
+**/.env*
+node_modules
+dist
+.astro
+export/theme
+export/images/*.part
+.git
+.claude
+.pytest_cache
+**/__pycache__

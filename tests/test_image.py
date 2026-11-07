@@ -245,7 +245,7 @@ needs_make = pytest.mark.skipif(shutil.which("make") is None or shutil.which("sh
 
 def run_image_probe(tmp_path: Path, dockerfile_text: str) -> tuple[subprocess.CompletedProcess, str]:
     shutil.copy(MAKEFILE, tmp_path / "Makefile")
-    (tmp_path / "Dockerfile").write_text(dockerfile_text, encoding="utf-8")
+    (tmp_path / "Dockerfile").write_text(dockerfile_text, encoding="utf-8", newline="\n")
     log = tmp_path / "docker-calls.txt"
     fake_docker = tmp_path / "fake-docker.sh"
     fake_docker.write_text(
@@ -254,6 +254,7 @@ def run_image_probe(tmp_path: Path, dockerfile_text: str) -> tuple[subprocess.Co
         f'  *imagetools*) printf "Name: x\\nMediaType: application/vnd.oci.image.index.v1+json\\nDigest: {FAKE_DIGEST}\\n" ;;\n'
         "esac\n",
         encoding="utf-8",
+        newline="\n",
     )
     completed = subprocess.run(
         ["make", "-s", "image-probe", f"DOCKER=sh {fake_docker.as_posix()}", "PROBE_TAG=abc1234"],
