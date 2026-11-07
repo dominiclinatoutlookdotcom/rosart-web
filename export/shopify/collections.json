@@ -1,12 +1,12 @@
 [
   {
-    "descriptionHtml": "",
+    "descriptionHtml": "<p>Rosart Face Care brings together everyday cleansing and moisturising care made with Bulgarian rose. The range includes Rose Glycerin Soap, Rose Cleansing Balm, Rose Face Soufflé Cream and Rose Face Cream. Every product is made in Bulgaria.</p>",
     "handle": "face-care",
     "id": "gid://shopify/Collection/705866661969",
     "image": {
-      "altText": "",
+      "altText": "Rosart Rose Face Cream with its box and rose petals",
       "height": 1500,
-      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/1.png?v=1793763730",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/1.png?v=1794031669",
       "width": 1200
     },
     "productHandles": [
@@ -19,22 +19,22 @@
     ],
     "ruleSet": null,
     "seo": {
-      "description": null,
-      "title": null
+      "description": "Rosart Face Care: Rose Face Cream, Rose Face Soufflé Cream, Rose Cleansing Balm and Rose Glycerin Soap, made in Bulgaria with Damascena rose.",
+      "title": "Face Care: Rose Creams, Balm and Soap | Rosart"
     },
     "sortOrder": "MOST_RELEVANT",
     "templateSuffix": null,
     "title": "Face Care",
-    "updatedAt": "2026-11-05T11:57:22Z"
+    "updatedAt": "2026-11-07T06:07:49Z"
   },
   {
-    "descriptionHtml": "",
+    "descriptionHtml": "<p>Rosart Rose Water &amp; Toners are made with Bulgarian Rosa Damascena rose water. Rose Water is a 100% natural, single-ingredient floral water in 10ml and 100ml sizes. Rose Facial Toner 330ml combines Damask rose water with botanical extracts and sodium hyaluronate.</p>",
     "handle": "face-care-copy",
     "id": "gid://shopify/Collection/705866760273",
     "image": {
-      "altText": "",
+      "altText": "Rosart Rose Water 100ml with its box",
       "height": 1500,
-      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/2.png?v=1793763712",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/2.png?v=1794031665",
       "width": 1200
     },
     "productHandles": [
@@ -44,13 +44,13 @@
     ],
     "ruleSet": null,
     "seo": {
-      "description": null,
-      "title": null
+      "description": "Rosart Rose Water & Toners: 100% natural Bulgarian Rosa Damascena rose water in 10ml and 100ml, and Rose Facial Toner 330ml. Made in Bulgaria.",
+      "title": "Rose Water & Toners, Bulgarian Damascena | Rosart"
     },
     "sortOrder": "MOST_RELEVANT",
     "templateSuffix": null,
     "title": "Rose Water & Toners",
-    "updatedAt": "2026-11-05T12:09:21Z"
+    "updatedAt": "2026-11-07T06:07:45Z"
   },
   {
     "descriptionHtml": "",
@@ -78,13 +78,13 @@
     "updatedAt": "2026-11-05T12:23:04Z"
   },
   {
-    "descriptionHtml": "",
+    "descriptionHtml": "<p>Rosart Masks &amp; Treatments bring together rose masks and facial oil treatments, all made in Bulgaria. The range includes Rose Face Mask, the Bulgarian Rose Hydrosol Essence Mask sheet masks, Pure Face Rosehip Oil and Rose Oil Revitalizing Essence capsules.</p>",
     "handle": "rose-water-toners-copy",
     "id": "gid://shopify/Collection/705866793041",
     "image": {
-      "altText": "",
+      "altText": "Rosart essence mask sachets with roses",
       "height": 1500,
-      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/3_e77f03d4-0767-4f83-939c-86d99bde2338.png?v=1793763697",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/3_e77f03d4-0767-4f83-939c-86d99bde2338.png?v=1794031673",
       "width": 1200
     },
     "productHandles": [
@@ -96,12 +96,12 @@
     ],
     "ruleSet": null,
     "seo": {
-      "description": null,
-      "title": null
+      "description": "Rosart Masks & Treatments: Rose Face Mask, Bulgarian Rose Hydrosol Essence sheet masks, Pure Face Rosehip Oil and Rose Oil Revitalizing Essence.",
+      "title": "Masks & Treatments: Rose Masks and Oils | Rosart"
     },
     "sortOrder": "MOST_RELEVANT",
     "templateSuffix": null,
     "title": "Masks & Treatments",
-    "updatedAt": "2026-11-05T12:23:04Z"
+    "updatedAt": "2026-11-07T06:07:53Z"
   }
 ]

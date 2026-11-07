@@ -6,13 +6,13 @@
     "id": "gid://shopify/Product/16432947331153",
     "images": [
       {
-        "altText": "",
+        "altText": "100% Natural Damascena Rose Water 10ml, with its box",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseWaterSet.png?v=1793791940",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "100% Natural Damascena Rose Water 10ml, among roses in a garden",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_3.png?v=1793880128",
         "width": 1200
@@ -20,10 +20,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "100% Natural Damascena Rose Water 10ml, with its box",
         "id": "gid://shopify/MediaImage/74419497762897",
         "image": {
-          "altText": "",
+          "altText": "100% Natural Damascena Rose Water 10ml, with its box",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseWaterSet.png?v=1793791940",
           "width": 1122
@@ -31,10 +31,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "100% Natural Damascena Rose Water 10ml, among roses in a garden",
         "id": "gid://shopify/MediaImage/74452926726225",
         "image": {
-          "altText": "",
+          "altText": "100% Natural Damascena Rose Water 10ml, among roses in a garden",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_3.png?v=1793880128",
           "width": 1200
@@ -77,7 +77,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Water 10ml | 100% Natural Bulgarian Rose Water"
+        "value": "Damascena Rose Water 10ml, 100% Natural Toner | Rosart"
       }
     ],
     "options": [
@@ -94,7 +94,7 @@
     "publishedAt": "2026-11-04T11:51:59Z",
     "seo": {
       "description": "Discover Rosart Rose Water 10ml, made from 100% natural Bulgarian Rosa Damascena flower water. Gently soothes, hydrates and refreshes skin.",
-      "title": "Rosart Rose Water 10ml | 100% Natural Bulgarian Rose Water"
+      "title": "Damascena Rose Water 10ml, 100% Natural Toner | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -104,7 +104,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "100% Natural Damascena Rose Water 10ml",
-    "updatedAt": "2026-11-05T12:02:49Z",
+    "updatedAt": "2026-11-07T06:09:14Z",
     "variants": [
       {
         "barcode": null,
@@ -132,25 +132,25 @@
     "id": "gid://shopify/Product/16432873701457",
     "images": [
       {
-        "altText": "",
+        "altText": "Bulgarian Rose Hydrosol Essence Mask 5pcs, front of the box",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseEssenceMaskBox.png?v=1793790307",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Bulgarian Rose Hydrosol Essence Mask 5pcs, box and sachet among roses",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseMaskShowcase.png?v=1793881335",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Bulgarian Rose Hydrosol Essence Mask 5pcs, sachet held by a model in a rose field",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_007bac73-3152-441e-9d95-86ccd6e85270.png?v=1793881123",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "Bulgarian Rose Hydrosol Essence Mask 5pcs, two sachets with roses",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST2.png?v=1793881336",
         "width": 1200
@@ -158,10 +158,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Bulgarian Rose Hydrosol Essence Mask 5pcs, front of the box",
         "id": "gid://shopify/MediaImage/74419025838161",
         "image": {
-          "altText": "",
+          "altText": "Bulgarian Rose Hydrosol Essence Mask 5pcs, front of the box",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseEssenceMaskBox.png?v=1793790307",
           "width": 1122
@@ -169,10 +169,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Bulgarian Rose Hydrosol Essence Mask 5pcs, box and sachet among roses",
         "id": "gid://shopify/MediaImage/74454394142801",
         "image": {
-          "altText": "",
+          "altText": "Bulgarian Rose Hydrosol Essence Mask 5pcs, box and sachet among roses",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseMaskShowcase.png?v=1793881335",
           "width": 1122
@@ -180,10 +180,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Bulgarian Rose Hydrosol Essence Mask 5pcs, sachet held by a model in a rose field",
         "id": "gid://shopify/MediaImage/74453937946705",
         "image": {
-          "altText": "",
+          "altText": "Bulgarian Rose Hydrosol Essence Mask 5pcs, sachet held by a model in a rose field",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_007bac73-3152-441e-9d95-86ccd6e85270.png?v=1793881123",
           "width": 1200
@@ -191,10 +191,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Bulgarian Rose Hydrosol Essence Mask 5pcs, two sachets with roses",
         "id": "gid://shopify/MediaImage/74454394110033",
         "image": {
-          "altText": "",
+          "altText": "Bulgarian Rose Hydrosol Essence Mask 5pcs, two sachets with roses",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST2.png?v=1793881336",
           "width": 1200
@@ -231,13 +231,13 @@
         "key": "description_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Discover Rosart Rose Facial Toner 330ml with Damask rose water, botanical extracts and sodium hyaluronate. Refreshes and hydrates skin. Made in Bulgaria."
+        "value": "Hydrate and refresh your skin with Rosart Bulgarian Rose Hydrosol Essence Mask. Featuring 93.3% organic rose water, hyaluronic acid and botanical extracts. 5pcs."
       },
       {
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Facial Toner 330ml | Hydrating Toner"
+        "value": "Rosart Bulgarian Rose Hydrosol Essence Mask 5pcs"
       }
     ],
     "options": [
@@ -253,8 +253,8 @@
     "productType": "Facial Sheet Mask",
     "publishedAt": "2026-11-04T11:52:00Z",
     "seo": {
-      "description": "Discover Rosart Rose Facial Toner 330ml with Damask rose water, botanical extracts and sodium hyaluronate. Refreshes and hydrates skin. Made in Bulgaria.",
-      "title": "Rosart Rose Facial Toner 330ml | Hydrating Toner"
+      "description": "Hydrate and refresh your skin with Rosart Bulgarian Rose Hydrosol Essence Mask. Featuring 93.3% organic rose water, hyaluronic acid and botanical extracts. 5pcs.",
+      "title": "Rosart Bulgarian Rose Hydrosol Essence Mask 5pcs"
     },
     "status": "ACTIVE",
     "tags": [
@@ -264,7 +264,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Bulgarian Rose Hydrosol Essence Mask 5pcs",
-    "updatedAt": "2026-11-05T12:22:26Z",
+    "updatedAt": "2026-11-07T06:09:14Z",
     "variants": [
       {
         "barcode": null,
@@ -292,25 +292,25 @@
     "id": "gid://shopify/Product/16432953065553",
     "images": [
       {
-        "altText": "",
+        "altText": "Pure Face Rosehip Oil 20ml, with its box",
         "height": 1568,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_2.png?v=1793792089",
         "width": 1254
       },
       {
-        "altText": "",
+        "altText": "Pure Face Rosehip Oil 20ml, with its box among roses in a garden",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRosehipOilinaSunlitGarden.png?v=1793792090",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Pure Face Rosehip Oil 20ml, with roses and a ribbon",
         "height": 1040,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_3.png?v=1793792088",
         "width": 832
       },
       {
-        "altText": "",
+        "altText": "Pure Face Rosehip Oil 20ml, front view",
         "height": 1568,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_1.png?v=1793792089",
         "width": 1254
@@ -318,10 +318,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Pure Face Rosehip Oil 20ml, with its box",
         "id": "gid://shopify/MediaImage/74419533742161",
         "image": {
-          "altText": "",
+          "altText": "Pure Face Rosehip Oil 20ml, with its box",
           "height": 1568,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_2.png?v=1793792089",
           "width": 1254
@@ -329,10 +329,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Pure Face Rosehip Oil 20ml, with its box among roses in a garden",
         "id": "gid://shopify/MediaImage/74419533807697",
         "image": {
-          "altText": "",
+          "altText": "Pure Face Rosehip Oil 20ml, with its box among roses in a garden",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRosehipOilinaSunlitGarden.png?v=1793792090",
           "width": 1122
@@ -340,10 +340,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Pure Face Rosehip Oil 20ml, with roses and a ribbon",
         "id": "gid://shopify/MediaImage/74419533774929",
         "image": {
-          "altText": "",
+          "altText": "Pure Face Rosehip Oil 20ml, with roses and a ribbon",
           "height": 1040,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_3.png?v=1793792088",
           "width": 832
@@ -351,10 +351,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Pure Face Rosehip Oil 20ml, front view",
         "id": "gid://shopify/MediaImage/74419533840465",
         "image": {
-          "altText": "",
+          "altText": "Pure Face Rosehip Oil 20ml, front view",
           "height": 1568,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_1.png?v=1793792089",
           "width": 1254
@@ -397,7 +397,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Pure Face Rosehip Oil 20ml | Nourishing Facial Oil"
+        "value": "Pure Face Rosehip Oil 20ml, Nourishing Facial Oil | Rosart"
       }
     ],
     "options": [
@@ -414,7 +414,7 @@
     "publishedAt": "2026-11-04T11:52:00Z",
     "seo": {
       "description": "Discover Rosart Pure Face Rosehip Oil 20ml with organic rosehip oil, Damask rose oil and vitamin E. Nourishes skin and improves the appearance of dullness.",
-      "title": "Rosart Pure Face Rosehip Oil 20ml | Nourishing Facial Oil"
+      "title": "Pure Face Rosehip Oil 20ml, Nourishing Facial Oil | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -424,7 +424,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Pure Face Rosehip Oil 20ml",
-    "updatedAt": "2026-11-05T12:10:19Z",
+    "updatedAt": "2026-11-07T06:09:14Z",
     "variants": [
       {
         "barcode": null,
@@ -452,7 +452,7 @@
     "id": "gid://shopify/Product/16432963649617",
     "images": [
       {
-        "altText": "",
+        "altText": "Pure Face Rosehip Oil 2ml, front view",
         "height": 1403,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartSmallDropperBottleinWarmStudioLight.png?v=1793792441",
         "width": 1121
@@ -460,10 +460,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Pure Face Rosehip Oil 2ml, front view",
         "id": "gid://shopify/MediaImage/74419602587729",
         "image": {
-          "altText": "",
+          "altText": "Pure Face Rosehip Oil 2ml, front view",
           "height": 1403,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartSmallDropperBottleinWarmStudioLight.png?v=1793792441",
           "width": 1121
@@ -506,7 +506,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Pure Face Rosehip Oil 2ml | Nourishing Facial Oil"
+        "value": "Pure Face Rosehip Oil 2ml, Nourishing Facial Oil | Rosart"
       }
     ],
     "options": [
@@ -523,7 +523,7 @@
     "publishedAt": "2026-11-04T11:52:01Z",
     "seo": {
       "description": "Discover Rosart Pure Face Rosehip Oil 2ml with organic rosehip oil, Damask rose oil and vitamin E. Nourishes skin and improves the appearance of dullness.",
-      "title": "Rosart Pure Face Rosehip Oil 2ml | Nourishing Facial Oil"
+      "title": "Pure Face Rosehip Oil 2ml, Nourishing Facial Oil | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -533,7 +533,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Pure Face Rosehip Oil 2ml",
-    "updatedAt": "2026-11-05T12:09:54Z",
+    "updatedAt": "2026-11-07T06:09:27Z",
     "variants": [
       {
         "barcode": null,
@@ -561,19 +561,19 @@
     "id": "gid://shopify/Product/16432837361745",
     "images": [
       {
-        "altText": "",
+        "altText": "Rose Face Mask 80ml, with its box and spoon",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseFaceMaskDuo.png?v=1793789419",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Rose Face Mask 80ml, with a rose",
         "height": 1536,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskGardenStillLife.png?v=1793789419",
         "width": 1024
       },
       {
-        "altText": "",
+        "altText": "Rose Face Mask 80ml, held by a model among roses",
         "height": 1536,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskinBloom.png?v=1793789419",
         "width": 1024
@@ -581,10 +581,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Rose Face Mask 80ml, with its box and spoon",
         "id": "gid://shopify/MediaImage/74418718212177",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Mask 80ml, with its box and spoon",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseFaceMaskDuo.png?v=1793789419",
           "width": 1122
@@ -592,10 +592,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Face Mask 80ml, with a rose",
         "id": "gid://shopify/MediaImage/74418718244945",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Mask 80ml, with a rose",
           "height": 1536,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskGardenStillLife.png?v=1793789419",
           "width": 1024
@@ -603,10 +603,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Face Mask 80ml, held by a model among roses",
         "id": "gid://shopify/MediaImage/74418718277713",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Mask 80ml, held by a model among roses",
           "height": 1536,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskinBloom.png?v=1793789419",
           "width": 1024
@@ -649,7 +649,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Face Mask 80ml | Hydrating Facial Mask"
+        "value": "Rose Face Mask 80ml, Hydrating Facial Mask | Rosart"
       }
     ],
     "options": [
@@ -666,7 +666,7 @@
     "publishedAt": "2026-11-04T11:52:01Z",
     "seo": {
       "description": "Discover Rosart Rose Face Mask with Bulgarian rose water, rose oil and marine polysaccharides. Hydrates, refreshes and softens skin. Made in Bulgaria.",
-      "title": "Rosart Rose Face Mask 80ml | Hydrating Facial Mask"
+      "title": "Rose Face Mask 80ml, Hydrating Facial Mask | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -677,7 +677,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Rose Face Mask 80ml",
-    "updatedAt": "2026-11-05T12:23:02Z",
+    "updatedAt": "2026-11-07T06:09:27Z",
     "variants": [
       {
         "barcode": null,
@@ -705,19 +705,19 @@
     "id": "gid://shopify/Product/16432829792337",
     "images": [
       {
-        "altText": "",
+        "altText": "Rose Cleansing Balm 80ml, with its box",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseCleansingBalmDisplay.png?v=1793789263",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Rose Cleansing Balm 80ml, with its box among roses",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseBalminaSunlitGarden.png?v=1793789264",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Rose Cleansing Balm 80ml, held by a model in a rose field",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseCleansingBalmPortrait.png?v=1793789263",
         "width": 1122
@@ -725,10 +725,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Rose Cleansing Balm 80ml, with its box",
         "id": "gid://shopify/MediaImage/74418652086353",
         "image": {
-          "altText": "",
+          "altText": "Rose Cleansing Balm 80ml, with its box",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseCleansingBalmDisplay.png?v=1793789263",
           "width": 1122
@@ -736,10 +736,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Cleansing Balm 80ml, with its box among roses",
         "id": "gid://shopify/MediaImage/74418652151889",
         "image": {
-          "altText": "",
+          "altText": "Rose Cleansing Balm 80ml, with its box among roses",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseBalminaSunlitGarden.png?v=1793789264",
           "width": 1122
@@ -747,10 +747,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Cleansing Balm 80ml, held by a model in a rose field",
         "id": "gid://shopify/MediaImage/74418652119121",
         "image": {
-          "altText": "",
+          "altText": "Rose Cleansing Balm 80ml, held by a model in a rose field",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseCleansingBalmPortrait.png?v=1793789263",
           "width": 1122
@@ -787,13 +787,13 @@
         "key": "description_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Discover Rosart Rose Cleansing Balm with rosehip, jojoba and avocado oils. Gently removes makeup and impurities while leaving skin soft and nourished. Made in Bulgaria."
+        "value": "Rosart Rose Cleansing Balm 80ml with rosehip, jojoba and avocado oils gently removes makeup and impurities, leaving skin soft. Made in Bulgaria."
       },
       {
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Cleansing Balm 80ml | Makeup Remover"
+        "value": "Rose Cleansing Balm 80ml, Makeup Remover | Rosart"
       }
     ],
     "options": [
@@ -809,8 +809,8 @@
     "productType": "Facial Cleanser",
     "publishedAt": "2026-11-04T11:52:01Z",
     "seo": {
-      "description": "Discover Rosart Rose Cleansing Balm with rosehip, jojoba and avocado oils. Gently removes makeup and impurities while leaving skin soft and nourished. Made in Bulgaria.",
-      "title": "Rosart Rose Cleansing Balm 80ml | Makeup Remover"
+      "description": "Rosart Rose Cleansing Balm 80ml with rosehip, jojoba and avocado oils gently removes makeup and impurities, leaving skin soft. Made in Bulgaria.",
+      "title": "Rose Cleansing Balm 80ml, Makeup Remover | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -821,7 +821,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Rose Cleansing Balm 80ml",
-    "updatedAt": "2026-11-05T11:39:00Z",
+    "updatedAt": "2026-11-07T06:09:27Z",
     "variants": [
       {
         "barcode": null,
@@ -849,13 +849,13 @@
     "id": "gid://shopify/Product/16431958523985",
     "images": [
       {
-        "altText": "",
+        "altText": "Rose Face Cream 3g, with its box",
         "height": 992,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCream3g_14a773ff-e665-4af0-8662-6debcfef1347.jpg?v=1793772403",
         "width": 790
       },
       {
-        "altText": "",
+        "altText": "Rose Face Cream 3g, with its box and rose petals",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseFaceCreamStillLife_ca18a3dc-fd34-4fcd-90fa-796fa6294fe9.png?v=1793772421",
         "width": 1122
@@ -863,10 +863,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Rose Face Cream 3g, with its box",
         "id": "gid://shopify/MediaImage/74412707905617",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Cream 3g, with its box",
           "height": 992,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCream3g_14a773ff-e665-4af0-8662-6debcfef1347.jpg?v=1793772403",
           "width": 790
@@ -874,10 +874,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Face Cream 3g, with its box and rose petals",
         "id": "gid://shopify/MediaImage/74412708659281",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Cream 3g, with its box and rose petals",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseFaceCreamStillLife_ca18a3dc-fd34-4fcd-90fa-796fa6294fe9.png?v=1793772421",
           "width": 1122
@@ -920,7 +920,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Face Cream 3g | Hydrating Facial Moisturizer"
+        "value": "Rose Face Cream 3g, Nourishing Moisturizer | Rosart"
       }
     ],
     "options": [
@@ -937,7 +937,7 @@
     "publishedAt": "2026-11-04T11:52:02Z",
     "seo": {
       "description": "Discover Rosart Rose Face Cream 3g, enriched with organic rose oil, rose water and rose concrete. A nourishing facial moisturizer for day and night use.",
-      "title": "Rosart Rose Face Cream 3g | Hydrating Facial Moisturizer"
+      "title": "Rose Face Cream 3g, Nourishing Moisturizer | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -950,7 +950,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Rose Face Cream 3g",
-    "updatedAt": "2026-11-05T11:56:59Z",
+    "updatedAt": "2026-11-07T06:09:27Z",
     "variants": [
       {
         "barcode": null,
@@ -978,25 +978,25 @@
     "id": "gid://shopify/Product/16431658401873",
     "images": [
       {
-        "altText": "",
+        "altText": "Rose Face Cream 50ml, with its box and spoon",
         "height": 992,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCreamDuo.jpg?v=1793771836",
         "width": 788
       },
       {
-        "altText": "",
+        "altText": "Rose Face Cream 50ml, with its box among roses in a garden",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_1.png?v=1793771197",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "Rose Face Cream 50ml, with a rose and petals",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/fc1.png?v=1793772987",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "Rose Face Cream 50ml, held by a model in a rose field",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseFaceCreamPortrait.png?v=1793770749",
         "width": 1122
@@ -1004,10 +1004,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Rose Face Cream 50ml, with its box and spoon",
         "id": "gid://shopify/MediaImage/74412680839249",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Cream 50ml, with its box and spoon",
           "height": 992,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCreamDuo.jpg?v=1793771836",
           "width": 788
@@ -1015,10 +1015,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Face Cream 50ml, with its box among roses in a garden",
         "id": "gid://shopify/MediaImage/74412645941329",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Cream 50ml, with its box among roses in a garden",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_1.png?v=1793771197",
           "width": 1200
@@ -1026,10 +1026,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Face Cream 50ml, with a rose and petals",
         "id": "gid://shopify/MediaImage/74412759351377",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Cream 50ml, with a rose and petals",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/fc1.png?v=1793772987",
           "width": 1200
@@ -1037,10 +1037,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Face Cream 50ml, held by a model in a rose field",
         "id": "gid://shopify/MediaImage/74412600852561",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Cream 50ml, held by a model in a rose field",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseFaceCreamPortrait.png?v=1793770749",
           "width": 1122
@@ -1083,7 +1083,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Face Cream 50ml | Bulgarian Rose Skincare"
+        "value": "Rose Face Cream 50ml, Nourishing Moisturizer | Rosart"
       }
     ],
     "options": [
@@ -1100,7 +1100,7 @@
     "publishedAt": "2026-11-04T11:52:02Z",
     "seo": {
       "description": "Discover Rosart Rose Face Cream 50ml, formulated with organic rose oil, rose water and rose concrete to hydrate and nourish skin. For day and night use.",
-      "title": "Rosart Rose Face Cream 50ml | Bulgarian Rose Skincare"
+      "title": "Rose Face Cream 50ml, Nourishing Moisturizer | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -1113,7 +1113,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Rose Face Cream 50ml",
-    "updatedAt": "2026-11-05T11:58:15Z",
+    "updatedAt": "2026-11-07T06:09:40Z",
     "variants": [
       {
         "barcode": null,
@@ -1141,7 +1141,7 @@
     "id": "gid://shopify/Product/16431961309265",
     "images": [
       {
-        "altText": "",
+        "altText": "Rose Face Soufflé Cream 3g, with its box",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleCreamSet.png?v=1793772758",
         "width": 1122
@@ -1149,10 +1149,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Rose Face Soufflé Cream 3g, with its box",
         "id": "gid://shopify/MediaImage/74412718358609",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Soufflé Cream 3g, with its box",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleCreamSet.png?v=1793772758",
           "width": 1122
@@ -1195,7 +1195,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Face Soufflé Cream 3g | Lightweight Moisturiser"
+        "value": "Rose Face Soufflé Cream 3g, Lightweight Moisturiser | Rosart"
       }
     ],
     "options": [
@@ -1212,7 +1212,7 @@
     "publishedAt": "2026-11-04T11:52:03Z",
     "seo": {
       "description": "Discover Rosart Rose Face Soufflé Cream 3g, a lightweight moisturiser with rose water, botanical oils and sodium hyaluronate. Made in Bulgaria.",
-      "title": "Rosart Rose Face Soufflé Cream 3g | Lightweight Moisturiser"
+      "title": "Rose Face Soufflé Cream 3g, Lightweight Moisturiser | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -1225,7 +1225,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Rose Face Soufflé Cream 3g",
-    "updatedAt": "2026-11-05T11:40:21Z",
+    "updatedAt": "2026-11-07T06:09:40Z",
     "variants": [
       {
         "barcode": null,
@@ -1253,13 +1253,13 @@
     "id": "gid://shopify/Product/16431960621137",
     "images": [
       {
-        "altText": "",
+        "altText": "Rose Face Soufflé Cream 50ml, with its box and spoon",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Curved-LabelRosartRoseCreamSet.png?v=1793879081",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Rose Face Soufflé Cream 50ml, with its box among roses",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleStillLife.png?v=1793772602",
         "width": 1122
@@ -1267,10 +1267,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Rose Face Soufflé Cream 50ml, with its box and spoon",
         "id": "gid://shopify/MediaImage/74451420545105",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Soufflé Cream 50ml, with its box and spoon",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Curved-LabelRosartRoseCreamSet.png?v=1793879081",
           "width": 1122
@@ -1278,10 +1278,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Face Soufflé Cream 50ml, with its box among roses",
         "id": "gid://shopify/MediaImage/74412714033233",
         "image": {
-          "altText": "",
+          "altText": "Rose Face Soufflé Cream 50ml, with its box among roses",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleStillLife.png?v=1793772602",
           "width": 1122
@@ -1318,13 +1318,13 @@
         "key": "description_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Discover Rosart Rose Face Soufflé Cream 50ml. A lightweight facial moisturizer with Damascena rose water, rosehip oil and hyaluronic acid for soft, hydrated skin."
+        "value": "Rosart Rose Face Soufflé Cream 50ml: a lightweight facial moisturizer with Damascena rose flower water, rose oil and rosehip oil. Made in Bulgaria."
       },
       {
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Face Soufflé Cream 50ml | Lightweight Moisturizer"
+        "value": "Rose Face Soufflé Cream 50ml, Light Moisturizer | Rosart"
       }
     ],
     "options": [
@@ -1340,8 +1340,8 @@
     "productType": "Facial Moisturizer",
     "publishedAt": "2026-11-04T11:52:03Z",
     "seo": {
-      "description": "Discover Rosart Rose Face Soufflé Cream 50ml. A lightweight facial moisturizer with Damascena rose water, rosehip oil and hyaluronic acid for soft, hydrated skin.",
-      "title": "Rosart Rose Face Soufflé Cream 50ml | Lightweight Moisturizer"
+      "description": "Rosart Rose Face Soufflé Cream 50ml: a lightweight facial moisturizer with Damascena rose flower water, rose oil and rosehip oil. Made in Bulgaria.",
+      "title": "Rose Face Soufflé Cream 50ml, Light Moisturizer | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -1355,7 +1355,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Rose Face Soufflé Cream 50ml",
-    "updatedAt": "2026-11-05T11:44:52Z",
+    "updatedAt": "2026-11-07T06:09:40Z",
     "variants": [
       {
         "barcode": null,
@@ -1383,25 +1383,25 @@
     "id": "gid://shopify/Product/16432859578449",
     "images": [
       {
-        "altText": "",
+        "altText": "Rose Facial Toner 330ml, with its box",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_65e67bcf-5d90-4538-8ea6-8383481d6367.png?v=1793882604",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "Rose Facial Toner 330ml, with a rose",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseTonerStillLife.png?v=1793790134",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Rose Facial Toner 330ml, held in a hand among roses",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/1_e8d51abc-fa25-4a53-8000-2a109dc374e9.png?v=1793790133",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "Rose Facial Toner 330ml, held up by a model in a rose field",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/2_3f29349c-2ca4-4df1-a6a4-11f29261cce9.png?v=1793790133",
         "width": 1200
@@ -1409,10 +1409,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Rose Facial Toner 330ml, with its box",
         "id": "gid://shopify/MediaImage/74455763026001",
         "image": {
-          "altText": "",
+          "altText": "Rose Facial Toner 330ml, with its box",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_65e67bcf-5d90-4538-8ea6-8383481d6367.png?v=1793882604",
           "width": 1200
@@ -1420,10 +1420,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Facial Toner 330ml, with a rose",
         "id": "gid://shopify/MediaImage/74418953715793",
         "image": {
-          "altText": "",
+          "altText": "Rose Facial Toner 330ml, with a rose",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseTonerStillLife.png?v=1793790134",
           "width": 1122
@@ -1431,10 +1431,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Facial Toner 330ml, held in a hand among roses",
         "id": "gid://shopify/MediaImage/74418953650257",
         "image": {
-          "altText": "",
+          "altText": "Rose Facial Toner 330ml, held in a hand among roses",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/1_e8d51abc-fa25-4a53-8000-2a109dc374e9.png?v=1793790133",
           "width": 1200
@@ -1442,10 +1442,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Facial Toner 330ml, held up by a model in a rose field",
         "id": "gid://shopify/MediaImage/74418953683025",
         "image": {
-          "altText": "",
+          "altText": "Rose Facial Toner 330ml, held up by a model in a rose field",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/2_3f29349c-2ca4-4df1-a6a4-11f29261cce9.png?v=1793790133",
           "width": 1200
@@ -1488,7 +1488,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Facial Toner 330ml | Hydrating Toner"
+        "value": "Rose Facial Toner 330ml with Damask Rose Water | Rosart"
       }
     ],
     "options": [
@@ -1505,7 +1505,7 @@
     "publishedAt": "2026-11-04T11:52:04Z",
     "seo": {
       "description": "Discover Rosart Rose Facial Toner 330ml with Damask rose water, botanical extracts and sodium hyaluronate. Refreshes and hydrates skin. Made in Bulgaria.",
-      "title": "Rosart Rose Facial Toner 330ml | Hydrating Toner"
+      "title": "Rose Facial Toner 330ml with Damask Rose Water | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -1515,7 +1515,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Rose Facial Toner 330ml",
-    "updatedAt": "2026-11-05T12:43:36Z",
+    "updatedAt": "2026-11-07T06:09:40Z",
     "variants": [
       {
         "barcode": null,
@@ -1543,25 +1543,25 @@
     "id": "gid://shopify/Product/16432893689937",
     "images": [
       {
-        "altText": "",
+        "altText": "Rose Glycerin Soap 90g, with its box",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseGlycerinSoapSet.png?v=1793790615",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Rose Glycerin Soap 90g, with its box and roses",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rose-GoldGlycerinSoapPackaging.png?v=1793790615",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Rose Glycerin Soap 90g, with its box in a sunlit garden",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSoapinSunlitGarden_3f7fc8b5-0d9f-477b-88d5-ba98bfe3eaa7.png?v=1793838507",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "Rose Glycerin Soap 90g, held up by a model in a rose field",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenwithAmberDisc.png?v=1793790615",
         "width": 1122
@@ -1569,10 +1569,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Rose Glycerin Soap 90g, with its box",
         "id": "gid://shopify/MediaImage/74419133218897",
         "image": {
-          "altText": "",
+          "altText": "Rose Glycerin Soap 90g, with its box",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseGlycerinSoapSet.png?v=1793790615",
           "width": 1122
@@ -1580,10 +1580,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Glycerin Soap 90g, with its box and roses",
         "id": "gid://shopify/MediaImage/74419133284433",
         "image": {
-          "altText": "",
+          "altText": "Rose Glycerin Soap 90g, with its box and roses",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rose-GoldGlycerinSoapPackaging.png?v=1793790615",
           "width": 1122
@@ -1591,10 +1591,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Glycerin Soap 90g, with its box in a sunlit garden",
         "id": "gid://shopify/MediaImage/74432052363345",
         "image": {
-          "altText": "",
+          "altText": "Rose Glycerin Soap 90g, with its box in a sunlit garden",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSoapinSunlitGarden_3f7fc8b5-0d9f-477b-88d5-ba98bfe3eaa7.png?v=1793838507",
           "width": 1200
@@ -1602,10 +1602,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Glycerin Soap 90g, held up by a model in a rose field",
         "id": "gid://shopify/MediaImage/74419133317201",
         "image": {
-          "altText": "",
+          "altText": "Rose Glycerin Soap 90g, held up by a model in a rose field",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenwithAmberDisc.png?v=1793790615",
           "width": 1122
@@ -1648,7 +1648,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Glycerin Soap 90g | Handmade Rose Soap"
+        "value": "Rose Glycerin Soap 90g, Handmade with Rose Petals | Rosart"
       }
     ],
     "options": [
@@ -1665,7 +1665,7 @@
     "publishedAt": "2026-11-04T11:52:04Z",
     "seo": {
       "description": "Discover Rosart Rose Glycerin Soap 90g, handmade with Bulgarian rose water, rose petals and glycerin to gently cleanse and soften skin. Made in Bulgaria.",
-      "title": "Rosart Rose Glycerin Soap 90g | Handmade Rose Soap"
+      "title": "Rose Glycerin Soap 90g, Handmade with Rose Petals | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -1675,7 +1675,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Rose Glycerin Soap 90g",
-    "updatedAt": "2026-11-05T00:28:43Z",
+    "updatedAt": "2026-11-07T06:09:54Z",
     "variants": [
       {
         "barcode": null,
@@ -1703,37 +1703,37 @@
     "id": "gid://shopify/Product/16432900898897",
     "images": [
       {
-        "altText": "",
+        "altText": "Rose Oil Revitalizing Essence 30 Capsules, with its box and loose capsules",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GlossyGoldenSoftgelCapsules.png?v=1793791564",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Rose Oil Revitalizing Essence 30 Capsules, capsules in an open container among roses",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1_c9e99047-71cb-42e8-86ac-bfdbad6c3da8.png?v=1793880975",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "Rose Oil Revitalizing Essence 30 Capsules, open container with a capsule on a spoon",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_a7c30e84-49fb-48b6-a53d-de7ec63c08d5.png?v=1793880975",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "Rose Oil Revitalizing Essence 30 Capsules, container held in a hand among roses",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartGoldSkincareJarinBloomingGarden.png?v=1793790918",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Rose Oil Revitalizing Essence 30 Capsules, held by a model in a rose field",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenSkincarePortrait.png?v=1793790886",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "Rose Oil Revitalizing Essence 30 Capsules, how to use: cut open the capsule with the mini scissors, squeeze out the essence, massage onto face and neck",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GoldenCapsuleCuttingGuide.png?v=1793791393",
         "width": 1122
@@ -1741,10 +1741,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "Rose Oil Revitalizing Essence 30 Capsules, with its box and loose capsules",
         "id": "gid://shopify/MediaImage/74419416039505",
         "image": {
-          "altText": "",
+          "altText": "Rose Oil Revitalizing Essence 30 Capsules, with its box and loose capsules",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GlossyGoldenSoftgelCapsules.png?v=1793791564",
           "width": 1122
@@ -1752,10 +1752,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Oil Revitalizing Essence 30 Capsules, capsules in an open container among roses",
         "id": "gid://shopify/MediaImage/74453893972049",
         "image": {
-          "altText": "",
+          "altText": "Rose Oil Revitalizing Essence 30 Capsules, capsules in an open container among roses",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1_c9e99047-71cb-42e8-86ac-bfdbad6c3da8.png?v=1793880975",
           "width": 1200
@@ -1763,10 +1763,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Oil Revitalizing Essence 30 Capsules, open container with a capsule on a spoon",
         "id": "gid://shopify/MediaImage/74453894004817",
         "image": {
-          "altText": "",
+          "altText": "Rose Oil Revitalizing Essence 30 Capsules, open container with a capsule on a spoon",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_a7c30e84-49fb-48b6-a53d-de7ec63c08d5.png?v=1793880975",
           "width": 1200
@@ -1774,10 +1774,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Oil Revitalizing Essence 30 Capsules, container held in a hand among roses",
         "id": "gid://shopify/MediaImage/74419241287761",
         "image": {
-          "altText": "",
+          "altText": "Rose Oil Revitalizing Essence 30 Capsules, container held in a hand among roses",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartGoldSkincareJarinBloomingGarden.png?v=1793790918",
           "width": 1122
@@ -1785,10 +1785,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Oil Revitalizing Essence 30 Capsules, held by a model in a rose field",
         "id": "gid://shopify/MediaImage/74419230474321",
         "image": {
-          "altText": "",
+          "altText": "Rose Oil Revitalizing Essence 30 Capsules, held by a model in a rose field",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenSkincarePortrait.png?v=1793790886",
           "width": 1122
@@ -1796,10 +1796,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "Rose Oil Revitalizing Essence 30 Capsules, how to use: cut open the capsule with the mini scissors, squeeze out the essence, massage onto face and neck",
         "id": "gid://shopify/MediaImage/74419382222929",
         "image": {
-          "altText": "",
+          "altText": "Rose Oil Revitalizing Essence 30 Capsules, how to use: cut open the capsule with the mini scissors, squeeze out the essence, massage onto face and neck",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GoldenCapsuleCuttingGuide.png?v=1793791393",
           "width": 1122
@@ -1842,7 +1842,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Oil Revitalizing Essence | 30 Capsules"
+        "value": "Rose Oil Revitalizing Essence, 30 Capsules | Rosart"
       }
     ],
     "options": [
@@ -1859,7 +1859,7 @@
     "publishedAt": "2026-11-04T11:52:05Z",
     "seo": {
       "description": "Discover Rosart Rose Oil Revitalizing Essence with rose oils, rosehip, grape seed oil and vitamin E. 30 facial oil capsules, made in Bulgaria.",
-      "title": "Rosart Rose Oil Revitalizing Essence | 30 Capsules"
+      "title": "Rose Oil Revitalizing Essence, 30 Capsules | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -1869,7 +1869,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "Rose Oil Revitalizing Essence 30 Capsules",
-    "updatedAt": "2026-11-05T12:16:35Z",
+    "updatedAt": "2026-11-07T06:09:54Z",
     "variants": [
       {
         "barcode": null,
@@ -1897,31 +1897,31 @@
     "id": "gid://shopify/Product/16432922165329",
     "images": [
       {
-        "altText": "",
+        "altText": "100% Natural Damascena Rose Water 100ml, with its box",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseRosartWaterSet.png?v=1793791195",
         "width": 1122
       },
       {
-        "altText": "",
+        "altText": "100% Natural Damascena Rose Water 100ml, with roses",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST.png?v=1793880512",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "100% Natural Damascena Rose Water 100ml, among roses in a garden",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_2.png?v=1793880511",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "100% Natural Damascena Rose Water 100ml, held in a hand among roses",
         "height": 1500,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1.png?v=1793880511",
         "width": 1200
       },
       {
-        "altText": "",
+        "altText": "100% Natural Damascena Rose Water 100ml, held by a model in a rose field",
         "height": 1402,
         "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterinaSunlitRoseGarden.png?v=1793791608",
         "width": 1122
@@ -1929,10 +1929,10 @@
     ],
     "media": [
       {
-        "alt": "",
+        "alt": "100% Natural Damascena Rose Water 100ml, with its box",
         "id": "gid://shopify/MediaImage/74419325010001",
         "image": {
-          "altText": "",
+          "altText": "100% Natural Damascena Rose Water 100ml, with its box",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseRosartWaterSet.png?v=1793791195",
           "width": 1122
@@ -1940,10 +1940,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "100% Natural Damascena Rose Water 100ml, with roses",
         "id": "gid://shopify/MediaImage/74453223735377",
         "image": {
-          "altText": "",
+          "altText": "100% Natural Damascena Rose Water 100ml, with roses",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST.png?v=1793880512",
           "width": 1200
@@ -1951,10 +1951,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "100% Natural Damascena Rose Water 100ml, among roses in a garden",
         "id": "gid://shopify/MediaImage/74453223800913",
         "image": {
-          "altText": "",
+          "altText": "100% Natural Damascena Rose Water 100ml, among roses in a garden",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_2.png?v=1793880511",
           "width": 1200
@@ -1962,10 +1962,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "100% Natural Damascena Rose Water 100ml, held in a hand among roses",
         "id": "gid://shopify/MediaImage/74453223768145",
         "image": {
-          "altText": "",
+          "altText": "100% Natural Damascena Rose Water 100ml, held in a hand among roses",
           "height": 1500,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1.png?v=1793880511",
           "width": 1200
@@ -1973,10 +1973,10 @@
         "mediaContentType": "IMAGE"
       },
       {
-        "alt": "",
+        "alt": "100% Natural Damascena Rose Water 100ml, held by a model in a rose field",
         "id": "gid://shopify/MediaImage/74419427278929",
         "image": {
-          "altText": "",
+          "altText": "100% Natural Damascena Rose Water 100ml, held by a model in a rose field",
           "height": 1402,
           "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterinaSunlitRoseGarden.png?v=1793791608",
           "width": 1122
@@ -2019,7 +2019,7 @@
         "key": "title_tag",
         "namespace": "global",
         "type": "string",
-        "value": "Rosart Rose Water 100ml | 100% Natural Bulgarian Rose Water"
+        "value": "Damascena Rose Water 100ml, 100% Natural Toner | Rosart"
       }
     ],
     "options": [
@@ -2036,7 +2036,7 @@
     "publishedAt": "2026-11-04T11:52:05Z",
     "seo": {
       "description": "Discover Rosart Rose Water 100ml, made from 100% natural Bulgarian Rosa Damascena flower water. Gently soothes, hydrates and refreshes skin.",
-      "title": "Rosart Rose Water 100ml | 100% Natural Bulgarian Rose Water"
+      "title": "Damascena Rose Water 100ml, 100% Natural Toner | Rosart"
     },
     "status": "ACTIVE",
     "tags": [
@@ -2046,7 +2046,7 @@
     ],
     "templateSuffix": "product-catalogue",
     "title": "100% Natural Damascena Rose Water 100ml",
-    "updatedAt": "2026-11-05T12:08:47Z",
+    "updatedAt": "2026-11-07T06:10:07Z",
     "variants": [
       {
         "barcode": null,
