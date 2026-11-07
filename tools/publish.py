@@ -128,6 +128,9 @@ def check_dist(dist: Path) -> DistSummary:
 ALLOWED_OPERATIONS = (
     ("sts", "get-caller-identity"),
     ("s3", "sync"),
+    # The bucket marker, and only that one key (see _assert_marker_command).
+    ("s3api", "get-object"),
+    ("s3api", "put-object"),
     ("cloudfront", "create-invalidation"),
     ("cloudfront", "wait", "invalidation-completed"),
 )
@@ -137,9 +140,66 @@ def _option_values(args: list[str], option: str) -> list[str]:
     return [args[i + 1] if i + 1 < len(args) else "" for i, arg in enumerate(args) if arg == option]
 
 
-def assert_command_allowed(command: list[str], config: DeployConfig) -> None:
+def _inside(path: str, folder: Path) -> bool:
+    try:
+        Path(path).resolve().relative_to(Path(folder).resolve())
+    except ValueError:
+        return False
+    return True
+
+
+def _assert_marker_command(args: list[str], config: DeployConfig, temp_dir: Optional[Path]) -> None:
+    """The two s3api shapes: get or put of exactly the marker key in the configured bucket, with a
+    local file inside ``temp_dir``, and no option beyond the ones the shape needs."""
+    operation = args[1]
+    if temp_dir is None:
+        raise PublishError(f"s3api {operation} needs a temp folder for its local file, none was given")
+    valued = {"--bucket", "--key", "--profile", "--region", "--output"}
+    if operation == "put-object":
+        valued |= {"--body", "--content-type", "--cache-control"}
+    seen: dict[str, list[str]] = {}
+    positional: list[str] = []
+    i = 2
+    while i < len(args):
+        arg = args[i]
+        if arg == "--no-cli-pager":
+            i += 1
+        elif arg in valued:
+            seen.setdefault(arg, []).append(args[i + 1] if i + 1 < len(args) else "")
+            i += 2
+        elif arg.startswith("--"):
+            raise PublishError(f"{arg} is not allowed on s3api {operation}")
+        else:
+            positional.append(arg)
+            i += 1
+    if seen.get("--bucket") != [config.bucket]:
+        raise PublishError(f"s3api {operation} must use --bucket {config.bucket}, got "
+                           f"{seen.get('--bucket') or 'none'}")
+    if seen.get("--key") != [MARKER_KEY]:
+        raise PublishError(f"s3api {operation} may only touch --key {MARKER_KEY}, got "
+                           f"{seen.get('--key') or 'none'}")
+    if operation == "put-object":
+        expected = {"--content-type": "application/json", "--cache-control": "no-store"}
+        for option, value in expected.items():
+            if seen.get(option) != [value]:
+                raise PublishError(f"s3api put-object must pass {option} {value}, got "
+                                   f"{seen.get(option) or 'none'}")
+        local = seen.get("--body", [])
+        if positional or len(local) != 1:
+            raise PublishError("s3api put-object takes exactly one --body file and no other argument")
+    else:
+        local = positional
+        if len(local) != 1:
+            raise PublishError("s3api get-object takes exactly one local file to write")
+    if not _inside(local[0], temp_dir):
+        raise PublishError(f"the local file {local[0]} is not inside the temp folder {temp_dir}")
+
+
+def assert_command_allowed(command: list[str], config: DeployConfig,
+                           temp_dir: Optional[Path] = None) -> None:
     """Refuse any aws command that is not a publish operation on the configured profile, bucket
-    and distribution. Every command passes through here before it runs."""
+    and distribution. Every command passes through here before it runs. ``temp_dir`` is the only
+    folder the bucket-marker commands may read or write locally."""
     if not command or command[0] != "aws":
         raise PublishError(f"not an aws command: {command!r}")
     args = command[1:]
@@ -164,6 +224,9 @@ def assert_command_allowed(command: list[str], config: DeployConfig) -> None:
                 or not positional[1].lower().startswith("s3://"):
             raise PublishError(f"s3 sync must upload from a local folder to {config.bucket_url}: "
                                f"{' '.join(command)}")
+
+    if args[0] == "s3api":
+        _assert_marker_command(args, config, temp_dir)
 
     if args[0] == "cloudfront":
         ids = _option_values(args, "--distribution-id")
@@ -214,16 +277,17 @@ class AwsCliRunner:
 class Aws:
     """Adds the profile and region to every command, guards it, runs it and fails on a non-zero exit."""
 
-    def __init__(self, config: DeployConfig, runner: Runner) -> None:
+    def __init__(self, config: DeployConfig, runner: Runner, temp_dir: Optional[Path] = None) -> None:
         self.config = config
         self.runner = runner
+        self.temp_dir = temp_dir
 
-    def run(self, args: list[str]) -> AwsResult:
+    def run(self, args: list[str], temp_dir: Optional[Path] = None) -> AwsResult:
         command = ["aws", *args, "--profile", self.config.profile, "--region", self.config.region,
                    "--no-cli-pager"]
         if args[0] != "s3":
             command += ["--output", "json"]
-        assert_command_allowed(command, self.config)
+        assert_command_allowed(command, self.config, temp_dir or self.temp_dir)
         result = self.runner(command)
         if result.returncode != 0:
             detail = (result.stderr.strip() or result.stdout.strip() or "no output")[-1500:]
