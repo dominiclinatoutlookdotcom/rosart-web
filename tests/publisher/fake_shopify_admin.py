@@ -83,6 +83,7 @@ class FakeShopifyAdmin:
         self.fetched_urls: list[str] = []
         self.opener = _Opener(self)
         self._issued = 0
+        self.issued_tokens: list[str] = []
         self._tokens: dict[str, tuple[float, list[str]]] = {}
         self._queue: list[Callable[[], _Response]] = []
         self._themes: dict[str, dict] = {}
@@ -169,6 +170,7 @@ class FakeShopifyAdmin:
             return self._http_error(400, {"error": "invalid_client", "error_description": "fake"})
         self._issued += 1
         token = f"shpat_fake_{self._issued:04d}"
+        self.issued_tokens.append(token)
         self._tokens[token] = (self.clock.mono() + self.expires_in, self.grant_scope.split(","))
         return _Response(200, self._json({"access_token": token, "scope": self.grant_scope,
                                           "expires_in": self.expires_in}))
