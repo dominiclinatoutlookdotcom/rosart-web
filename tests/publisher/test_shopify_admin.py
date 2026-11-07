@@ -78,7 +78,7 @@ def test_graphql_goes_to_the_pinned_api_version_with_the_token_header(fake, cloc
 
 
 def test_the_token_is_reused_until_30_minutes_remain_then_refreshed(fake, clock):
-    runner, _ = build(fake, clock)
+    runner, _ = build(fake, clock, deadline_in=10 * 86400)
     runner(SHOP_QUERY, {})
     clock.advance(23 * 3600 + 20 * 60)          # 39 min remain: still reused
     runner(SHOP_QUERY, {})
