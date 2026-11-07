@@ -9,3 +9,6 @@ export/**/*.json text eol=lf
 # Read by sh and docker inside the Linux image: never CRLF, whatever core.autocrlf says.
 Dockerfile text eol=lf
 *.sh text eol=lf
+
+# The fake aws executable runs on the Linux image (shebang): never CRLF.
+tests/publisher/bin/aws text eol=lf
