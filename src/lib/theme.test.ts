@@ -357,7 +357,13 @@ describe('siteChrome', () => {
       { id: 'footer_m9NzUG', type: 'footer', blocks: [{ id: 'text_dGnm6k', type: 'text', html: '<p>Bulgarian Rose Skincare · Naturally Inspired</p>' }] },
       { id: 'footer_utilities_jLGE8U', type: 'footer-utilities', blocks: [{ id: 'footer_copyright_jweRK8', type: 'footer-copyright' }] },
     ]);
-    expect(chrome.logo).toEqual({ file: 'ESPRIT_HONG_KONG.png', alt: '' });
+    // The logo's alt is the one Shopify holds for that file in files.json.
+    const logoFile = rawExport.files.find((f) => {
+      const url = new URL(f.url);
+      return rawExport.manifest.sources[`${url.origin}${url.pathname}`] === 'ESPRIT_HONG_KONG.png';
+    });
+    expect(logoFile?.alt).toBeTruthy();
+    expect(chrome.logo).toEqual({ file: 'ESPRIT_HONG_KONG.png', alt: logoFile?.alt });
     expect(chrome.footerText).toBe('Bulgarian Rose Skincare · Naturally Inspired');
   });
 });

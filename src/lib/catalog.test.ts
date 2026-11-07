@@ -7,6 +7,11 @@ const ctx = createSiteContext(rawExport, { imageAlt: {} });
 const products = toProducts(rawExport.products, ctx);
 const collections = toCollections(rawExport.collections, ctx);
 const pages = toPages(rawExport.pages, ctx);
+const rawProduct = (handle: string) => {
+  const found = rawExport.products.find((p) => p.handle === handle);
+  if (!found) throw new Error(`no raw product ${handle}`);
+  return found;
+};
 const bySlug = (handle: string) => {
   const found = products.find((p) => p.handle === handle);
   if (!found) throw new Error(`no product ${handle}`);
@@ -19,14 +24,28 @@ describe('toProducts', () => {
     expect(bySlug('rose-face-cream-50ml').url).toBe('/products/rose-face-cream-50ml/');
   });
 
-  it('resolves every product image to a file in export/images, with alt text', () => {
+  it('resolves every product image to a file in export/images, with the Shopify alt text', () => {
+    const shopifyAlts = rawExport.products.flatMap((p) => p.images.map((i) => i.altText?.trim() ?? '')).filter(Boolean);
+    expect(shopifyAlts.length).toBeGreaterThan(0); // the export holds alt texts, so ignoring them would fail below
     for (const product of products) {
-      expect(product.images.length).toBeGreaterThan(0);
-      for (const image of product.images) {
+      const raw = rawProduct(product.handle);
+      expect(product.images.length).toBe(raw.images.length);
+      product.images.forEach((image, index) => {
         expect(existsSync(`export/images/${image.file}`), image.file).toBe(true);
-        expect(image.alt).toBe(product.title);
-      }
+        expect(image.alt, image.file).toBe(raw.images[index]?.altText?.trim() || product.title);
+      });
     }
+  });
+
+  it('falls back to the product title for an image Shopify holds no alt text for', () => {
+    const raw = rawProduct('rose-face-cream-50ml');
+    const [first, second] = raw.images;
+    if (!first || !second) throw new Error('fixture product needs two images');
+    // No files.json alt either: otherwise that alt is the next fallback.
+    const bare = createSiteContext({ ...rawExport, files: [] }, { imageAlt: {} });
+    const images = [{ ...first, altText: 'The jar on a sunlit table' }, { ...second, altText: null }];
+    const [product] = toProducts([{ ...raw, images }], bare);
+    expect(product?.images.map((i) => i.alt)).toEqual(['The jar on a sunlit table', raw.title]);
   });
 
   it('renders the detail sections in the theme order with the theme headings', () => {
@@ -42,12 +61,30 @@ describe('toProducts', () => {
     expect(water.details[0]?.html).toMatch(/^<p>Spray directly onto the face/);
   });
 
-  it('uses the Shopify SEO fields and the single variant price', () => {
+  it('uses the Shopify SEO fields from the export and the single variant price', () => {
     const water = bySlug('100-natural-damascena-rose-water-10ml');
-    expect(water.seo.title).toBe('Rosart Rose Water 10ml | 100% Natural Bulgarian Rose Water');
-    expect(water.seo.description).toMatch(/^Discover Rosart Rose Water 10ml/);
+    const raw = rawProduct('100-natural-damascena-rose-water-10ml');
+    const tag = (key: string) => raw.metafields.find((m) => m.namespace === 'global' && m.key === key)?.value;
+    const seoTitle = raw.seo.title || tag('title_tag');
+    const seoDescription = raw.seo.description || tag('description_tag');
+    // The export sets both, unlike the defaults, so ignoring them would fail.
+    expect(seoTitle).toBeTruthy();
+    expect(seoTitle).not.toBe(raw.title);
+    expect(seoDescription).toBeTruthy();
+    expect(water.seo.title).toBe(seoTitle);
+    expect(water.seo.description).toBe(seoDescription);
     expect(water.price).toEqual({ amount: '10.00', currencyCode: 'AUD' });
     expect(water.sku).toBe('RARWT10ML');
+  });
+
+  it('takes the SEO title from seo.title, else the global.title_tag metafield, else the product title', () => {
+    const raw = rawProduct('rose-face-cream-50ml');
+    const base = { ...raw, metafields: raw.metafields.filter((m) => m.namespace !== 'global') };
+    const titleOf = (product: typeof raw) => toProducts([product], ctx)[0]?.seo.title;
+    const titleTag = { namespace: 'global', key: 'title_tag', type: 'single_line_text_field', value: 'Tag title' };
+    expect(titleOf({ ...base, seo: { title: 'SEO title', description: null }, metafields: [...base.metafields, titleTag] })).toBe('SEO title');
+    expect(titleOf({ ...base, seo: { title: null, description: null }, metafields: [...base.metafields, titleTag] })).toBe('Tag title');
+    expect(titleOf({ ...base, seo: { title: null, description: null } })).toBe(raw.title);
   });
 
   it('gives each product its collection for the breadcrumb, never the homepage list', () => {
