@@ -6,7 +6,7 @@ PUBLISH_FLAGS ?=
 # Astro's anonymous usage telemetry is an outbound call on every build; keep builds offline.
 export ASTRO_TELEMETRY_DISABLED := 1
 
-.PHONY: theme-pull export export-json test site check dev publish-config publish publish-only publish-dryrun seo-apply-dryrun seo-apply
+.PHONY: theme-pull export export-json test site check dev doctor changes publish-config publish publish-only publish-dryrun publish-commit seo-apply-dryrun seo-apply
 
 ## Refresh export/theme/ from the live theme (read-only `shopify theme pull`)
 theme-pull:
@@ -40,6 +40,18 @@ check:
 ## Local development server with live reload (http://localhost:4321/)
 dev:
 	$(NPM) run dev
+
+## Publish preflight: tools, repo state, deploy config, AWS profile, Shopify sign-in (changes nothing)
+doctor:
+	$(PYTHON) tools/publish_doctor.py
+
+## What the current export/ changes since the last commit, in plain words, with URLs to spot-check
+changes:
+	$(PYTHON) tools/export_changes.py
+
+## After a successful publish: commit export/ only as "Publish <date> by <git user.name>"; never pushes
+publish-commit:
+	$(PYTHON) tools/export_changes.py --commit
 
 ## Refuse early while deploy.config.json still holds placeholders (calls nothing)
 publish-config:

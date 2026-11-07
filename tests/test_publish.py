@@ -48,10 +48,11 @@ def test_placeholder_config_is_refused_naming_every_unfilled_field(tmp_path):
     assert "not filled in: bucket, region, distributionId" in message
 
 
-def test_the_committed_config_is_still_placeholders_and_refused():
+def test_the_committed_config_is_filled_and_valid():
+    # Filled in 6c024f1 (2026-11-07) once the bucket and distribution existed.
     committed = Path(__file__).resolve().parent.parent / "deploy.config.json"
-    with pytest.raises(PublishError, match="not filled in"):
-        load_config(committed)
+    config = load_config(committed)
+    assert config.profile == "rosart-deploy"
 
 
 def test_profile_defaults_to_rosart_deploy(tmp_path):

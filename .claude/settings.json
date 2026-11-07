@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(make doctor)",
+      "Bash(make changes)",
+      "Bash(make publish-dryrun)",
+      "Bash(make publish-only PUBLISH_FLAGS=\"--yes --wait\")",
+      "Bash(make publish-commit)",
+      "Bash(npm ci)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add export)",
+      "Bash(git pull --ff-only)",
+      "Bash(git switch main)",
+      "Bash(aws sts get-caller-identity --profile rosart-deploy *)",
+      "Bash(shopify store execute *)"
+    ],
+    "ask": [
+      "Edit(/deploy.config.json)",
+      "Edit(/src/lib/allowed-differences.ts)",
+      "Edit(/Makefile)",
+      "Edit(/.claude/**)"
+    ],
+    "deny": [
+      "Bash(git push*)",
+      "Bash(git * push*)",
+      "PowerShell(git push*)",
+      "PowerShell(git * push*)",
+      "Bash(shopify *--allow-mutations*)",
+      "PowerShell(shopify *--allow-mutations*)",
+      "Bash(shopify store auth *write_*)",
+      "Bash(shopify theme push*)",
+      "Bash(shopify theme publish*)",
+      "Bash(shopify theme delete*)",
+      "Bash(make seo-apply APPROVED*)",
+      "Bash(*seo_apply.py*--write*)",
+      "Bash(aws configure*)",
+      "Read(~/.aws/**)",
+      "Read(//**/.aws/credentials)",
+      "Edit(/export/**)"
+    ]
+  }
+}

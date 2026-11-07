@@ -103,6 +103,31 @@ All site settings are in `src/site.config.ts`:
 
 Example: `SITE_URL=https://staging.example.com make site`.
 
+## Staff publishing
+
+Staff publish from Claude Code with the project skill **`publish`**
+(`.claude/skills/publish/SKILL.md`): open Claude Code in this folder and say "publish the
+website". The skill runs `make doctor`, previews with `make publish-dryrun` and `make changes`,
+asks the staff member to confirm, publishes with `make publish-only PUBLISH_FLAGS="--yes --wait"`
+(the content just previewed, checks run again), then `make publish-commit` commits `export/` on
+that PC as `Publish <date> by <name>`; the owner pushes. Staff change content in Shopify only.
+One-time PC setup: [`docs/staff-setup.md`](docs/staff-setup.md). Rules for every Claude session
+here: `CLAUDE.md`; permissions: `.claude/settings.json`.
+
+```sh
+make doctor           # preflight: tools, repo clean on main and not behind, node_modules, deploy
+                      # config, AWS profile identity, Shopify store sign-in scopes and theme access
+make changes          # what export/ changes since the last commit, by title, with URLs to check
+make publish-commit   # commit export/ only, "Publish <YYYY-MM-DD> by <git user.name>"; never pushes
+```
+
+`make doctor` (`tools/publish_doctor.py`) changes nothing; it prints `PASS|FAIL|WARN <name>:
+<detail>` with a `fix:` line under each problem, and exits 0 only with no FAIL. A dirty working
+tree FAILs, because the publish commit must hold the export only. Shopify CLI results are read
+from files, never a stdout pipe (the Windows encoding rule under "SEO plan").
+`make publish-commit` (`tools/export_changes.py --commit`) refuses while anything outside
+`export/` is changed.
+
 ## Publish
 
 Shopify stays the content editor (owner decision 2026-11-07): products, pages, collections and
@@ -328,7 +353,7 @@ packages; the site makes no requests to other hosts.
 make theme-pull      # refresh export/theme/ from the live theme only
 make export          # theme pull, then JSON + theme copy + images
 make export-json     # theme pull, then JSON + theme copy only, no downloads
-make test            # the Python tests: export, theme pull, publish (no network, no AWS)
+make test            # the Python tests: export, theme pull, publish, doctor, change summary (no network, no AWS)
 ```
 
 Both export targets first run `python tools/pull_theme.py`: `shopify theme pull --store
