@@ -190,6 +190,63 @@ def test_guard_refuses_other_profiles_buckets_operations_and_distributions(comma
         assert_command_allowed(command, CONFIG)
 
 
+# --- command guard: the bucket marker (E1, R-3) ---------------------------------------------
+
+SUFFIX = [*P, "--region", "ap-southeast-2", "--no-cli-pager", "--output", "json"]
+
+
+def get_marker_cmd(local, bucket="rosart-site", key="_publish.json", suffix=SUFFIX):
+    return ["aws", "s3api", "get-object", "--bucket", bucket, "--key", key, str(local), *suffix]
+
+
+def put_marker_cmd(local, bucket="rosart-site", key="_publish.json", suffix=SUFFIX,
+                   content_type="application/json", cache="no-store"):
+    return ["aws", "s3api", "put-object", "--bucket", bucket, "--key", key, "--body", str(local),
+            "--content-type", content_type, "--cache-control", cache, *suffix]
+
+
+def test_guard_allows_exactly_the_marker_get_and_put_inside_the_temp_folder(tmp_path):
+    assert_command_allowed(get_marker_cmd(tmp_path / "m.json"), CONFIG, tmp_path)
+    assert_command_allowed(put_marker_cmd(tmp_path / "m.json"), CONFIG, tmp_path)
+    assert_command_allowed(put_marker_cmd(tmp_path / "sub" / "m.json"), CONFIG, tmp_path)
+
+
+@pytest.mark.parametrize("build, reason", [
+    (lambda t: get_marker_cmd(t / "m.json", key="index.html"), "_publish.json"),
+    (lambda t: get_marker_cmd(t / "m.json", key="_publish.json.bak"), "_publish.json"),
+    (lambda t: put_marker_cmd(t / "m.json", key="_astro/x.css"), "_publish.json"),
+    (lambda t: get_marker_cmd(t / "m.json", bucket="other-bucket"), "other-bucket"),
+    (lambda t: put_marker_cmd(t / "m.json", bucket="rosart-site-backup"), "rosart-site-backup"),
+    (lambda t: get_marker_cmd(t.parent / "outside.json"), "temp folder"),
+    (lambda t: put_marker_cmd(t.parent / "outside.json"), "temp folder"),
+    (lambda t: put_marker_cmd(t / ".." / "outside.json"), "temp folder"),
+    (lambda t: put_marker_cmd(t / "m.json", content_type="text/html"), "content-type"),
+    (lambda t: put_marker_cmd(t / "m.json", cache="public, max-age=60"), "cache-control"),
+    (lambda t: get_marker_cmd(t / "m.json", suffix=[*SUFFIX, "--profile", "admin"]), "--profile"),
+    (lambda t: [*put_marker_cmd(t / "m.json"), "--acl", "public-read"], "--acl"),
+    (lambda t: [*get_marker_cmd(t / "m.json"), "--key", "other"], "--key"),
+    (lambda t: ["aws", "s3api", "delete-object", "--bucket", "rosart-site", "--key", "_publish.json", *SUFFIX],
+     "not allowed"),
+    (lambda t: ["aws", "s3api", "head-object", "--bucket", "rosart-site", "--key", "_publish.json", *SUFFIX],
+     "not allowed"),
+    (lambda t: ["aws", "s3api", "list-objects-v2", "--bucket", "rosart-site", *SUFFIX], "not allowed"),
+    (lambda t: ["aws", "s3api", "put-object-acl", "--bucket", "rosart-site", "--key", "_publish.json", *SUFFIX],
+     "not allowed"),
+    (lambda t: ["aws", "s3api", "delete-bucket", "--bucket", "rosart-site", *SUFFIX], "not allowed"),
+])
+def test_guard_refuses_every_near_miss_of_the_marker_shapes(tmp_path, build, reason):
+    folder = tmp_path / "job"
+    folder.mkdir()
+    with pytest.raises(PublishError, match=re.escape(reason)):
+        assert_command_allowed(build(folder), CONFIG, folder)
+
+
+def test_guard_refuses_the_marker_shapes_when_no_temp_folder_is_given(tmp_path):
+    for command in (get_marker_cmd(tmp_path / "m.json"), put_marker_cmd(tmp_path / "m.json")):
+        with pytest.raises(PublishError, match="temp folder"):
+            assert_command_allowed(command, CONFIG)
+
+
 # --- the publish flow, through main() with a fake aws ------------------------------------
 
 IDENTITY = {"UserId": "AIDAEXAMPLE", "Account": "123456789012",
