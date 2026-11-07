@@ -638,8 +638,9 @@ def test_plan_returns_the_upload_and_delete_sets_and_still_prints_the_same_summa
     assert "s3://rosart-site/index.html" in result.uploads and len(result.uploads) == 3
     out = capsys.readouterr().out
     assert out.splitlines()[0] == "Dry run for s3://rosart-site: 3 to upload, 2 to delete"
-    assert out.splitlines()[1:] == ["  delete s3://rosart-site/_astro/old.Zz99.css",
-                                    "  delete s3://rosart-site/old-page/index.html"]
+    # Order of first appearance across the passes, exactly as before the change.
+    assert out.splitlines()[1:] == ["  delete s3://rosart-site/old-page/index.html",
+                                    "  delete s3://rosart-site/_astro/old.Zz99.css"]
 
 
 def test_sync_calls_on_pass_before_each_pass_in_order_and_prints_as_before(tmp_path, capsys):

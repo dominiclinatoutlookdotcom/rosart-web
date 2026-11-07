@@ -26,6 +26,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONFIG = REPO_ROOT / "deploy.config.json"
 DEFAULT_PROFILE = "rosart-deploy"
 PLACEHOLDER = "REPLACE_ME"
+# The only IAM identity allowed to publish (spec 006 Clarifications 2026-11-07): the owner's
+# `rosart-deploy` CLI profile and the box's key both belong to this user.
+DEPLOY_USER = "rosart-web-deploy"
+MARKER_KEY = "_publish.json"
 
 # Field name in deploy.config.json -> (pattern, what a valid value looks like).
 FIELDS = {
@@ -267,16 +271,19 @@ def sync_passes(config: DeployConfig, dist: Path) -> list[list[str]]:
     assets = [str(Path(dist) / ASSETS_DIR), f"{config.bucket_url}/{ASSETS_DIR}"]
     root = [str(Path(dist)), config.bucket_url]
     not_assets = ["--exclude", f"{ASSETS_DIR}/*"]
-    typed = [["s3", "sync", *root, "--delete", "--exclude", "*", "--include", pattern, *not_assets,
+    # The bucket marker is written after the last pass and must survive every --delete.
+    keep_marker = ["--exclude", MARKER_KEY]
+    typed = [["s3", "sync", *root, "--delete", "--exclude", "*", "--include", pattern, *keep_marker,
+              *not_assets,
               "--content-type", content_type, "--cache-control", REVALIDATE, "--no-progress"]
              for pattern, content_type in TYPED_FILES]
     not_typed = [arg for pattern, _ in TYPED_FILES for arg in ("--exclude", pattern)]
     return [
         ["s3", "sync", *assets, "--cache-control", IMMUTABLE, "--no-progress"],
         *typed,
-        ["s3", "sync", *root, "--delete", *not_typed, *not_assets, "--cache-control", REVALIDATE,
-         "--no-progress"],
-        ["s3", "sync", *assets, "--delete", "--cache-control", IMMUTABLE, "--no-progress"],
+        ["s3", "sync", *root, "--delete", *not_typed, *keep_marker, *not_assets, "--cache-control",
+         REVALIDATE, "--no-progress"],
+        ["s3", "sync", *assets, "--delete", *keep_marker, "--cache-control", IMMUTABLE, "--no-progress"],
     ]
 
 
@@ -301,11 +308,22 @@ def show_identity(aws: Aws) -> dict:
     identity = aws.json(["sts", "get-caller-identity"])
     print(f"AWS identity: account {identity.get('Account')}, {identity.get('Arn')} "
           f"(profile {aws.config.profile})")
+    if not re.fullmatch(rf"arn:aws:iam::\d{{12}}:user/{re.escape(DEPLOY_USER)}", str(identity.get("Arn"))):
+        raise PublishError(f"the profile {aws.config.profile} is {identity.get('Arn')}, not the IAM user "
+                           f"{DEPLOY_USER}: fix the profile's key (README, section Publish); "
+                           "nothing was uploaded")
     return identity
 
 
-def plan(aws: Aws, passes: list[list[str]]) -> None:
-    """Dry-run every pass and print what the real sync would upload and delete."""
+@dataclass(frozen=True)
+class Plan:
+    """What the dry run says the real passes would do, as s3:// URLs."""
+    uploads: set[str]
+    deletes: set[str]
+
+
+def plan(aws: Aws, passes: list[list[str]]) -> Plan:
+    """Dry-run every pass, print what the real sync would upload and delete, and return it."""
     uploads: dict[str, None] = {}
     deletes: dict[str, None] = {}
     for args in passes:
@@ -315,6 +333,7 @@ def plan(aws: Aws, passes: list[list[str]]) -> None:
     print(f"Dry run for {aws.config.bucket_url}: {len(uploads)} to upload, {len(deletes)} to delete")
     for key in deletes:
         print(f"  delete {key}")
+    return Plan(set(uploads), set(deletes))
 
 
 def confirm(aws: Aws, identity: dict, ask: Ask) -> None:
@@ -330,8 +349,10 @@ def confirm(aws: Aws, identity: dict, ask: Ask) -> None:
         raise PublishError("cancelled: nothing was uploaded")
 
 
-def sync(aws: Aws, passes: list[list[str]]) -> None:
+def sync(aws: Aws, passes: list[list[str]], on_pass: Optional[Callable[[int], None]] = None) -> None:
     for number, args in enumerate(passes, start=1):
+        if on_pass:
+            on_pass(number)
         try:
             up, down = parse_sync_output(aws.run(args).stdout)
         except PublishError as exc:
@@ -341,7 +362,9 @@ def sync(aws: Aws, passes: list[list[str]]) -> None:
         print(f"sync {number}/{len(passes)} {args[3]}: {len(up)} uploaded, {len(down)} deleted")
 
 
-def invalidate(aws: Aws, wait: bool) -> None:
+def invalidate(aws: Aws, wait: bool) -> tuple[Optional[str], bool]:
+    """Invalidate everything; return ``(invalidation id, completed)``. A waiter that fails after a
+    good create does not raise: the invalidation is under way, so ``completed`` is False."""
     distribution = aws.config.distribution_id
     try:
         response = aws.json(["cloudfront", "create-invalidation", "--distribution-id", distribution,
@@ -355,12 +378,17 @@ def invalidate(aws: Aws, wait: bool) -> None:
     print(f"CloudFront invalidation {invalidation_id} for /* on {distribution}: {invalidation.get('Status')}")
     if wait:
         print("waiting for the invalidation to complete...")
-        aws.run(["cloudfront", "wait", "invalidation-completed", "--distribution-id", distribution,
-                 "--id", str(invalidation_id)])
+        try:
+            aws.run(["cloudfront", "wait", "invalidation-completed", "--distribution-id", distribution,
+                     "--id", str(invalidation_id)])
+        except PublishError as exc:
+            print(f"publish: {exc}", file=sys.stderr)
+            return invalidation_id, False
         print("invalidation complete: the site is live")
-    else:
-        print(f"check it with: aws cloudfront get-invalidation --distribution-id {distribution} "
-              f"--id {invalidation_id} --profile {aws.config.profile}")
+        return invalidation_id, True
+    print(f"check it with: aws cloudfront get-invalidation --distribution-id {distribution} "
+          f"--id {invalidation_id} --profile {aws.config.profile}")
+    return invalidation_id, False
 
 
 def publish(config: DeployConfig, dist: Path, runner: Runner, ask: Ask, *, yes: bool,
@@ -375,7 +403,10 @@ def publish(config: DeployConfig, dist: Path, runner: Runner, ask: Ask, *, yes: 
     if not yes:
         confirm(aws, identity, ask)
     sync(aws, passes)
-    invalidate(aws, wait)
+    invalidation_id, completed = invalidate(aws, wait)
+    if wait and not completed:
+        raise PublishError(f"the invalidation {invalidation_id} was created but the wait for it failed: "
+                           "it may still complete (the site is updated)")
 
 
 def main(argv: Optional[list[str]] = None, runner: Optional[Runner] = None, ask: Ask = input) -> int:
