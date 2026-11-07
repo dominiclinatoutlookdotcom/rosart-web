@@ -12,15 +12,19 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import contextlib
+import hashlib
 import json
 import os
 import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable, Iterator, Optional
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONFIG = REPO_ROOT / "deploy.config.json"
@@ -30,6 +34,7 @@ PLACEHOLDER = "REPLACE_ME"
 # `rosart-deploy` CLI profile and the box's key both belong to this user.
 DEPLOY_USER = "rosart-web-deploy"
 MARKER_KEY = "_publish.json"
+MARKER_SITE = "rosart"
 
 # Field name in deploy.config.json -> (pattern, what a valid value looks like).
 FIELDS = {
@@ -400,6 +405,86 @@ def plan(aws: Aws, passes: list[list[str]]) -> Plan:
     return Plan(set(uploads), set(deletes))
 
 
+# --- the bucket marker ----------------------------------------------------------------------
+# `_publish.json` at the bucket root says which publish the live site came from. Every publish
+# (the box and this CLI) reads it before uploading and writes it last, right after pass 6; every
+# --delete pass excludes it. It is public through the site, so it names no person.
+
+def dist_hash(dist: Path) -> str:
+    """SHA-256 over the sorted lines ``<sha256 of file>  <relative path>`` of every file in ``dist``
+    that a sync would publish (the marker itself is never one of them)."""
+    dist = Path(dist)
+    entries = []
+    for path in dist.rglob("*"):
+        rel = path.relative_to(dist).as_posix()
+        if not path.is_file() or rel == MARKER_KEY:
+            continue
+        digest = hashlib.sha256()
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1 << 20), b""):
+                digest.update(chunk)
+        entries.append((rel, digest.hexdigest()))
+    lines = "".join(f"{digest}  {rel}\n" for rel, digest in sorted(entries))
+    return hashlib.sha256(lines.encode("utf-8")).hexdigest()
+
+
+@contextlib.contextmanager
+def _marker_folder(aws: Aws) -> Iterator[Path]:
+    """The folder the marker's local file lives in: the caller's (a job's temp folder) or a new one."""
+    if aws.temp_dir is not None:
+        yield Path(aws.temp_dir)
+        return
+    with tempfile.TemporaryDirectory(prefix="rosart-marker-") as folder:
+        yield Path(folder)
+
+
+def read_marker(aws: Aws) -> Optional[dict]:
+    """The bucket marker, or None before the first marked publish (NoSuchKey); any other failure raises."""
+    with _marker_folder(aws) as folder:
+        local = folder / "marker-read.json"
+        try:
+            aws.run(["s3api", "get-object", "--bucket", aws.config.bucket, "--key", MARKER_KEY, str(local)],
+                    temp_dir=folder)
+        except PublishError as exc:
+            if "NoSuchKey" in str(exc):
+                return None
+            raise
+        try:
+            marker = json.loads(local.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            raise PublishError(f"the bucket marker {MARKER_KEY} is not readable JSON: {exc}") from exc
+    if not isinstance(marker, dict):
+        raise PublishError(f"the bucket marker {MARKER_KEY} is not a JSON object")
+    return marker
+
+
+def write_marker(aws: Aws, marker: dict) -> None:
+    """Write the marker as canonical JSON, never cached, as the last bucket write of a publish."""
+    with _marker_folder(aws) as folder:
+        local = folder / "marker-write.json"
+        local.write_text(json.dumps(marker, sort_keys=True, separators=(",", ":")), encoding="utf-8")
+        try:
+            aws.run(["s3api", "put-object", "--bucket", aws.config.bucket, "--key", MARKER_KEY,
+                     "--body", str(local), "--content-type", "application/json",
+                     "--cache-control", "no-store"], temp_dir=folder)
+        except PublishError as exc:
+            raise PublishError(f"{exc}\nThe bucket is updated but the marker {MARKER_KEY} was not written "
+                               "and CloudFront was not invalidated. Fix the cause and publish again.") from None
+
+
+def build_marker(publisher: str, publish_id: str, content_hash: str, now: datetime) -> dict:
+    return {"site": MARKER_SITE, "publish_id": publish_id, "published_at": _utc_stamp(now),
+            "content_hash": content_hash, "publisher": publisher}
+
+
+def _utc_stamp(now: datetime) -> str:
+    return now.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def utc_now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
 def confirm(aws: Aws, identity: dict, ask: Ask) -> None:
     question = (f"Publish to {aws.config.bucket_url} in account {identity.get('Account')} "
                 f"({identity.get('Arn')}) and invalidate CloudFront {aws.config.distribution_id}? "
@@ -456,9 +541,10 @@ def invalidate(aws: Aws, wait: bool) -> tuple[Optional[str], bool]:
 
 
 def publish(config: DeployConfig, dist: Path, runner: Runner, ask: Ask, *, yes: bool,
-            dry_run_only: bool, wait: bool) -> None:
+            dry_run_only: bool, wait: bool, clock: Callable[[], datetime] = utc_now) -> None:
     aws = Aws(config, runner)
     identity = show_identity(aws)
+    read_marker(aws)  # fails early when the bucket cannot be read; the box compares it, the CLI does not
     passes = sync_passes(config, dist)
     plan(aws, passes)
     if dry_run_only:
@@ -466,14 +552,18 @@ def publish(config: DeployConfig, dist: Path, runner: Runner, ask: Ask, *, yes: 
         return
     if not yes:
         confirm(aws, identity, ask)
+    content_hash = dist_hash(dist)
     sync(aws, passes)
+    now = clock()
+    write_marker(aws, build_marker("pc", f"pc-{now.astimezone(timezone.utc):%Y%m%dT%H%M%SZ}", content_hash, now))
     invalidation_id, completed = invalidate(aws, wait)
     if wait and not completed:
         raise PublishError(f"the invalidation {invalidation_id} was created but the wait for it failed: "
                            "it may still complete (the site is updated)")
 
 
-def main(argv: Optional[list[str]] = None, runner: Optional[Runner] = None, ask: Ask = input) -> int:
+def main(argv: Optional[list[str]] = None, runner: Optional[Runner] = None, ask: Ask = input,
+         clock: Callable[[], datetime] = utc_now) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--dist", type=Path, default=REPO_ROOT / "dist")
@@ -492,7 +582,7 @@ def main(argv: Optional[list[str]] = None, runner: Optional[Runner] = None, ask:
         summary = check_dist(args.dist)
         print(f"dist: {summary.pages} pages, {summary.files} files, {summary.bytes / 1024 / 1024:.1f} MB")
         publish(config, args.dist, runner or AwsCliRunner(), ask,
-                yes=args.yes, dry_run_only=args.dry_run, wait=args.wait)
+                yes=args.yes, dry_run_only=args.dry_run, wait=args.wait, clock=clock)
     except PublishError as exc:
         print(f"publish: {exc}", file=sys.stderr)
         return 1

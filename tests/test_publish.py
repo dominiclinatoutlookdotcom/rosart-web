@@ -261,6 +261,7 @@ class FakeAws:
     def __init__(self, fail=lambda command: False):
         self.commands: list[list[str]] = []
         self.fail = fail
+        self.marker: dict | None = None  # the bucket marker _publish.json; None until a publish writes it
 
     def __call__(self, command):
         self.commands.append(list(command))
@@ -273,6 +274,14 @@ class FakeAws:
             return AwsResult(0, json.dumps({"Invalidation": {"Id": "I2EXAMPLE", "Status": "InProgress"}}), "")
         if args[:2] == ["s3", "sync"]:
             return AwsResult(0, self.sync_output(command), "")
+        if args[:2] == ["s3api", "get-object"]:
+            if self.marker is None:
+                return AwsResult(254, "", "An error occurred (NoSuchKey) when calling the GetObject operation")
+            Path(command[command.index("_publish.json") + 1]).write_text(json.dumps(self.marker), encoding="utf-8")
+            return AwsResult(0, "{}", "")
+        if args[:2] == ["s3api", "put-object"]:
+            self.marker = json.loads(Path(command[command.index("--body") + 1]).read_text(encoding="utf-8"))
+            return AwsResult(0, "{}", "")
         return AwsResult(0, "", "")
 
     @staticmethod
@@ -589,6 +598,8 @@ class BucketSim(FakeAws):
         self.objects = dict(objects or {})  # key -> {"size", "modified", "type", "cache"}
         self.uploads: list[str] = []         # keys uploaded for real, once per upload
         self.deletes: list[str] = []
+        if "_publish.json" in self.objects:
+            self.marker = {}
 
     def sync_output(self, command):
         dryrun = "--dryrun" in command
