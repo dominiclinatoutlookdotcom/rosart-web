@@ -11,15 +11,21 @@ from pathlib import Path
 
 import pytest
 
+import publish as publish_module
 from publish import (
+    Aws,
     AwsCliRunner,
     AwsResult,
     DeployConfig,
     PublishError,
     assert_command_allowed,
     check_dist,
+    invalidate,
     load_config,
     main,
+    plan,
+    sync,
+    sync_passes,
 )
 
 FILLED = {"profile": "rosart-deploy", "bucket": "rosart-site", "region": "ap-southeast-2",
@@ -187,7 +193,7 @@ def test_guard_refuses_other_profiles_buckets_operations_and_distributions(comma
 # --- the publish flow, through main() with a fake aws ------------------------------------
 
 IDENTITY = {"UserId": "AIDAEXAMPLE", "Account": "123456789012",
-            "Arn": "arn:aws:iam::123456789012:user/rosart-deploy"}
+            "Arn": "arn:aws:iam::123456789012:user/rosart-web-deploy"}
 IMMUTABLE = "public, max-age=31536000, immutable"
 REVALIDATE = "public, max-age=0, must-revalidate"
 
@@ -288,7 +294,7 @@ def test_identity_is_checked_first_and_shown(site, capsys):
     assert main([*site, "--yes"], runner=aws, ask=no_prompt) == 0
     assert aws.commands[0][1:3] == ["sts", "get-caller-identity"]
     out = capsys.readouterr().out
-    assert "123456789012" in out and "arn:aws:iam::123456789012:user/rosart-deploy" in out
+    assert "123456789012" in out and "arn:aws:iam::123456789012:user/rosart-web-deploy" in out
 
 
 def test_every_aws_command_names_the_profile_and_only_the_configured_bucket(site):
@@ -312,7 +318,8 @@ def test_asset_syncs_are_confined_to_astro_with_immutable_caching(site, tmp_path
     for command in assets:
         assert Path(command[3]) == tmp_path / "dist" / "_astro"
         assert option(command, "--cache-control") == IMMUTABLE
-        assert filters(command) == []
+        # Only the pruning pass carries filters: the bucket marker is never deleted (E1).
+        assert filters(command) == ([("--exclude", "_publish.json")] if "--delete" in command else [])
 
 
 def test_root_syncs_never_touch_astro_and_revalidate(site, tmp_path):
@@ -338,7 +345,8 @@ def test_html_text_and_xml_each_get_a_utf8_typed_pass_that_mirrors_its_own_files
     typed = [c for c in aws.syncs(dryrun=False) if option(c, "--content-type")]
     assert [(filters(c)[1][1], option(c, "--content-type")) for c in typed] == TYPED
     for command, (pattern, _) in zip(typed, TYPED):
-        assert filters(command) == [("--exclude", "*"), ("--include", pattern), ("--exclude", "_astro/*")]
+        assert filters(command) == [("--exclude", "*"), ("--include", pattern),
+                                    ("--exclude", "_publish.json"), ("--exclude", "_astro/*")]
         assert option(command, "--cache-control") == REVALIDATE
         # Each typed pass deletes its own stale keys: the general pass excludes these patterns.
         assert "--delete" in command
@@ -351,7 +359,7 @@ def test_general_root_pass_leaves_typed_files_to_their_passes(site):
                  if c[4] == "s3://rosart-site" and not option(c, "--content-type")]
     assert "--delete" in general
     assert filters(general) == [("--exclude", "*.html"), ("--exclude", "*.txt"), ("--exclude", "*.xml"),
-                                ("--exclude", "_astro/*")]
+                                ("--exclude", "_publish.json"), ("--exclude", "_astro/*")]
 
 
 def test_real_sync_order_uploads_assets_first_and_prunes_them_last(site):
@@ -618,3 +626,115 @@ def test_dry_run_leaves_the_bucket_untouched(llms_site, capsys):
     assert main([*llms_site, "--dry-run"], runner=bucket, ask=no_prompt) == 0
     assert set(bucket.objects) == {"old.txt"} and bucket.uploads == []
     assert "delete s3://rosart-site/old.txt" in capsys.readouterr().out
+
+
+# --- R-3: plan sets, pass progress, invalidation result, marker exclusion, identity --------------
+
+def test_plan_returns_the_upload_and_delete_sets_and_still_prints_the_same_summary(site, tmp_path, capsys):
+    aws = Aws(CONFIG, FakeAws())
+    result = plan(aws, sync_passes(CONFIG, tmp_path / "dist"))
+    assert isinstance(result, publish_module.Plan)
+    assert result.deletes == {"s3://rosart-site/_astro/old.Zz99.css", "s3://rosart-site/old-page/index.html"}
+    assert "s3://rosart-site/index.html" in result.uploads and len(result.uploads) == 3
+    out = capsys.readouterr().out
+    assert out.splitlines()[0] == "Dry run for s3://rosart-site: 3 to upload, 2 to delete"
+    assert out.splitlines()[1:] == ["  delete s3://rosart-site/_astro/old.Zz99.css",
+                                    "  delete s3://rosart-site/old-page/index.html"]
+
+
+def test_sync_calls_on_pass_before_each_pass_in_order_and_prints_as_before(tmp_path, capsys):
+    events = []
+
+    class Recording(FakeAws):
+        def __call__(self, command):
+            if command[1:3] == ["s3", "sync"]:
+                events.append(("sync", command[4]))
+            return super().__call__(command)
+
+    passes = sync_passes(CONFIG, make_dist(tmp_path))
+    sync(Aws(CONFIG, Recording()), passes, on_pass=lambda n: events.append(("pass", n)))
+    assert [e for e in events if e[0] == "pass"] == [("pass", n) for n in range(1, 7)]
+    assert [events[i] for i in range(0, 12, 2)] == [("pass", n) for n in range(1, 7)]
+    assert all(events[i][0] == "sync" for i in range(1, 12, 2))
+    out = capsys.readouterr().out.splitlines()
+    assert out[0] == f"sync 1/6 {passes[0][3]}: 1 uploaded, 0 deleted"
+    assert len(out) == 6
+
+
+def test_on_pass_is_optional(tmp_path):
+    sync(Aws(CONFIG, FakeAws()), sync_passes(CONFIG, make_dist(tmp_path)))
+
+
+def test_invalidate_returns_the_id_and_completed_when_the_wait_succeeds():
+    assert invalidate(Aws(CONFIG, FakeAws()), wait=True) == ("I2EXAMPLE", True)
+
+
+def test_invalidate_without_wait_returns_not_completed():
+    assert invalidate(Aws(CONFIG, FakeAws()), wait=False) == ("I2EXAMPLE", False)
+
+
+def test_a_failed_waiter_after_a_good_create_returns_not_completed_instead_of_raising():
+    def waiter_fails(command):
+        return command[1:3] == ["cloudfront", "wait"]
+
+    class Exit255(FakeAws):
+        def __call__(self, command):
+            result = super().__call__(command)
+            return AwsResult(255, "", "Waiter InvalidationCompleted failed") if waiter_fails(command) else result
+
+    assert invalidate(Aws(CONFIG, Exit255()), wait=True) == ("I2EXAMPLE", False)
+
+
+def test_the_cli_still_fails_when_the_waiter_fails(site, capsys):
+    class Exit255(FakeAws):
+        def __call__(self, command):
+            result = super().__call__(command)
+            return AwsResult(255, "", "Waiter InvalidationCompleted failed") if command[1:3] == ["cloudfront", "wait"] else result
+
+    assert main([*site, "--yes", "--wait"], runner=Exit255(), ask=no_prompt) == 1
+    assert "I2EXAMPLE" in capsys.readouterr().err
+
+
+def test_every_delete_pass_excludes_the_bucket_marker(tmp_path):
+    passes = sync_passes(CONFIG, make_dist(tmp_path))
+    assert len(passes) == 6
+    for number, args in enumerate(passes, start=1):
+        has_marker_filter = ("--exclude", "_publish.json") in filters(args)
+        assert has_marker_filter == ("--delete" in args), f"pass {number}"
+    assert [("--delete" in args) for args in passes] == [False, True, True, True, True, True]
+
+
+def test_the_marker_survives_a_publish_and_no_dry_run_plan_lists_it(llms_site, capsys):
+    bucket = BucketSim({"_publish.json": stale_object(), "old.txt": stale_object()})
+    assert main([*llms_site, "--yes"], runner=bucket, ask=no_prompt) == 0
+    assert "_publish.json" in bucket.objects and "_publish.json" not in bucket.deletes
+    assert bucket.deletes == ["old.txt"]
+    assert "_publish.json" not in capsys.readouterr().out
+
+
+def test_a_marker_in_dist_is_never_uploaded(llms_site, tmp_path):
+    (tmp_path / "dist" / "_publish.json").write_text("{}", encoding="utf-8")
+    bucket = BucketSim()
+    assert main([*llms_site, "--yes"], runner=bucket, ask=no_prompt) == 0
+    assert "_publish.json" not in bucket.objects
+
+
+@pytest.mark.parametrize("arn", [
+    "arn:aws:iam::123456789012:user/rosart-deploy",
+    "arn:aws:iam::123456789012:user/admin",
+    "arn:aws:iam::123456789012:role/rosart-web-deploy",
+    "arn:aws:iam::123456789012:user/path/rosart-web-deploy-2",
+    "",
+])
+def test_any_identity_but_the_rosart_web_deploy_user_stops_before_any_sync(site, arn, capsys):
+    class Other(FakeAws):
+        def __call__(self, command):
+            if command[1:3] == ["sts", "get-caller-identity"]:
+                self.commands.append(list(command))
+                return AwsResult(0, json.dumps({**IDENTITY, "Arn": arn}), "")
+            return super().__call__(command)
+
+    aws = Other()
+    assert main([*site, "--yes"], runner=aws, ask=no_prompt) == 1
+    assert not aws.ran("s3") and not aws.ran("cloudfront") and not aws.ran("s3api")
+    assert "rosart-web-deploy" in capsys.readouterr().err
