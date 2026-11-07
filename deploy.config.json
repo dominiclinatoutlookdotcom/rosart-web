@@ -1,7 +1,7 @@
 {
   "_readme": "Deploy target for `make publish` (tools/publish.py). No credentials here: the AWS CLI profile holds them. Replace every REPLACE_ME once the bucket and CloudFront distribution exist; see README, Publish.",
   "profile": "rosart-deploy",
-  "bucket": "REPLACE_ME",
-  "region": "REPLACE_ME",
-  "distributionId": "REPLACE_ME"
+  "bucket": "rosart-web-site",
+  "region": "ap-southeast-2",
+  "distributionId": "E5L4UOPZMBQHP"
 }
