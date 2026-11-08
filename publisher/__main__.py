@@ -28,7 +28,8 @@ from publisher.config import ConfigError, load_config
 from publisher.egress import default_opener, make_opener_fetch
 from publisher.exportrepo import ExportRepo, ExportRepoError
 from publisher.jobs import JobStore, backup_database
-from publisher.runner import ChildRunner, JobRunner, NullJobStore
+from publisher.recovery import recover
+from publisher.runner import ChildRunner, ChildStuck, JobRunner, NullJobStore
 from publisher.scrub import JobLog, Scrubber
 from publisher.slack import SlackNotifier
 from publisher.snapshots import SnapshotStore
@@ -66,9 +67,10 @@ APP_ROOT = Path(__file__).resolve().parent.parent       # the image's /app: code
 
 def make_deps_factory(config: Any, store: JobStore, snapshots: SnapshotStore, clock: Any, scrubber: Scrubber,
                       code_commit: str, opener: Any, app_root: Path = APP_ROOT,
-                      aws_executable: Optional[str] = None) -> Callable[[Any], Deps]:
+                      aws_executable: Optional[str] = None,
+                      workspace: Optional[Workspace] = None) -> Callable[[Any], Deps]:
     """The real collaborators of one job: its own supervised ``ChildRunner``, log, workspace and AWS runner."""
-    workspace = Workspace(config.data / "work", config.site, app_root, config.export_repo)
+    workspace = workspace or Workspace(config.data / "work", config.site, app_root, config.export_repo)
 
     def deps_for(job: Any) -> Deps:
         children = ChildRunner(store, job.id, clock, scrubber)
@@ -109,13 +111,17 @@ def create_app(environ: Optional[MutableMapping[str, str]] = None, clock: Option
     store = JobStore(config.data / "publisher.sqlite3", site=config.site, clock=clock)
     snapshots = SnapshotStore(store, config.data, config.site, clock, config.snapshot_window_s)
     opener = default_opener(DEFAULT_STORE)
+    workspace = Workspace(config.data / "work", config.site, APP_ROOT, config.export_repo)
     runner = JobRunner(store, snapshots,
-                       make_deps_factory(config, store, snapshots, clock, scrubber, code_commit, opener),
+                       make_deps_factory(config, store, snapshots, clock, scrubber, code_commit, opener,
+                                         workspace=workspace),
                        SlackNotifier(config, store, opener, clock.sleep, scrubber), config, code_commit, scrubber)
     reader = ExportRepo(config.export_repo, ChildRunner(NullJobStore(), 0, clock, scrubber), config.child_env(),
                         config.tmp_dir / "git", config.tz_display)
-    return App(config, store, clock, code_commit=code_commit, scrubber=scrubber, snapshots=snapshots, runner=runner,
-               export_repo=reader)
+    app = App(config, store, clock, code_commit=code_commit, scrubber=scrubber, snapshots=snapshots, runner=runner,
+              export_repo=reader)
+    app.workspace = workspace
+    return app
 
 
 def serve() -> int:
@@ -125,6 +131,14 @@ def serve() -> int:
         print(f"rosart-publisher NOT started: {exc}", file=sys.stderr)
         return 1
     configure_logging(app.scrubber)
+    try:
+        report = recover(store=app.store, snapshots=app.snapshots, workspace=app.workspace, config=app.config,
+                         notifier=app.runner.notifier, log_for=app.runner.log_line_for)
+    except ChildStuck as exc:
+        print(f"rosart-publisher NOT started: {exc}", file=sys.stderr)
+        return 1
+    if report.interrupted:
+        log.warning("jobs interrupted by the restart: %s", report.interrupted)
     server = make_server(app, app.config.bind)
     signal.signal(signal.SIGTERM, lambda *_: threading.Thread(target=server.shutdown, daemon=True).start())
     log.info("rosart publisher serving %s on %s (code %s)", app.config.base_path, app.config.bind, app.code_commit)

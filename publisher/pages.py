@@ -266,7 +266,9 @@ class Pages:
             return "Published; the cache refresh is still running"
         if state == "failed":
             return "Publish stopped before anything was uploaded"
-        return PARTLY_UPDATED
+        if publishable:
+            return PARTLY_UPDATED
+        return "Publish failed: the live site may be partly updated. Check again, then Publish to finish it"
 
     def _details(self, job: Any, snapshot: Any) -> str:
         """The record of a job: snapshot, export commit, code commit, Slack notice, log (FR-016)."""

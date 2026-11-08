@@ -238,6 +238,14 @@ class JobRunner:
             self._threads = [t for t in self._threads if t.is_alive()] + [worker]
         worker.start()
 
+    @property
+    def notifier(self) -> Any:
+        return self._notifier
+
+    def log_line_for(self, job: Any) -> Callable[[str], None]:
+        """A function that appends a scrubbed line to ``job``'s log (for notices posted outside a worker)."""
+        return self._job_log_line(job)
+
     def wait_idle(self, timeout: float) -> bool:
         """Wait for every worker and notice thread; False when something is still running after ``timeout``."""
         end = time.monotonic() + timeout

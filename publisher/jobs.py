@@ -257,6 +257,13 @@ class JobStore:
                 "last_publish": {"date": finished.date().isoformat(),
                                  "result": "ok" if job.state in PUBLISH_OK_STATES else "failed"}}
 
+    def pending_notices(self) -> list[Job]:
+        """Finished jobs whose Slack notice has not been posted yet, oldest first."""
+        with self.connection() as db:
+            rows = db.execute("SELECT * FROM jobs WHERE site = ? AND state <> 'running' AND notice_state = 'pending' "
+                              "ORDER BY id", (self.site,)).fetchall()
+        return [self._job(row) for row in rows]
+
     def purge(self, retention_days: int, data_dir: Path) -> int:
         """Delete finished jobs older than ``retention_days`` with their logs (A-12); returns how many.
 

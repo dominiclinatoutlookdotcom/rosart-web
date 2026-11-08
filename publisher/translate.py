@@ -87,14 +87,13 @@ def for_code(code: str, **extra: Optional[str]) -> dict[str, Any]:
     return failure
 
 
-def interrupted_failure(kind: str, window_open: bool = False) -> dict[str, Any]:
-    """The failure of a job a restart cut short (start-up recovery): the words depend on the kind and the window."""
+def interrupted_failure(kind: str) -> dict[str, Any]:
+    """The failure of a job a restart cut short (start-up recovery); the page words the next step by the window."""
     if kind == "check":
-        text = "The check was interrupted by a restart: press Check changes again"
-        return {"code": "interrupted", "text": text, "action": AGAIN}
-    next_step = "press Publish again" if window_open else "run Check again, then Publish"
+        return {"code": "interrupted", "action": AGAIN,
+                "text": "The check was interrupted by a restart: press Check changes again"}
     return {"code": "interrupted", "action": PUBLISH_AGAIN,
-            "text": f"The publish was interrupted by a restart: {PARTLY}; {next_step}. {MIRROR[0].upper() + MIRROR[1:]}"}
+            "text": f"The publish was interrupted by a restart: {PARTLY}. {MIRROR[0].upper() + MIRROR[1:]}"}
 
 
 # --- the raw output of a failed check step ------------------------------------------------------------
