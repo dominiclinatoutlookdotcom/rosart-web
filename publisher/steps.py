@@ -371,9 +371,6 @@ def run_publish(job: Any, deps: Deps) -> Outcome:
         row = deps.store.get(job.id)
         partial = row is not None and row.passes_started >= 1
         state = "publish-failed-partial" if partial else "failed"
-        if partial:
-            failure["text"] = ("The upload stopped part-way and the live site may be partly updated; "
-                               "press Publish again to finish it. " + failure["text"])[:600]
         deps.log.line(f"publish failed in phase {track['phase']}: {deps.scrubber.describe_exception(exc)}")
         log.info("job %s: publish ended %s in phase %s (%s)", job.id, state, track["phase"], failure["code"])
         deps.store.finish(job.id, state, reason_code=failure["code"], reason_text=failure["text"],
