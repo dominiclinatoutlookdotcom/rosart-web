@@ -19,8 +19,8 @@ from shopify_admin import (
 )
 from shopify_cli import ShopifyCliError
 
-from .fake_clock import FakeClock
-from .fake_shopify_admin import READ_SCOPES, SHOP, FakeShopifyAdmin
+from fake_clock import FakeClock
+from fake_shopify_admin import READ_SCOPES, SHOP, FakeShopifyAdmin
 
 SHOP_QUERY = "query Shop { shop { name } }"
 DATA = {"shop": {"name": "Rosart"}}

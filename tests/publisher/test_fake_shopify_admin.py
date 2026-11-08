@@ -11,8 +11,8 @@ import urllib.request
 
 import pytest
 
-from .fake_clock import FakeClock
-from .fake_shopify_admin import READ_SCOPES, FakeShopifyAdmin
+from fake_clock import FakeClock
+from fake_shopify_admin import READ_SCOPES, FakeShopifyAdmin
 
 SHOP = "rosart-mhfmyuxq.myshopify.com"
 GRAPHQL = f"https://{SHOP}/admin/api/2026-10/graphql.json"

@@ -14,7 +14,7 @@ import pytest
 import publish as publish_module
 from publish import Aws, AwsResult, DeployConfig, PublishError, main
 
-from .fake_aws import FakeAws
+from fake_aws import FakeAws
 
 CONFIG = DeployConfig("rosart-deploy", "rosart-site", "ap-southeast-2", "E2ABCDEF123456")
 MARKER = {"site": "rosart", "publish_id": "box-7", "published_at": "2026-11-08T01:02:03Z",

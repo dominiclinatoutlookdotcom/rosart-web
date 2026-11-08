@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from .fake_aws import FakeAws, MARKER_KEY
+from fake_aws import FakeAws, MARKER_KEY
 from publish import Aws, DeployConfig, PublishError
 
 CONFIG = DeployConfig("rosart-deploy", "rosart-site", "ap-southeast-2", "E2ABCDEF123456")

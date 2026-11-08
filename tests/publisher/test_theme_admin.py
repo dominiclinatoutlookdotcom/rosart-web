@@ -12,8 +12,8 @@ import pytest
 from shopify_admin import AdminApiRunner, ClientCredentialsTokenSource, Secret, ShopifyAdminError
 from theme_admin import THEME_URL_HOSTS, read_theme
 
-from .fake_clock import FakeClock
-from .fake_shopify_admin import SHOP, FakeShopifyAdmin
+from fake_clock import FakeClock
+from fake_shopify_admin import SHOP, FakeShopifyAdmin
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 THEME_ID = "201570156625"

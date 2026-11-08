@@ -232,8 +232,8 @@ def test_theme_content_json_is_written_from_the_theme(exported):
 # --- the Admin API transport (spec 006 R-1, T023) --------------------------------------------
 
 import export_shopify  # noqa: E402
-from publisher.fake_clock import FakeClock  # noqa: E402
-from publisher.fake_shopify_admin import SHOP as ADMIN_SHOP, FakeShopifyAdmin  # noqa: E402
+from fake_clock import FakeClock  # noqa: E402
+from fake_shopify_admin import SHOP as ADMIN_SHOP, FakeShopifyAdmin  # noqa: E402
 from shopify_admin import AdminApiRunner, ClientCredentialsTokenSource, Secret  # noqa: E402
 
 THEME_GID = "gid://shopify/OnlineStoreTheme/201570156625"

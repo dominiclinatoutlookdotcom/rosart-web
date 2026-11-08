@@ -12,7 +12,7 @@ import pytest
 import publish as publish_module
 from publish import Aws, AwsResult, DeployConfig, PublishError, assert_command_allowed
 
-from .fake_aws import FakeAws
+from fake_aws import FakeAws
 
 CONFIG = DeployConfig("rosart-deploy", "rosart-site", "ap-southeast-2", "E2ABCDEF123456")
 SERVICE_DIR = Path(__file__).resolve().parent.parent.parent / "publisher"

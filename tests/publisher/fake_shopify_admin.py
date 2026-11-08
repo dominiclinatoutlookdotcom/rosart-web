@@ -18,7 +18,7 @@ import urllib.parse
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
-from .fake_clock import FakeClock
+from fake_clock import FakeClock
 
 READ_SCOPES = ("read_content", "read_products", "read_online_store_navigation", "read_files",
                "read_themes", "read_metaobjects")
