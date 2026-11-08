@@ -6,8 +6,8 @@
 # VI). Owner task T001 freezes them and reports the two digests; put them in the ARGs below in a reviewed
 # commit (64 hex characters, without the `sha256:` prefix). PENDING-T001 is not a valid digest, so
 # `docker build` and `make image-probe` refuse to build until then.
-ARG NODE_SHA256=PENDING-T001
-ARG PYTHON_SHA256=PENDING-T001
+ARG NODE_SHA256=01d566e8d94d8c619591d78652babfccd3c6992a3dffa9ed5ab39e11cf6c70e9
+ARG PYTHON_SHA256=af8a5aa14780025dbfbcfbc81bd8a91ebd87711dd5b0f48ed71090949dd7cb1d
 
 FROM harbor.int.solagratia.com.au/frozen/node@sha256:${NODE_SHA256} AS node
 
