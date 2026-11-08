@@ -1,8 +1,8 @@
 """``python -m publisher``: the service's commands (spec 006 T052).
 
 ``serve`` starts the page; ``healthcheck`` asks the running service whether it is healthy (the container
-HEALTHCHECK and the box checks call it). Further commands (``backup-db``, ``seed-export-repo``,
-``selftest``) arrive with their tasks.
+HEALTHCHECK and the box checks call it); ``seed-export-repo`` makes the export history's one seed commit.
+Further commands (``backup-db``, ``selftest``) arrive with their tasks.
 """
 from __future__ import annotations
 
@@ -20,7 +20,9 @@ from typing import Any, MutableMapping, Optional, Sequence, TextIO
 
 from publisher.clock import RealClock
 from publisher.config import ConfigError, load_config
+from publisher.exportrepo import ExportRepo, ExportRepoError
 from publisher.jobs import JobStore
+from publisher.runner import ChildRunner, NullJobStore
 from publisher.scrub import Scrubber
 from publisher.web import App, make_server
 
@@ -103,15 +105,39 @@ def healthcheck(url: str, timeout: float = 5.0) -> int:
     return 0
 
 
+def seed_export_repo(app_root: Path, environ: Optional[MutableMapping[str, str]] = None) -> int:
+    """One commit in the (empty) export repository from the image's committed ``export/`` (A-8)."""
+    environ = os.environ if environ is None else environ
+    repo_path = Path((environ.get("PUBLISHER_EXPORT_REPO") or "").strip() or "/export.git")
+    tmp_dir = Path((environ.get("PUBLISHER_TMP") or "").strip() or "/tmp")
+    code_commit = (environ.get("PUBLISHER_CODE_COMMIT") or "").strip() or "unknown"
+    env = {"PATH": environ.get("PATH") or "/usr/local/bin:/usr/bin:/bin", "HOME": str(tmp_dir / "home"),
+           "LANG": environ.get("LANG") or "C.UTF-8"}
+    (tmp_dir / "home").mkdir(parents=True, exist_ok=True)
+    repo = ExportRepo(repo_path, ChildRunner(NullJobStore(), 0, RealClock()), env, tmp_dir)
+    try:
+        sha = repo.seed(app_root, code_commit)
+    except ExportRepoError as exc:
+        print(f"seed-export-repo: {exc}", file=sys.stderr)
+        return 1
+    print(f"seed-export-repo: seeded {repo_path} with commit {sha[:12]} from {app_root / 'export'}")
+    return 0
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m publisher", description="The Rosart publisher service.")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("serve", help="start the publisher page")
     check = commands.add_parser("healthcheck", help="exit non-zero unless the running service is healthy")
     check.add_argument("--url", default=DEFAULT_HEALTHCHECK_URL)
+    seed = commands.add_parser("seed-export-repo", help="make the export history's first commit from the image's export/")
+    seed.add_argument("--app-root", type=Path, default=Path(__file__).resolve().parent.parent,
+                      help="the folder holding the committed export/ (default: the image's /app)")
     args = parser.parse_args(argv)
     if args.command == "serve":
         return serve()
+    if args.command == "seed-export-repo":
+        return seed_export_repo(args.app_root)
     return healthcheck(args.url)
 
 
