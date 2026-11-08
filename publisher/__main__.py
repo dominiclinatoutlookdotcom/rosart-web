@@ -18,14 +18,13 @@ import urllib.request
 from pathlib import Path
 from typing import Any, Callable, MutableMapping, Optional, Sequence, TextIO
 
-from downloads import make_urllib_fetch
 from export_shopify import DEFAULT_STORE
 from shopify_admin import AdminApiRunner, token_source_from_config
 
 from publisher.aws import ServiceAwsRunner, service_aws
 from publisher.clock import RealClock
 from publisher.config import ConfigError, load_config
-from publisher.egress import default_opener
+from publisher.egress import default_opener, make_opener_fetch
 from publisher.exportrepo import ExportRepo, ExportRepoError
 from publisher.jobs import JobStore
 from publisher.runner import ChildRunner, JobRunner, NullJobStore
@@ -88,7 +87,7 @@ def make_deps_factory(config: Any, store: JobStore, snapshots: SnapshotStore, cl
                     scrubber=scrubber, workspace=workspace,
                     export_repo=ExportRepo(config.export_repo, children, config.child_env(), config.tmp_dir / "git",
                                            config.tz_display),
-                    code_commit=code_commit, make_shopify=make_shopify, fetch=make_urllib_fetch(),
+                    code_commit=code_commit, make_shopify=make_shopify, fetch=make_opener_fetch(opener),
                     make_aws=make_aws, sleep=clock.sleep)
 
     return deps_for

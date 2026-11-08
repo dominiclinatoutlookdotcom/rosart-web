@@ -262,3 +262,43 @@ def test_the_services_downloader_goes_through_the_egress_opener_and_refuses_the_
         assert len(inner.urls) == 1
     finally:
         deps.log.close()
+
+
+def test_the_downloader_marks_throttling_and_server_errors_retryable_and_other_http_errors_not(tmp_path):
+    import io
+    import urllib.error
+
+    from downloads import FetchError
+    from publisher.egress import EgressOpener, make_opener_fetch
+
+    class Failing:
+        def __init__(self, error):
+            self.error = error
+
+        def open(self, request, data=None, timeout=None):
+            raise self.error
+
+    url = "https://cdn.shopify.com/s/files/1/a.jpg"
+    expected = {404: False, 403: False, 429: True, 500: True, 503: True}
+    for status, retryable in expected.items():
+        error = urllib.error.HTTPError(url, status, "fake", {}, io.BytesIO(b""))
+        fetch = make_opener_fetch(EgressOpener(("cdn.shopify.com",), inner=Failing(error)))
+        with pytest.raises(FetchError) as caught:
+            fetch(url)
+        assert caught.value.retryable is retryable, status
+
+    fetch = make_opener_fetch(EgressOpener(("cdn.shopify.com",), inner=Failing(ConnectionResetError("reset"))))
+    with pytest.raises(FetchError) as caught:
+        fetch(url)
+    assert caught.value.retryable is True
+
+
+def test_the_downloader_refuses_the_stores_own_host_and_slack_even_though_the_opener_allows_them():
+    from publisher.egress import default_opener, make_opener_fetch
+
+    fetch = make_opener_fetch(default_opener(SHOP, inner=RecordingInner()))
+
+    for url in (f"https://{SHOP}/admin/api/2026-10/graphql.json", "https://slack.com/api/chat.postMessage"):
+        with pytest.raises(ShopifyAdminError) as caught:
+            fetch(url)
+        assert caught.value.code == "egress-refused"

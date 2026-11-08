@@ -7,10 +7,13 @@ opened, and checks every redirect again. The public site and the storefront are 
 """
 from __future__ import annotations
 
+import urllib.error
 import urllib.parse
 import urllib.request
-from typing import Any, Iterable, Optional
+from typing import Any, Callable, Iterable, Optional
 
+from downloads import TIMEOUT_SECONDS, USER_AGENT, FetchError
+from images import DisallowedHost, assert_allowed_host
 from shopify_admin import ShopifyAdminError
 from theme_admin import THEME_URL_HOSTS
 
@@ -74,3 +77,28 @@ class EgressOpener:
 def default_opener(shop: str, inner: Optional[Any] = None) -> EgressOpener:
     """The service's opener: the store's Admin API host, the theme/image CDN hosts and Slack."""
     return EgressOpener((shop, *THEME_URL_HOSTS, SLACK_HOST), inner=inner)
+
+
+def make_opener_fetch(opener: EgressOpener, timeout: float = TIMEOUT_SECONDS) -> Callable[[str], bytes]:
+    """The service's downloader (images and theme files): ``tools/downloads.make_urllib_fetch`` over the egress opener.
+
+    The opener refuses any host off the allowlist (and every redirect to one) with ``egress-refused``; downloads
+    come from the Shopify CDN only, so the store's own host and Slack are refused here too. Errors keep the
+    shape ``download_images`` retries on: ``FetchError`` with ``retryable`` set for 429, 5xx and network faults.
+    """
+    def fetch(url: str) -> bytes:
+        opener.check(url)
+        try:
+            assert_allowed_host(url)
+        except DisallowedHost as exc:
+            raise EgressRefused(urllib.parse.urlsplit(url).hostname or "", "downloads come from the Shopify CDN only") from exc
+        request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        try:
+            with opener.open(request, timeout=timeout) as response:
+                return response.read()
+        except urllib.error.HTTPError as exc:
+            raise FetchError(f"HTTP {exc.code} {exc.reason}", retryable=exc.code == 429 or exc.code >= 500) from exc
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as exc:
+            raise FetchError(f"network error: {exc}", retryable=True) from exc
+
+    return fetch
