@@ -105,7 +105,26 @@ def test_a_form_has_a_labelled_button_the_csrf_field_and_a_prefixed_action():
         Pages("/rosart").form("/check", "  ", "tok")
 
 
+PORTAL_HOME = "/"       # the one URL without the prefix: the link back to the SGS Portal home (owner, 2026-11-08)
+
+
 def test_no_page_links_or_loads_anything_outside_the_service(web):
     for name, reply in html_replies(web).items():
         for url in web.urls_in(reply.body):
-            assert url.startswith(web.base + "/") and "://" not in url and not url.startswith("//"), (name, url)
+            assert url == PORTAL_HOME or url.startswith(web.base + "/"), (name, url)
+            assert "://" not in url and not url.startswith("//"), (name, url)
+
+
+def test_the_portal_home_is_the_one_url_without_the_prefix_and_never_an_asset_or_action(web):
+    for name, reply in html_replies(web).items():
+        for attribute in ("src", "action"):
+            assert f'{attribute}="{PORTAL_HOME}"' not in reply.body, (name, attribute)
+
+
+def test_the_portal_home_url_is_the_root_whatever_the_prefix_while_every_other_url_is_prefixed():
+    from publisher.pages import Pages
+
+    for base in ("/rosart", "/other"):
+        pages = Pages(base)
+        assert pages.portal_home_url() == "/"
+        assert pages.url("/") == base + "/" and pages.url("/jobs/1") == base + "/jobs/1"

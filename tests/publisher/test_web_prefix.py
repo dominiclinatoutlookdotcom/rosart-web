@@ -4,6 +4,8 @@ Seam: the real server on 127.0.0.1:0 (fixture ``web``, run under ``/rosart`` and
 """
 import re
 
+PORTAL_HOME = "/"       # the one URL without the prefix: the link back to the SGS Portal home (owner, 2026-11-08)
+
 
 def test_a_path_outside_the_prefix_is_a_plain_404(web):
     for path in ("/", "/jobs", web.base + "x/", "/elsewhere/", "/static/app.css"):
@@ -36,11 +38,12 @@ def test_every_url_a_page_emits_starts_with_the_prefix_and_resolves_to_a_route(w
     for page in pages:
         for url in web.urls_in(page.body):
             seen.add(url)
-            assert url.startswith(web.base + "/"), url
+            assert url == PORTAL_HOME or url.startswith(web.base + "/"), url
             assert not url.startswith("//") and "://" not in url
     assert seen, "the pages should link at least their stylesheet"
-    for url in seen:
+    for url in seen - {PORTAL_HOME}:
         assert web.raw("GET", url, web.identity()).status == 200, url
+    assert PORTAL_HOME in seen, "the home page links back to the portal home"
 
 
 def test_the_redirect_location_is_path_absolute_with_no_host(web):
