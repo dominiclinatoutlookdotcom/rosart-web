@@ -156,3 +156,109 @@ def test_a_redirect_that_stays_on_an_allowed_host_is_followed():
             assert response.read() == b"ok"
 
     assert server.hits == ["/", "/ok"]
+
+
+# --- a whole fake check and publish under the strict guard (spec 006 T069; SC-006, code half) -------------
+
+class _Cdn:
+    """A fake CDN response: bytes, usable as a context manager like a urllib response."""
+
+    def __init__(self, data=b"image-bytes"):
+        self._data = data
+
+    def read(self):
+        return self._data
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+class CdnInner:
+    def __init__(self):
+        self.urls = []
+
+    def open(self, request, data=None, timeout=None):
+        self.urls.append(request.full_url)
+        return _Cdn()
+
+
+@pytest.fixture
+def strict_guard(monkeypatch):
+    """Stricter than the autouse guard: *any* connection or name lookup fails, loopback included."""
+    import socket
+
+    def refuse(*args, **kwargs):
+        raise AssertionError("a code path opened its own connection: everything must go through the fakes")
+
+    for name in ("getaddrinfo", "create_connection"):
+        monkeypatch.setattr(socket, name, refuse)
+    for name in ("connect", "connect_ex"):
+        monkeypatch.setattr(socket.socket, name, refuse)
+
+
+def test_the_strict_guard_itself_refuses_a_loopback_connection(strict_guard):
+    import socket
+
+    with pytest.raises(AssertionError, match="own connection"):
+        socket.create_connection(("127.0.0.1", 9))
+
+
+def test_a_full_fake_check_and_publish_open_no_connection_and_only_allowlisted_names_are_asked(strict_guard, tmp_path):
+    from flow_harness import Flow
+    from publisher.egress import EgressOpener
+    from publisher.slack import SlackNotifier
+    from fake_slack import FakeSlack
+    from theme_admin import THEME_URL_HOSTS
+
+    flow = Flow(tmp_path)
+    allowed = EgressOpener((flow.shopify.shop, *THEME_URL_HOSTS, "slack.com"), inner=flow.shopify.opener)
+    names = []
+
+    def make_shopify(deadline):
+        from shopify_admin import AdminApiRunner, token_source_from_config
+
+        tokens = token_source_from_config(flow.config.token_config(), shop=flow.shopify.shop, opener=allowed,
+                                          clock=flow.clock.mono)
+        return tokens, AdminApiRunner(flow.shopify.shop, tokens, allowed, flow.clock.sleep, deadline,
+                                      clock=flow.clock.mono)
+
+    job, _ = flow.check(make_shopify=make_shopify)
+    assert job.state == "passed", job.reason_text
+    published, _ = flow.publish(job.snapshot_id, make_shopify=make_shopify)
+    assert published.state == "published", published.reason_text
+
+    slack = FakeSlack()
+    notifier = SlackNotifier(flow.config, flow.store, slack.opener, flow.clock.sleep, flow.scrubber)
+    assert notifier.notify(published.id) == "posted"
+
+    from urllib.parse import urlsplit
+    names = {urlsplit(r.url).hostname for r in flow.shopify.requests} | {urlsplit(r.url).hostname for r in slack.requests}
+    assert names == {flow.shopify.shop, "slack.com"}
+
+
+def test_the_services_downloader_goes_through_the_egress_opener_and_refuses_the_public_site(tmp_path):
+    from flow_harness import Flow
+    from publisher.__main__ import make_deps_factory
+    from publisher.egress import EgressOpener
+
+    flow = Flow(tmp_path)
+    inner = CdnInner()
+    opener = EgressOpener(("cdn.shopify.com",), inner=inner)
+    factory = make_deps_factory(flow.config, flow.store, flow.snapshots, flow.clock, flow.scrubber, "deadbeef1234",
+                                opener, app_root=flow.image, aws_executable="aws")
+    job = flow.start("check")
+    deps = factory(job)
+
+    try:
+        assert deps.fetch("https://cdn.shopify.com/s/files/1/a.jpg") == b"image-bytes"
+        assert inner.urls == ["https://cdn.shopify.com/s/files/1/a.jpg"], "the download went through the opener"
+        for refused in ("https://rosart.com.au/", "https://www.rosart.com.au/products/x", "https://example.org/a.jpg"):
+            with pytest.raises(ShopifyAdminError) as caught:
+                deps.fetch(refused)
+            assert caught.value.code == "egress-refused"
+        assert len(inner.urls) == 1
+    finally:
+        deps.log.close()
