@@ -12,15 +12,18 @@ import logging
 import sqlite3
 from contextlib import closing, contextmanager
 from dataclasses import dataclass, fields
-from datetime import timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Callable, Iterator, Optional
+from zoneinfo import ZoneInfo
 
 log = logging.getLogger("rosart.jobs")
 
 CHECK_FINAL_STATES = ("passed", "failed", "interrupted")
 PUBLISH_FINAL_STATES = ("published", "published-cache-pending", "failed", "publish-failed-partial", "interrupted")
 FINAL_STATES = {"check": CHECK_FINAL_STATES, "publish": PUBLISH_FINAL_STATES}
+PUBLISH_OK_STATES = ("published", "published-cache-pending")
+NEEDS_HUMAN_STATES = ("failed", "publish-failed-partial", "interrupted", "published-cache-pending")
 ALL_STATES = ("running",) + tuple(dict.fromkeys(CHECK_FINAL_STATES + PUBLISH_FINAL_STATES))
 
 # Columns a caller may set after the start, besides the state itself.
@@ -239,6 +242,19 @@ class JobStore:
             return self._job(db.execute("SELECT * FROM jobs WHERE site = ? AND kind = 'publish' "
                                         "AND finished_at IS NOT NULL ORDER BY finished_at DESC, id DESC LIMIT 1",
                                         (self.site,)).fetchone())
+
+    def portal_status(self, tz_display: str) -> dict[str, Any]:
+        """The portal tile's status, derived from the newest finished publish (data-model "Portal tile status").
+
+        Exactly ``site``, ``needs_human`` and ``last_publish`` (``{"date", "result"}`` or None): nothing about a
+        person, a reason, a job number or a count."""
+        job = self.last_publish()
+        if job is None:
+            return {"site": self.site, "needs_human": False, "last_publish": None}
+        finished = datetime.fromisoformat(job.finished_at).astimezone(ZoneInfo(tz_display))
+        return {"site": self.site, "needs_human": job.state in NEEDS_HUMAN_STATES,
+                "last_publish": {"date": finished.date().isoformat(),
+                                 "result": "ok" if job.state in PUBLISH_OK_STATES else "failed"}}
 
     def last_check(self) -> Optional[Job]:
         """The newest finished check job (any final state), or None."""

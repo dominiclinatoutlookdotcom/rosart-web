@@ -141,6 +141,7 @@ class App:
         self.add_route("GET", "/", self._home)
         self.add_route("GET", "/static/app.css", self._stylesheet)
         self.add_route("GET", "/healthz", self._healthz)
+        self.add_route("GET", "/status.json", self._status)
         self.add_route("POST", "/check", self._check)
         self.add_route("POST", "/publish", self._publish)
         self.add_route("GET", "/jobs", self._history)
@@ -323,6 +324,14 @@ class App:
         except OSError:
             return self.message(404, "This job has no log")
         return Response(200, data, "text/plain; charset=utf-8")
+
+    def _status(self, request: Request) -> Response:
+        """The portal tile's status, no sign-in: the shape the portal badge reads (research R-17, C5)."""
+        try:
+            return Response.json(self.store.portal_status(self.config.tz_display))
+        except Exception:  # noqa: BLE001 - an unreadable database means "needs attention", not a trace
+            log.exception("status.json: the database cannot be read")
+            return Response.json({"site": self.config.site, "needs_human": True, "last_publish": None}, 503)
 
     def _healthz(self, request: Request) -> Response:
         """Liveness with no sign-in: no secret and no person in the body (FR-002)."""
