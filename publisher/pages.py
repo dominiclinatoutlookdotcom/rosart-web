@@ -200,8 +200,12 @@ class Pages:
         if job is None:
             return "<h2>Last publish</h2><p>Nothing has been published from this page yet.</p>"
         who = job.person_name or job.person_user
+        warning = ""
+        if job.state in ("publish-failed-partial", "interrupted"):
+            warning = ('<p class="notice">The live site may be partly updated. A new publish will mirror the site '
+                       "fully.</p>")
         return (f"<h2>Last publish</h2><p>{esc(STATE_WORDS.get(job.state, job.state))} by {esc(who)} at "
-                f"{esc(self.when(job.finished_at))}. {self.link(f'/jobs/{job.id}', f'See job {job.id}')}</p>")
+                f"{esc(self.when(job.finished_at))}. {self.link(f'/jobs/{job.id}', f'See job {job.id}')}</p>{warning}")
 
     def _jobs_table(self, jobs: list[Any]) -> str:
         rows = "".join(
@@ -296,6 +300,9 @@ class Pages:
         if job.state == "running":
             parts.append(f"<p>Now: {esc(phase_in_words(job.phase))}.</p><pre>{esc(log_tail)}</pre>")
         parts.append(self.failures_html(job))
+        if job.kind == "publish" and job.state in ("publish-failed-partial", "interrupted"):
+            parts.append('<p class="notice">The live site may be partly updated. A new publish will mirror the site '
+                         "fully.</p>")
         summary = json.loads(snapshot.summary_json) if snapshot is not None else None
         if summary and job.kind == "check" and job.state == "passed":
             parts.append(f"<h2>What will change</h2><pre>{esc(summary.get('text', ''))}</pre>")
