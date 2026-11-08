@@ -22,8 +22,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def env_for(tmp_path, **extra):
-    return dict(ENV, PUBLISHER_DATA=str(tmp_path / "data"), PUBLISHER_TMP=str(tmp_path / "tmp"),
-                PUBLISHER_BIND="127.0.0.1:0", **extra)
+    env = dict(ENV, PUBLISHER_DATA=str(tmp_path / "data"), PUBLISHER_TMP=str(tmp_path / "tmp"),
+               PUBLISHER_BIND="127.0.0.1:0")
+    env.update(extra)
+    return env
 
 
 def test_create_app_wires_config_store_scrubber_and_the_credentials_file(tmp_path):

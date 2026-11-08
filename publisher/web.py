@@ -30,6 +30,7 @@ from pathlib import Path
 from typing import Any, Callable, Optional
 
 from publisher.pages import Pages, esc
+from publisher.scrub import Scrubber
 
 log = logging.getLogger("rosart.web")
 
@@ -118,8 +119,10 @@ class CsrfTokens:
 
 
 class App:
-    def __init__(self, config: Any, store: Any, clock: Any, code_commit: str = "unknown") -> None:
+    def __init__(self, config: Any, store: Any, clock: Any, code_commit: str = "unknown",
+                 scrubber: Optional[Any] = None) -> None:
         self.config = config
+        self.scrubber = scrubber or Scrubber()
         self.store = store
         self.clock = clock
         self.code_commit = code_commit
@@ -128,6 +131,7 @@ class App:
         self._routes: dict[tuple[str, str], Handler] = {}
         self.add_route("GET", "/", self._home)
         self.add_route("GET", "/static/app.css", self._stylesheet)
+        self.add_route("GET", "/healthz", self._healthz)
 
     def add_route(self, method: str, path: str, handler: Handler) -> None:
         self._routes[(method, path)] = handler
@@ -220,6 +224,16 @@ class App:
     def _home(self, request: Request) -> Response:
         body = f"<p>Signed in as {esc(request.name)}.</p>"
         return Response(200, self.pages.layout("Rosart website publisher", body))
+
+    def _healthz(self, request: Request) -> Response:
+        """Liveness with no sign-in: no secret and no person in the body (FR-002)."""
+        try:
+            running, ok = self.store.running() is not None, True
+        except Exception:  # noqa: BLE001 - any failure to read the database means "not healthy"
+            log.exception("healthz: the database cannot be opened")
+            running, ok = False, False
+        return Response.json({"ok": ok, "site": self.config.site, "code_commit": self.code_commit,
+                              "job_running": running}, 200 if ok else 503)
 
     def _stylesheet(self, request: Request) -> Response:
         data = (STATIC_DIR / "app.css").read_bytes()

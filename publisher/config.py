@@ -132,9 +132,13 @@ def _number(environ: MutableMapping[str, str], key: str, default: int) -> int:
     return value
 
 
-def load_config(environ: Optional[MutableMapping[str, str]] = None, tmp_dir: Path = Path("/tmp")) -> Config:
-    """Read the settings, take the secrets out of ``environ`` and refuse an unusable configuration."""
+def load_config(environ: Optional[MutableMapping[str, str]] = None, tmp_dir: Optional[Path] = None) -> Config:
+    """Read the settings, take the secrets out of ``environ`` and refuse an unusable configuration.
+
+    ``tmp_dir`` (the tmpfs: credentials file, HOME, npm cache) defaults to ``PUBLISHER_TMP``, then ``/tmp``.
+    """
     environ = os.environ if environ is None else environ
+    tmp_dir = Path(tmp_dir or environ.get("PUBLISHER_TMP") or "/tmp")
     taken = {key: (environ.pop(key) or "").strip() for key in SECRET_KEYS if key in environ}
 
     def text(key: str, default: str) -> str:
