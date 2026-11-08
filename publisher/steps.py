@@ -9,7 +9,6 @@ announces it.
 from __future__ import annotations
 
 import contextlib
-import errno
 import io
 import json
 import logging
@@ -25,6 +24,7 @@ from export_shopify import run_export
 from pull_theme import DEFAULT_THEME
 from theme_admin import read_theme
 
+from publisher import translate
 from publisher.exportrepo import ExportRepoError, plain_commit_error
 from publisher.runner import ChildTimeout
 from publisher.snapshots import canonical_json, content_hash
@@ -49,8 +49,6 @@ FAILURE_CODES = frozenset({
     "egress-refused", "aws-before-upload", "aws-identity-mismatch", "new-deletions", "snapshot-hash",
     "snapshot-stale", "site-changed", "partial-sync", "disk-full", "deadline", "interrupted", "worker-died",
     "unknown"})
-AWS_PHASES = ("aws-identity", "marker-read", "dry-run")
-PARTIAL_PHASES = ("marker-write", "invalidate")
 DEPLOY_CONFIG = "deploy.config.json"
 KEY_LINE_MAX = 500
 
@@ -93,12 +91,13 @@ class Outcome:
 
 
 class StepFailure(Exception):
-    """An expected failure with its plain-words form (the translator of T072 refines the text)."""
+    """An expected failure with its plain-words form (``failures`` carries a translated list, T072)."""
 
     def __init__(self, code: str, text: str, action: str = "contact-owner", key_line: Optional[str] = None,
-                 where: Optional[str] = None) -> None:
+                 where: Optional[str] = None, failures: Optional[list[dict[str, Any]]] = None) -> None:
         super().__init__(text)
         self.code, self.text, self.action, self.key_line, self.where = code, text, action, key_line, where
+        self.failures = failures        # several translated failures (a failed check step), first one is the main
 
 
 class _LogWriter(io.TextIOBase):
@@ -115,31 +114,27 @@ class _LogWriter(io.TextIOBase):
         return len(text)
 
 
-def _key_line(output: str) -> str:
-    lines = [line.strip() for line in output.splitlines() if line.strip()]
-    return (lines[-1] if lines else "")[:KEY_LINE_MAX]
-
-
-def failure_from(exc: BaseException, phase: str, scrubber: Any) -> dict[str, Any]:
-    """The failure record (code, plain text, staff action) for an exception raised in ``phase``."""
+def failures_for(exc: BaseException, phase: str, scrubber: Any) -> list[dict[str, Any]]:
+    """The failure records (code, plain text, staff action) for an exception raised in ``phase`` (T072)."""
+    if isinstance(exc, StepFailure) and exc.failures:
+        return [_scrubbed(failure, scrubber) for failure in exc.failures]
     if isinstance(exc, StepFailure):
         failure = {"code": exc.code, "text": exc.text, "action": exc.action}
         if exc.key_line:
             failure["key_line"] = exc.key_line
         if exc.where:
             failure["where"] = exc.where
-    else:
-        code = getattr(exc, "code", None)
-        if isinstance(exc, OSError) and exc.errno == errno.ENOSPC:
-            code = "disk-full"
-        elif isinstance(exc, ChildTimeout):
-            code = "deadline"
-        elif isinstance(exc, publish.PublishError) and phase in AWS_PHASES:
-            code = "aws-before-upload"
-        elif isinstance(exc, publish.PublishError) and (phase.startswith("pass-") or phase in PARTIAL_PHASES):
-            code = "partial-sync"
-        failure = {"code": code if code in FAILURE_CODES else "unknown", "text": str(exc) or type(exc).__name__,
-                   "action": "check-again" if code == "deadline" else "contact-owner"}
+        return [_scrubbed(failure, scrubber)]
+    return [_scrubbed(translate.from_exception(exc, phase, scrubber), scrubber)]
+
+
+def failure_from(exc: BaseException, phase: str, scrubber: Any) -> dict[str, Any]:
+    """The first (main) failure record of :func:`failures_for`."""
+    return failures_for(exc, phase, scrubber)[0]
+
+
+def _scrubbed(failure: dict[str, Any], scrubber: Any) -> dict[str, Any]:
+    failure = dict(failure)
     failure["text"] = scrubber.scrub(failure["text"])[:600]
     if "key_line" in failure:
         failure["key_line"] = scrubber.scrub(failure["key_line"])
@@ -158,11 +153,12 @@ def run_check(job: Any, deps: Deps) -> Outcome:
         snapshot, summary = _check_phases(job, deps, temp, track)
     except Exception as exc:  # noqa: BLE001 - every failure is translated and written to the job
         shutil.rmtree(partial, ignore_errors=True)
-        failure = failure_from(exc, track["phase"], deps.scrubber)
+        failures = failures_for(exc, track["phase"], deps.scrubber)
+        failure = failures[0]
         deps.log.line(f"check failed in phase {track['phase']}: {deps.scrubber.describe_exception(exc)}")
         log.info("job %s: check failed in phase %s (%s)", job.id, track["phase"], failure["code"])
         deps.store.finish(job.id, "failed", reason_code=failure["code"], reason_text=failure["text"],
-                          failures_json=canonical_json([failure]), notice_state="pending")
+                          failures_json=canonical_json(failures), notice_state="pending")
         return Outcome("failed", job.id, None, failure["code"], failure["text"])
     finally:
         shutil.rmtree(temp, ignore_errors=True)
@@ -257,8 +253,9 @@ def _run_check_step(deps: Deps, argv: tuple[str, ...], workspace: Path, deadline
     deps.log.write(done.stdout)
     deps.log.write(done.stderr)
     if done.returncode != 0:
-        raise StepFailure("unknown", f"{' '.join(argv)} failed (exit {done.returncode})",
-                          key_line=_key_line(done.stdout + "\n" + done.stderr))
+        failures = translate.from_output(done.stdout + "\n" + done.stderr, deps.scrubber)
+        raise StepFailure(failures[0]["code"], failures[0]["text"], failures[0]["action"],
+                          key_line=failures[0].get("key_line"), failures=failures)
 
 
 def _copy_export(source: Path, dest: Path) -> None:
@@ -367,14 +364,15 @@ def run_publish(job: Any, deps: Deps) -> Outcome:
         temp.mkdir(parents=True, exist_ok=True)
         result = _publish_phases(job, deps, temp, track)
     except Exception as exc:  # noqa: BLE001 - every failure is translated and written to the job
-        failure = failure_from(exc, track["phase"], deps.scrubber)
+        failures = failures_for(exc, track["phase"], deps.scrubber)
+        failure = failures[0]
         row = deps.store.get(job.id)
         partial = row is not None and row.passes_started >= 1
         state = "publish-failed-partial" if partial else "failed"
         deps.log.line(f"publish failed in phase {track['phase']}: {deps.scrubber.describe_exception(exc)}")
         log.info("job %s: publish ended %s in phase %s (%s)", job.id, state, track["phase"], failure["code"])
         deps.store.finish(job.id, state, reason_code=failure["code"], reason_text=failure["text"],
-                          failures_json=canonical_json([failure]), notice_state="pending")
+                          failures_json=canonical_json(failures), notice_state="pending")
         _retain(deps)
         return Outcome(state, job.id, job.snapshot_id, failure["code"], failure["text"])
     finally:
