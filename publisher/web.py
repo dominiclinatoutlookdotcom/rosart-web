@@ -15,8 +15,14 @@ plain 500 page and never shows a stack trace.
 """
 from __future__ import annotations
 
+import base64
+import binascii
+import hashlib
+import hmac
 import json
 import logging
+import os
+import struct
 import urllib.parse
 from dataclasses import dataclass, field
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -36,6 +42,11 @@ CSP = ("default-src 'none'; style-src 'self'; img-src 'self'; form-action 'self'
 
 NO_IDENTITY = "No sign-in identity reached the publisher; contact the owner"
 NO_ACCESS = "You do not have access to publishing; ask the owner"
+OUT_OF_DATE = "This page was out of date; reload it and press the button again"
+BAD_ORIGIN = "That request did not come from the publisher page; open the page again and press the button"
+
+CSRF_MAX_AGE_S = 12 * 3600
+CSRF_MAX_SKEW_S = 300           # a token "from the future" (the wall clock stepped back) is refused
 
 
 @dataclass
@@ -74,6 +85,38 @@ def _utf8(value: str) -> str:
         return value
 
 
+class CsrfTokens:
+    """``base64url(issued_unix || HMAC-SHA256(k, user "|" issued_unix))``, valid 12 h, bound to the user.
+
+    ``k`` is 32 random bytes made when the process starts and kept in memory only, so a token never
+    survives a restart. Age is measured on the wall clock (a step only shortens or lengthens a token's life).
+    """
+
+    def __init__(self, clock: Any, key: Optional[bytes] = None) -> None:
+        self._clock = clock
+        self._key = key or os.urandom(32)
+
+    def _mac(self, user: str, issued: int) -> bytes:
+        return hmac.new(self._key, f"{user}|{issued}".encode("utf-8"), hashlib.sha256).digest()
+
+    def issue(self, user: str) -> str:
+        issued = int(self._clock.utc_now().timestamp())
+        return base64.urlsafe_b64encode(struct.pack(">Q", issued) + self._mac(user, issued)).decode("ascii")
+
+    def verify(self, user: str, token: str) -> bool:
+        try:
+            raw = base64.urlsafe_b64decode(token.encode("ascii") + b"=" * (-len(token) % 4))
+        except (binascii.Error, UnicodeEncodeError, ValueError):
+            return False
+        if len(raw) != 8 + hashlib.sha256().digest_size:
+            return False
+        (issued,) = struct.unpack(">Q", raw[:8])
+        if not hmac.compare_digest(raw[8:], self._mac(user, issued)):
+            return False
+        age = self._clock.utc_now().timestamp() - issued
+        return -CSRF_MAX_SKEW_S <= age <= CSRF_MAX_AGE_S
+
+
 class App:
     def __init__(self, config: Any, store: Any, clock: Any, code_commit: str = "unknown") -> None:
         self.config = config
@@ -81,6 +124,7 @@ class App:
         self.clock = clock
         self.code_commit = code_commit
         self.pages = Pages(config.base_path)
+        self.csrf = CsrfTokens(clock)
         self._routes: dict[tuple[str, str], Handler] = {}
         self.add_route("GET", "/", self._home)
         self.add_route("GET", "/static/app.css", self._stylesheet)
@@ -123,7 +167,25 @@ class App:
         request = self._request(lookup, path, raw_query, headers, body, user)
         if lookup == "POST" and self.config.group not in request.groups:
             return self.message(403, NO_ACCESS)
+        if lookup == "POST":
+            refusal = self._csrf_refusal(request)
+            if refusal is not None:
+                return refusal
         return self._call(request)
+
+    def _csrf_refusal(self, request: Request) -> Optional[Response]:
+        """A 403 unless the POST comes from our own page (Origin or Referer) and carries a valid token."""
+        origin = request.headers.get("Origin")
+        if origin is not None:
+            same_site = origin == self.config.public_origin
+        else:
+            referer = request.headers.get("Referer")
+            same_site = referer is not None and referer.startswith(self.config.public_origin + self.config.base_path + "/")
+        if not same_site:
+            return self.message(403, BAD_ORIGIN)
+        if not self.csrf.verify(request.user, request.form.get("csrf", "")):
+            return self.message(403, OUT_OF_DATE)
+        return None
 
     def _request(self, method: str, path: str, raw_query: str, headers: Any, body: bytes, user: str) -> Request:
         name = _utf8((headers.get("Remote-Name") or "").strip()) or user
