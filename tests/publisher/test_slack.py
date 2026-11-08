@@ -192,3 +192,68 @@ def test_the_post_runs_on_a_background_thread_after_the_final_state_is_written(w
 
     assert seen["thread"] is not threading.current_thread() and seen["state_when_posting"] == "failed"
     assert world.store.get(job_id).state == "failed" and world.store.get(job_id).notice_state == "posted"
+
+
+# --- T087: a Slack failure never changes a job, and is recorded (US5 scenario 4) ----------------------
+
+SCRIPTS = {
+    "invalid_auth": lambda slack: slack.invalid_auth_next(2),
+    "http-500": lambda slack: slack.http_error_next(500, 2),
+    "timeout": lambda slack: slack.timeout_next(2),
+    "refused": lambda slack: slack.refused_next(2),
+}
+
+
+@pytest.mark.parametrize("kind", sorted(SCRIPTS))
+def test_a_failed_post_leaves_the_final_state_unchanged_and_records_that_it_could_not_be_posted(world, kind):
+    job_id = world.job("publish", "publish-failed-partial", reason_code="partial-sync", reason_text="pass 3 failed")
+    before = world.store.get(job_id)
+    SCRIPTS[kind](world.slack)
+
+    assert world.notify(job_id) == "failed"
+
+    after = world.store.get(job_id)
+    assert (after.state, after.reason_code, after.reason_text, after.finished_at) == \
+        (before.state, before.reason_code, before.reason_text, before.finished_at)
+    assert after.notice_state == "failed"
+    assert any("could not be posted" in line for line in world.lines)
+    assert len(world.slack.requests) == 2 and world.slack.requests[0].timeout == 10
+
+
+def test_the_job_page_and_log_say_the_notice_could_not_be_posted_and_the_next_job_starts_while_a_post_hangs(tmp_path):
+    from flow_harness import FakeChildren
+    from flow_web import FlowWeb
+    from web_harness import VALID
+
+    world = FlowWeb(tmp_path, children=FakeChildren(fail={("npm", "run", "build"): (1, "boom\n")}))
+    maria = dict(user="maria", name="Maria Lopez", email="maria@example.org")
+    world.slack.invalid_auth_next(2)
+    try:
+        reply = world.web.post("/check", csrf=VALID, **maria)
+        world.wait()
+        job_id = int(reply.headers["location"].rsplit("/", 1)[1])
+        job = world.flow.store.get(job_id)
+        page = world.web.get(f"/jobs/{job_id}", **maria).body
+        log = (world.flow.config.data / job.log_path).read_text(encoding="utf-8")
+
+        assert job.state == "failed" and job.notice_state == "failed"
+        assert "could not be posted" in page and "could not be posted" in log
+
+        entered, release = threading.Event(), threading.Event()
+        real_open = world.slack.open
+
+        def hanging_open(request, data=None, timeout=None):
+            entered.set()
+            assert release.wait(60)
+            return real_open(request, data, timeout)
+
+        world.slack.open = hanging_open
+        first = world.web.post("/check", csrf=VALID, **maria)
+        assert entered.wait(30), "the notice is hanging"
+        second = world.web.post("/check", csrf=VALID, **maria)
+        assert first.status == 303 and second.status in (303, 409)
+        assert second.status == 303, "the lock was free: a hanging Slack post does not hold it"
+        release.set()
+    finally:
+        release.set()
+        world.close()
