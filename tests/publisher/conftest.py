@@ -105,3 +105,13 @@ def pytest_runtest_makereport(item, call):
     if _require_posix() and report.skipped and "posix" in item.keywords:
         report.outcome = "failed"
         report.longrepr = "a posix test was skipped but PUBLISHER_REQUIRE_POSIX=1 requires it to run"
+
+
+@pytest.fixture(params=["/rosart", "/other"], ids=["base-rosart", "base-other"])
+def web(request, tmp_path):
+    """A running publisher server; every web test runs under the default prefix and under /other."""
+    import web_harness
+
+    harness = web_harness.start(tmp_path, base_path=request.param)
+    yield harness
+    harness.close()
