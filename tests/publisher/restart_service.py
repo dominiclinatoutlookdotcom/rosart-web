@@ -8,6 +8,7 @@ Shopify Admin and theme read (in-process), Slack, ``npm`` and ``aws`` (the execu
 """
 import os
 import sys
+import threading
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -27,14 +28,15 @@ from publisher.scrub import JobLog  # noqa: E402
 from publisher.slack import SlackNotifier  # noqa: E402
 from publisher.web import App  # noqa: E402
 
-flow = Flow(ROOT, extra_env={"PATH": PATH, "PUBLISHER_BIND": "127.0.0.1:0"})
+flow = Flow(ROOT, extra_env={"PATH": PATH})
 fault = fault_hook_from_env(os.environ)
+stop = threading.Event()
 scenario = os.environ.get("FAKE_AWS_SCENARIO", "")
 
 
 def deps_for(job):
     deps = flow.deps()
-    children = ChildRunner(flow.store, job.id, flow.clock, flow.scrubber, fault=fault)
+    children = ChildRunner(flow.store, job.id, flow.clock, flow.scrubber, fault=fault, stop=stop)
     deps.children = children
     deps.log = JobLog(flow.config.data / job.log_path, flow.scrubber)
     deps.export_repo = ExportRepo(flow.bare, children, flow.config.child_env(), flow.config.tmp_dir / "git")
@@ -51,7 +53,7 @@ def deps_for(job):
 
 slack = FakeSlack()
 notifier = SlackNotifier(flow.config, flow.store, slack.opener, flow.clock.sleep, flow.scrubber)
-runner = JobRunner(flow.store, flow.snapshots, deps_for, notifier, flow.config, CODE_COMMIT, flow.scrubber)
+runner = JobRunner(flow.store, flow.snapshots, deps_for, notifier, flow.config, CODE_COMMIT, flow.scrubber, stop=stop)
 app = App(flow.config, flow.store, flow.clock, code_commit=CODE_COMMIT, scrubber=flow.scrubber,
           snapshots=flow.snapshots, runner=runner, export_repo=flow.export_repo)
 app.workspace = flow.workspace

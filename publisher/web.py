@@ -32,6 +32,7 @@ from typing import Any, Callable, Optional
 
 from publisher.jobs import JobAlreadyRunning
 from publisher.pages import HISTORY_PAGE_SIZE, Pages
+from publisher.runner import ServiceStopping
 from publisher.scrub import Scrubber
 from publisher.steps import NotPublishable
 
@@ -47,6 +48,7 @@ CSP = ("default-src 'none'; style-src 'self'; img-src 'self'; form-action 'self'
 NO_IDENTITY = "No sign-in identity reached the publisher; contact the owner"
 NO_ACCESS = "You do not have access to publishing; ask the owner"
 OUT_OF_DATE = "This page was out of date; reload it and press the button again"
+STOPPING = "The publisher is restarting; try again in a minute"
 BAD_ORIGIN = "That request did not come from the publisher page; open the page again and press the button"
 
 CSRF_MAX_AGE_S = 12 * 3600
@@ -281,6 +283,8 @@ class App:
             job = self.runner.start_check(request.user, request.name, request.email)
         except JobAlreadyRunning as busy:
             return self._busy(busy.running)
+        except ServiceStopping:
+            return self.message(503, STOPPING)
         return self._see_job(job.id)
 
     def _publish(self, request: Request) -> Response:
@@ -291,6 +295,8 @@ class App:
                                             request.email)
         except JobAlreadyRunning as busy:
             return self._busy(busy.running)
+        except ServiceStopping:
+            return self.message(503, STOPPING)
         except NotPublishable:
             return Response(410, self.pages.gone_page(self.csrf.issue(request.user)))
         return self._see_job(job.id)

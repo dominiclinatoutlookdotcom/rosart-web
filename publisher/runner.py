@@ -22,12 +22,27 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, Callable, Mapping, Optional, Sequence
 
+from publisher.snapshots import canonical_json
+
 log = logging.getLogger("rosart.runner")
 
 SIGTERM = 15
 SIGKILL = 9
 POLL_S = 0.05
 POSIX = os.name == "posix"
+
+
+class FaultInjected(BaseException):
+    """Raised by the test-only fault hook; a BaseException so it escapes every ``except Exception`` of a worker."""
+
+
+class ServiceStopping(Exception):
+    """The service received SIGTERM and starts no more jobs."""
+
+
+class WorkerStopped(BaseException):
+    """The service is stopping and a child of this worker was killed for it: the worker ends without writing a final
+    state, because ``JobRunner.shutdown`` writes ``interrupted`` (a BaseException so no ``except Exception`` eats it)."""
 
 
 class ChildTimeout(Exception):
@@ -79,6 +94,14 @@ def kill_and_wait(pgid: int, started: Optional[int] = None, grace_s: float = 5.0
     zombie leader of our own child does not keep the group alive.
     """
     ops = ops or PosixOps()
+    if reap is None:
+        def reap() -> None:
+            """A leader that is our own child and already dead stays a zombie, and a zombie keeps its group
+            "alive" for ``killpg(pgid, 0)``; collect it (a pid that is not our child raises and is ignored)."""
+            try:
+                os.waitpid(pgid, os.WNOHANG)
+            except (ChildProcessError, OSError, AttributeError):
+                pass
     if started is not None:
         current = ops.start_time(pgid)
         if current is not None and current != started:
@@ -117,6 +140,30 @@ def kill_and_wait(pgid: int, started: Optional[int] = None, grace_s: float = 5.0
         raise ChildStuck(f"process group {pgid} is still there after SIGKILL")
 
 
+def fault_hook_from_env(environ: Mapping[str, str]) -> Optional[Callable[[Sequence[str]], None]]:
+    """The test-only fault hook, enabled only by ``PUBLISHER_FAULT_HOOK`` (``selftest`` refuses it set, T100).
+
+    ``build`` raises :class:`FaultInjected` in the worker just after the ``npm run build`` child has started and been
+    recorded, outside the runner's own clean-up; ``pass-N`` does the same as the Nth real ``aws s3 sync`` pass
+    starts. It simulates a worker thread dying with a child running, which only the watchdog can clean up."""
+    spec = (environ.get("PUBLISHER_FAULT_HOOK") or "").strip()
+    if not spec:
+        return None
+    passes = [0]
+
+    def hook(argv: Sequence[str]) -> None:
+        name, point = Path(argv[0]).name, None
+        if name == "npm" and list(argv[1:3]) == ["run", "build"]:
+            point = "build"
+        elif name == "aws" and list(argv[1:3]) == ["s3", "sync"] and "--dryrun" not in argv:
+            passes[0] += 1
+            point = f"pass-{passes[0]}"
+        if point == spec:
+            raise FaultInjected(point)
+
+    return hook
+
+
 class NullJobStore:
     """A job store that remembers nothing: for commands that run children outside a job (``seed-export-repo``)."""
 
@@ -131,7 +178,10 @@ class ChildRunner:
     """Runs a job's children under supervision; one per running job."""
 
     def __init__(self, store: Any, job_id: int, clock: Any, scrubber: Optional[Any] = None,
-                 ops: Optional[Any] = None) -> None:
+                 ops: Optional[Any] = None, fault: Optional[Callable[[Sequence[str]], None]] = None,
+                 stop: Optional[threading.Event] = None) -> None:
+        self._fault = fault
+        self._stop = stop
         self._store = store
         self._job_id = job_id
         self._clock = clock
@@ -150,6 +200,8 @@ class ChildRunner:
             proc = subprocess.Popen(list(argv), env=dict(env), cwd=cwd, stdin=subprocess.DEVNULL, stdout=out,
                                     stderr=err, start_new_session=POSIX)
             pgid, started = self._record(proc)
+            if self._fault is not None:
+                self._fault(argv)           # test only: dies here, outside the clean-up below
             timed_out = False
             try:
                 try:
@@ -161,6 +213,8 @@ class ChildRunner:
             out.seek(0)
             err.seek(0)
             stdout, stderr = (self._text(handle.read()) for handle in (out, err))
+        if self._stop is not None and self._stop.is_set():
+            raise WorkerStopped()
         if timed_out:
             raise ChildTimeout(f"{Path(argv[0]).name} ran past its deadline and was stopped")
         return Completed(proc.returncode, stdout, stderr)
@@ -192,6 +246,26 @@ class ChildRunner:
         return self._scrubber.scrub(text) if self._scrubber else text
 
 
+class Watchdog(threading.Thread):
+    """Every ``interval_s`` seconds: a running job whose worker thread died is cleaned up (E2, plan "Job supervision")."""
+
+    def __init__(self, runner: "JobRunner", interval_s: float = 5.0) -> None:
+        super().__init__(name="watchdog", daemon=True)
+        self._runner = runner
+        self._interval = interval_s
+        self._halt = threading.Event()
+
+    def run(self) -> None:
+        while not self._halt.wait(self._interval):
+            try:
+                self._runner.reap_dead_worker()
+            except Exception:  # noqa: BLE001 - the watchdog itself must never die
+                log.exception("watchdog check failed")
+
+    def stop(self) -> None:
+        self._halt.set()
+
+
 # --- the job worker ---------------------------------------------------------------------------------
 
 class JobRunner:
@@ -205,7 +279,8 @@ class JobRunner:
     """
 
     def __init__(self, store: Any, snapshots: Any, deps_factory: Callable[[Any], Any], notifier: Any, config: Any,
-                 code_commit: str, scrubber: Any) -> None:
+                 code_commit: str, scrubber: Any, stop: Optional[threading.Event] = None) -> None:
+        self._stop = stop or threading.Event()
         self._store = store
         self._snapshots = snapshots
         self._deps_factory = deps_factory
@@ -214,13 +289,22 @@ class JobRunner:
         self._code_commit = code_commit
         self._scrubber = scrubber
         self._threads: list[Any] = []
-        self._lock = threading.Lock()
+        self._workers: dict[int, threading.Thread] = {}
+        self._announced: set[int] = set()
+        self._lock = threading.RLock()
+
+    @property
+    def stopping(self) -> bool:
+        return self._stop.is_set()
 
     # --- starting -----------------------------------------------------------------------
 
     def start_check(self, user: str, name: str, email: str) -> Any:
-        job = self._store.start_job("check", user, name, email, self._code_commit, self._config.check_timeout_s)
-        self._spawn(job)
+        with self._lock:                    # the watchdog never sees a started job before its worker exists
+            if self.stopping:
+                raise ServiceStopping()
+            job = self._store.start_job("check", user, name, email, self._code_commit, self._config.check_timeout_s)
+            self._spawn(job)
         return job
 
     def start_publish(self, snapshot_id: str, user: str, name: str, email: str) -> Any:
@@ -228,15 +312,69 @@ class JobRunner:
 
         starter = SimpleNamespace(store=self._store, snapshots=self._snapshots, code_commit=self._code_commit,
                                   config=self._config)
-        job = steps.start_publish(starter, snapshot_id, user, name, email)
-        self._spawn(job)
+        with self._lock:
+            if self.stopping:
+                raise ServiceStopping()
+            job = steps.start_publish(starter, snapshot_id, user, name, email)
+            self._spawn(job)
         return job
 
     def _spawn(self, job: Any) -> None:
         worker = threading.Thread(target=self._work, args=(job,), name=f"job-{job.id}", daemon=True)
         with self._lock:
             self._threads = [t for t in self._threads if t.is_alive()] + [worker]
+            self._workers[job.id] = worker
         worker.start()
+
+    # --- a dead worker and a stop (E2) ---------------------------------------------------
+
+    def reap_dead_worker(self, ops: Optional[Any] = None) -> Optional[int]:
+        """If the running job has no live worker thread, stop its child group and end it; returns its id or None.
+
+        The state is ``failed`` (code ``worker-died``), or ``publish-failed-partial`` once a pass was started."""
+        with self._lock:
+            job = self._store.running()
+            if job is None:
+                return None
+            worker = self._workers.get(job.id)
+            if worker is not None and worker.is_alive():
+                return None
+        log.error("job %s is running but its worker thread is gone: cleaning up", job.id)
+        if job.child_pgid is not None:
+            kill_and_wait(job.child_pgid, job.child_started, ops=ops)
+            self._store.clear_child(job.id)
+        from publisher import translate      # translate imports this module: import late
+
+        partial = job.kind == "publish" and job.passes_started >= 1
+        failure = translate.for_code("worker-died")
+        if partial:
+            failure["text"] = ("The publish stopped unexpectedly part-way: the live site may be partly updated. "
+                               "A new publish will mirror the site fully")
+            failure["action"] = "publish-again"
+        written = self._store.finish(job.id, "publish-failed-partial" if partial else "failed",
+                                     reason_code="worker-died", reason_text=failure["text"],
+                                     failures_json=canonical_json([failure]), notice_state="pending")
+        if written:
+            self._announce(job.id)
+        return job.id if written else None
+
+    def shutdown(self, ops: Optional[Any] = None) -> None:
+        """SIGTERM: start no more jobs, stop and await the running job's child group, write ``interrupted``."""
+        with self._lock:
+            self._stop.set()
+            job = self._store.running()
+        if job is None:
+            return
+        if job.child_pgid is not None:
+            kill_and_wait(job.child_pgid, job.child_started, ops=ops)
+            self._store.clear_child(job.id)
+        from publisher import translate
+
+        failure = translate.interrupted_failure(job.kind)
+        if self._store.finish(job.id, "interrupted", reason_code=failure["code"], reason_text=failure["text"],
+                              failures_json=canonical_json([failure]), notice_state="pending"):
+            self._announce(job.id)
+            self.wait_idle(5)
 
     @property
     def notifier(self) -> Any:
@@ -287,6 +425,10 @@ class JobRunner:
                            notice_state="pending")
 
     def _announce(self, job_id: int) -> None:
+        with self._lock:
+            if job_id in self._announced:
+                return
+            self._announced.add(job_id)
         row = self._store.get(job_id)
         if row is None or row.notice_state != "pending":
             return

@@ -29,7 +29,7 @@ from publisher.egress import default_opener, make_opener_fetch
 from publisher.exportrepo import ExportRepo, ExportRepoError
 from publisher.jobs import JobStore, backup_database
 from publisher.recovery import recover
-from publisher.runner import ChildRunner, ChildStuck, JobRunner, NullJobStore
+from publisher.runner import ChildRunner, ChildStuck, JobRunner, NullJobStore, Watchdog, fault_hook_from_env
 from publisher.scrub import JobLog, Scrubber
 from publisher.slack import SlackNotifier
 from publisher.snapshots import SnapshotStore
@@ -68,12 +68,14 @@ APP_ROOT = Path(__file__).resolve().parent.parent       # the image's /app: code
 def make_deps_factory(config: Any, store: JobStore, snapshots: SnapshotStore, clock: Any, scrubber: Scrubber,
                       code_commit: str, opener: Any, app_root: Path = APP_ROOT,
                       aws_executable: Optional[str] = None,
-                      workspace: Optional[Workspace] = None) -> Callable[[Any], Deps]:
+                      workspace: Optional[Workspace] = None,
+                      fault: Optional[Callable[[Any], None]] = None,
+                      stop: Optional[threading.Event] = None) -> Callable[[Any], Deps]:
     """The real collaborators of one job: its own supervised ``ChildRunner``, log, workspace and AWS runner."""
     workspace = workspace or Workspace(config.data / "work", config.site, app_root, config.export_repo)
 
     def deps_for(job: Any) -> Deps:
-        children = ChildRunner(store, job.id, clock, scrubber)
+        children = ChildRunner(store, job.id, clock, scrubber, fault=fault, stop=stop)
         job_log = JobLog(config.data / job.log_path, scrubber)
 
         def make_shopify(deadline: float) -> tuple[Any, Any]:
@@ -112,10 +114,12 @@ def create_app(environ: Optional[MutableMapping[str, str]] = None, clock: Option
     snapshots = SnapshotStore(store, config.data, config.site, clock, config.snapshot_window_s)
     opener = default_opener(DEFAULT_STORE)
     workspace = Workspace(config.data / "work", config.site, APP_ROOT, config.export_repo)
+    stop = threading.Event()
     runner = JobRunner(store, snapshots,
                        make_deps_factory(config, store, snapshots, clock, scrubber, code_commit, opener,
-                                         workspace=workspace),
-                       SlackNotifier(config, store, opener, clock.sleep, scrubber), config, code_commit, scrubber)
+                                         workspace=workspace, fault=fault_hook_from_env(environ), stop=stop),
+                       SlackNotifier(config, store, opener, clock.sleep, scrubber), config, code_commit, scrubber,
+                       stop=stop)
     reader = ExportRepo(config.export_repo, ChildRunner(NullJobStore(), 0, clock, scrubber), config.child_env(),
                         config.tmp_dir / "git", config.tz_display)
     app = App(config, store, clock, code_commit=code_commit, scrubber=scrubber, snapshots=snapshots, runner=runner,
@@ -131,6 +135,13 @@ def serve() -> int:
         print(f"rosart-publisher NOT started: {exc}", file=sys.stderr)
         return 1
     configure_logging(app.scrubber)
+    return serve_app(app)
+
+
+def serve_app(app: App, announce: Optional[Callable[[int], None]] = None) -> int:
+    """Recover from a restart, start the watchdog, serve until SIGTERM, then stop the running job cleanly (E2).
+
+    ``announce(port)`` is called once the server is listening (the process tests read the port from it)."""
     try:
         report = recover(store=app.store, snapshots=app.snapshots, workspace=app.workspace, config=app.config,
                          notifier=app.runner.notifier, log_for=app.runner.log_line_for)
@@ -140,13 +151,25 @@ def serve() -> int:
     if report.interrupted:
         log.warning("jobs interrupted by the restart: %s", report.interrupted)
     server = make_server(app, app.config.bind)
-    signal.signal(signal.SIGTERM, lambda *_: threading.Thread(target=server.shutdown, daemon=True).start())
+    watchdog = Watchdog(app.runner)
+    watchdog.start()
+
+    def terminate() -> None:
+        try:
+            app.runner.shutdown()
+        finally:
+            server.shutdown()
+
+    signal.signal(signal.SIGTERM, lambda *_: threading.Thread(target=terminate, daemon=True).start())
     log.info("rosart publisher serving %s on %s (code %s)", app.config.base_path, app.config.bind, app.code_commit)
+    if announce is not None:
+        announce(server.server_address[1])
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         pass
     finally:
+        watchdog.stop()
         server.server_close()
     return 0
 
