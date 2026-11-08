@@ -12,3 +12,7 @@ Dockerfile text eol=lf
 
 # The fake aws executable runs on the Linux image (shebang): never CRLF.
 tests/publisher/bin/aws text eol=lf
+
+# make and the image's test stage read the Makefile on Linux: never CRLF.
+Makefile text eol=lf
+.dockerignore text eol=lf
