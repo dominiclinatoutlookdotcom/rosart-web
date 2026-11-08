@@ -580,7 +580,9 @@ def test_image_test_builds_and_runs_the_test_stage_then_the_selftest_in_the_fina
     assert len(runs) == 2, runs
     suite = next(line for line in runs if "selftest" not in line)
     assert "--rm" in suite and "--tmpfs /tmp:size=2g,exec" in suite
+    assert "--init" in suite.split(), "the suite runs with an init, as production does (zombie reaping)"
     selftest = next(line for line in runs if "selftest" in line)
+    assert "--init" in selftest.split(), "the selftest runs with an init, as production does"
     assert "--read-only" in selftest and "--user 10001:10001" in selftest and "python -m publisher selftest" in selftest
     assert lines.index(suite) < lines.index(selftest)
 

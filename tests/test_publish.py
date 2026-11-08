@@ -548,6 +548,7 @@ def test_real_runner_uses_only_the_profile_for_credentials(monkeypatch):
                  "AWS_DEFAULT_PROFILE"):
         monkeypatch.setenv(name, "from-env")
     monkeypatch.setenv("AWS_PAGER", "less")
+    monkeypatch.setenv("AWS_CLI_AUTO_PROMPT", "off")     # the image sets it: a CLI setting, not a credential
     calls = []
 
     def fake_run(command, **kwargs):
@@ -558,7 +559,8 @@ def test_real_runner_uses_only_the_profile_for_credentials(monkeypatch):
     result = runner(["aws", "sts", "get-caller-identity", "--profile", "rosart-deploy"])
     [(command, kwargs)] = calls
     assert command == ["C:/aws/aws.exe", "sts", "get-caller-identity", "--profile", "rosart-deploy"]
-    assert not {k for k in kwargs["env"] if k.startswith("AWS_") and k != "AWS_PAGER"}
+    allowed = {"AWS_PAGER", "AWS_CLI_AUTO_PROMPT"}       # non-credential CLI settings
+    assert not {k for k in kwargs["env"] if k.startswith("AWS_") and k not in allowed}
     assert kwargs["env"]["AWS_PAGER"] == ""
     assert result == AwsResult(0, "{}", "")
 
