@@ -14,7 +14,7 @@ from contextlib import closing, contextmanager
 from dataclasses import dataclass, fields
 from datetime import timedelta
 from pathlib import Path
-from typing import Any, Iterator, Optional
+from typing import Any, Callable, Iterator, Optional
 
 log = logging.getLogger("rosart.jobs")
 
@@ -158,8 +158,12 @@ class JobStore:
                                         (self.site,)).fetchone())
 
     def start_job(self, kind: str, person_user: Optional[str], person_name: Optional[str], person_email: Optional[str],
-                  code_commit: str, timeout_s: int) -> Job:
-        """Start a job inside BEGIN IMMEDIATE; raise :class:`JobAlreadyRunning` when one runs."""
+                  code_commit: str, timeout_s: int, snapshot_id: Optional[str] = None,
+                  guard: Optional[Callable[[sqlite3.Connection], None]] = None) -> Job:
+        """Start a job inside BEGIN IMMEDIATE; raise :class:`JobAlreadyRunning` when one runs.
+
+        ``guard`` runs inside the same transaction after the running-job check; an exception from it
+        aborts the start (the publish handler re-checks the publishable predicate there)."""
         if kind not in FINAL_STATES:
             raise ValueError(f"unknown job kind {kind!r}")
         if not (person_user or "").strip():
@@ -171,11 +175,13 @@ class JobStore:
                 existing = db.execute("SELECT * FROM jobs WHERE site = ? AND state = 'running'", (self.site,)).fetchone()
                 if existing is not None:
                     raise JobAlreadyRunning(self._job(existing))
+                if guard is not None:
+                    guard(db)
                 cursor = db.execute(
                     "INSERT INTO jobs (site, kind, state, person_user, person_name, person_email, created_at, "
-                    "started_at, deadline_at, code_commit) VALUES (?, ?, 'running', ?, ?, ?, ?, ?, ?, ?)",
+                    "started_at, deadline_at, code_commit, snapshot_id) VALUES (?, ?, 'running', ?, ?, ?, ?, ?, ?, ?, ?)",
                     (self.site, kind, person_user.strip(), person_name or "", person_email or "", now.isoformat(),
-                     now.isoformat(), (now + timedelta(seconds=timeout_s)).isoformat(), code_commit))
+                     now.isoformat(), (now + timedelta(seconds=timeout_s)).isoformat(), code_commit, snapshot_id))
                 job_id = cursor.lastrowid
                 db.execute("UPDATE jobs SET log_path = ? WHERE id = ?", (f"logs/{self.site}/{job_id}.log", job_id))
                 row = db.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()

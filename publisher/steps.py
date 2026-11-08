@@ -11,6 +11,7 @@ from __future__ import annotations
 import contextlib
 import errno
 import io
+import json
 import logging
 import re
 import shutil
@@ -24,9 +25,9 @@ from export_shopify import run_export
 from pull_theme import DEFAULT_THEME
 from theme_admin import read_theme
 
-from publisher.exportrepo import ExportRepoError
+from publisher.exportrepo import ExportRepoError, plain_commit_error
 from publisher.runner import ChildTimeout
-from publisher.snapshots import canonical_json
+from publisher.snapshots import canonical_json, content_hash
 from publisher.workspace import WorkspaceError, clean_build
 
 log = logging.getLogger("rosart.steps")
@@ -49,6 +50,7 @@ FAILURE_CODES = frozenset({
     "snapshot-stale", "site-changed", "partial-sync", "disk-full", "deadline", "interrupted", "worker-died",
     "unknown"})
 AWS_PHASES = ("aws-identity", "marker-read", "dry-run")
+PARTIAL_PHASES = ("marker-write", "invalidate")
 DEPLOY_CONFIG = "deploy.config.json"
 KEY_LINE_MAX = 500
 
@@ -134,6 +136,8 @@ def failure_from(exc: BaseException, phase: str, scrubber: Any) -> dict[str, Any
             code = "deadline"
         elif isinstance(exc, publish.PublishError) and phase in AWS_PHASES:
             code = "aws-before-upload"
+        elif isinstance(exc, publish.PublishError) and (phase.startswith("pass-") or phase in PARTIAL_PHASES):
+            code = "partial-sync"
         failure = {"code": code if code in FAILURE_CODES else "unknown", "text": str(exc) or type(exc).__name__,
                    "action": "check-again" if code == "deadline" else "contact-owner"}
     failure["text"] = scrubber.scrub(failure["text"])[:600]
@@ -315,3 +319,169 @@ def build_summary(deps: Deps, snapshot_dir: Path, plan: dict[str, Any]) -> dict[
             "images": {"changed": changes.images.changed, "added": changes.images.added,
                        "removed": changes.images.removed},
             "spot_check_urls": spot}
+
+
+# --- the publish job --------------------------------------------------------------------------------
+
+class NotPublishable(Exception):
+    """The snapshot cannot be published now (superseded, expired, published, unknown): check again (FR-007)."""
+
+
+def start_publish(deps: Deps, snapshot_id: str, person_user: str, person_name: str, person_email: str) -> Any:
+    """Start a publish job; the publishable predicate is re-checked inside the start transaction.
+
+    Raises :class:`NotPublishable` or ``JobAlreadyRunning``; nothing is started in either case."""
+    def guard(db: Any) -> None:
+        if not deps.snapshots.publishable(snapshot_id, db):
+            raise NotPublishable(snapshot_id)
+
+    return deps.store.start_job("publish", person_user, person_name, person_email, deps.code_commit,
+                                deps.config.publish_timeout_s, snapshot_id=snapshot_id, guard=guard)
+
+
+PLURALS = (("products", "product", "products"), ("pages", "page", "pages"),
+           ("collections", "collection", "collections"), ("menus", "menu", "menus"), ("blogs", "blog", "blogs"),
+           ("theme_areas", "theme area", "theme areas"))
+
+
+def change_counts(summary: dict[str, Any]) -> str:
+    """The short count line of a summary, for example ``2 products, 1 page changed`` (at most 200 characters)."""
+    parts = []
+    for key, one, many in PLURALS:
+        entry = (summary.get("changed") or {}).get(key) or {}
+        total = sum(len(entry.get(kind) or []) for kind in ("changed", "added", "removed"))
+        if total:
+            parts.append(f"{total} {one if total == 1 else many}")
+    images = summary.get("images") or {}
+    total_images = sum(images.get(kind, 0) for kind in ("changed", "added", "removed"))
+    if total_images:
+        parts.append(f"{total_images} {'image' if total_images == 1 else 'images'}")
+    return (", ".join(parts) + " changed")[:200] if parts else "no content changes"
+
+
+def run_publish(job: Any, deps: Deps) -> Outcome:
+    """Run the publish phases for ``job`` (already started) and write its final state."""
+    track = {"phase": "history-retry"}
+    temp = deps.config.tmp_dir / "jobs" / str(job.id)
+    try:
+        temp.mkdir(parents=True, exist_ok=True)
+        result = _publish_phases(job, deps, temp, track)
+    except Exception as exc:  # noqa: BLE001 - every failure is translated and written to the job
+        failure = failure_from(exc, track["phase"], deps.scrubber)
+        row = deps.store.get(job.id)
+        partial = row is not None and row.passes_started >= 1
+        state = "publish-failed-partial" if partial else "failed"
+        if partial:
+            failure["text"] = ("The upload stopped part-way and the live site may be partly updated; "
+                               "press Publish again to finish it. " + failure["text"])[:600]
+        deps.log.line(f"publish failed in phase {track['phase']}: {deps.scrubber.describe_exception(exc)}")
+        log.info("job %s: publish ended %s in phase %s (%s)", job.id, state, track["phase"], failure["code"])
+        deps.store.finish(job.id, state, reason_code=failure["code"], reason_text=failure["text"],
+                          failures_json=canonical_json([failure]), notice_state="pending")
+        _retain(deps)
+        return Outcome(state, job.id, job.snapshot_id, failure["code"], failure["text"])
+    finally:
+        shutil.rmtree(temp, ignore_errors=True)
+    deps.store.finish(job.id, result["state"], invalidation_id=result["invalidation_id"],
+                      export_commit=result["export_commit"], export_commit_error=result["export_commit_error"],
+                      summary_json=canonical_json(result["summary"]), notice_state="pending")
+    _retain(deps)
+    return Outcome(result["state"], job.id, job.snapshot_id)
+
+
+def _publish_phases(job: Any, deps: Deps, temp: Path, track: dict) -> dict[str, Any]:
+    _phase(deps, job.id, track, "history-retry")
+    deps.export_repo.retry_pending(deps.store, deps.snapshots)
+
+    snapshot = deps.snapshots.get(job.snapshot_id)
+    if snapshot is None:
+        raise StepFailure("snapshot-stale", "The checked files are gone: run Check again", "check-again")
+    folder = deps.snapshots.folder(snapshot.id)
+    dist = folder / "dist"
+    stored = json.loads(snapshot.plan_json)
+
+    _phase(deps, job.id, track, "verify")
+    if content_hash(dist, stored) != snapshot.content_hash:
+        raise StepFailure("snapshot-hash", "The checked files changed after the check, so nothing was uploaded: "
+                          "run Check again", "check-again")
+    _phase(deps, job.id, track, "preflight")
+    deploy = publish.load_config(deps.workspace.image_root / DEPLOY_CONFIG)
+    publish.check_dist(dist)
+
+    aws = deps.make_aws(deploy, temp, None)
+    _phase(deps, job.id, track, "aws-identity")
+    check_identity(aws)
+
+    _phase(deps, job.id, track, "marker-read")
+    marker = publish.read_marker(aws)
+    if (canonical_json(marker) if marker is not None else None) != snapshot.marker_json:
+        deps.snapshots.set_status(snapshot.id, "stale")
+        raise StepFailure("site-changed", "The live site changed since this check: run Check again "
+                          "(nothing was uploaded)", "check-again")
+
+    _phase(deps, job.id, track, "dry-run")
+    fresh = dry_run_plan(deps, aws, deploy, dist)
+    unexpected = sorted(set(fresh["delete_keys"]) - set(stored["delete_keys"]))
+    if unexpected:
+        raise StepFailure("new-deletions", "The website's files changed since the check and a publish would now "
+                          "delete pages the check did not show: run Check again (nothing was uploaded)",
+                          "check-again", key_line=", ".join(unexpected)[:KEY_LINE_MAX])
+
+    def before_pass(number: int) -> None:
+        track["phase"] = f"pass-{number}"
+        deps.store.update(job.id, passes_started=number, phase=track["phase"])
+        deps.log.line(f"== pass-{number}")
+
+    with contextlib.redirect_stdout(_LogWriter(deps.log)):
+        publish.sync(aws, publish.sync_passes(deploy, dist), on_pass=before_pass)
+
+    _phase(deps, job.id, track, "marker-write")
+    publish.write_marker(aws, publish.build_marker("box", f"box-{job.id}", publish.dist_hash(dist),
+                                                   deps.clock.utc_now()))
+
+    _phase(deps, job.id, track, "invalidate")
+    with contextlib.redirect_stdout(_LogWriter(deps.log)):
+        invalidation_id, _ = publish.invalidate(aws, wait=False)
+
+    _phase(deps, job.id, track, "wait")
+    completed = _wait_for_invalidation(deps, deploy, temp, invalidation_id)
+    state = "published" if completed else "published-cache-pending"
+    deps.snapshots.set_status(snapshot.id, "published", published_by_job_id=job.id)
+
+    _phase(deps, job.id, track, "commit")
+    export_commit, export_error = _record_history(deps, job, snapshot, folder, invalidation_id)
+    summary = {"uploaded": fresh["upload_count"], "deleted": len(fresh["delete_keys"]),
+               "changes": change_counts(json.loads(snapshot.summary_json)), "invalidation_completed": completed}
+    return {"state": state, "invalidation_id": invalidation_id, "export_commit": export_commit,
+            "export_commit_error": export_error, "summary": summary}
+
+
+def _wait_for_invalidation(deps: Deps, deploy: Any, temp: Path, invalidation_id: Optional[str]) -> bool:
+    """Wait for the CloudFront invalidation, at most ``INVALIDATION_WAIT_S``; a failed wait is not an error."""
+    wait_s = deps.config.invalidation_wait_s
+    if wait_s <= 0 or not invalidation_id:
+        return False
+    waiter = deps.make_aws(deploy, temp, float(wait_s))
+    try:
+        waiter.run(["cloudfront", "wait", "invalidation-completed", "--distribution-id", deploy.distribution_id,
+                    "--id", str(invalidation_id)])
+    except publish.PublishError as exc:
+        deps.log.line(f"the invalidation wait ended without completion: {deps.scrubber.scrub(str(exc))}")
+        return False
+    return True
+
+
+def _record_history(deps: Deps, job: Any, snapshot: Any, folder: Path,
+                    invalidation_id: Optional[str]) -> tuple[Optional[str], Optional[str]]:
+    """One history commit of the snapshot's export/; a failure is recorded, never raised (E5)."""
+    try:
+        changes = deps.export_repo.summary(folder)
+        sha = deps.export_repo.commit(
+            folder, changes, person_name=job.person_name or job.person_user,
+            person_email=job.person_email or f"{job.person_user}@rosart-publisher.invalid",
+            when=deps.clock.utc_now(), job_id=job.id, snapshot_id=snapshot.id, code_commit=job.code_commit,
+            invalidation_id=invalidation_id)
+    except (ExportRepoError, export_changes.ChangesError, OSError, ValueError) as exc:
+        deps.log.line(f"the export history commit failed: {deps.scrubber.describe_exception(exc)}")
+        return None, plain_commit_error(exc)
+    return sha, None
