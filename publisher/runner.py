@@ -115,6 +115,16 @@ def kill_and_wait(pgid: int, started: Optional[int] = None, grace_s: float = 5.0
         raise ChildStuck(f"process group {pgid} is still there after SIGKILL")
 
 
+class NullJobStore:
+    """A job store that remembers nothing: for commands that run children outside a job (``seed-export-repo``)."""
+
+    def set_child(self, job_id: int, pgid: int, started: Optional[int]) -> None:
+        return None
+
+    def clear_child(self, job_id: int) -> None:
+        return None
+
+
 class ChildRunner:
     """Runs a job's children under supervision; one per running job."""
 

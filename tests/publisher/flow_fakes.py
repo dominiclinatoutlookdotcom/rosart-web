@@ -58,6 +58,7 @@ def make_bare_repo(path: Path, files: Mapping[str, "str | bytes"]) -> Path:
     git("add", "-A", cwd=source)
     git("-c", "commit.gpgsign=false", "commit", "-q", "-m", "seed", cwd=source)
     git("clone", "-q", "--bare", str(source), str(path))
+    git("--git-dir", str(path), "remote", "remove", "origin")      # the export repository has no remote
     return path
 
 

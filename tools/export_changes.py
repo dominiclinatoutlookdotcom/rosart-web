@@ -24,7 +24,7 @@ import tempfile
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 EXPORT = "export"
@@ -95,9 +95,12 @@ def _git(repo: Path, *args: str, check: bool = True) -> subprocess.CompletedProc
     return completed
 
 
-def status(repo: Path, *pathspec: str) -> list[tuple[str, str]]:
-    """``(XY, path)`` for every changed or untracked file, from ``git status -z`` (no quoting)."""
-    raw = _git(repo, "status", "--porcelain=v1", "-z", "--untracked-files=all", "--", *pathspec).stdout
+def status(repo: Path, *pathspec: str, git: Optional[Callable[..., Any]] = None) -> list[tuple[str, str]]:
+    """``(XY, path)`` for every changed or untracked file, from ``git status -z`` (no quoting).
+
+    ``git`` replaces the command runner (default :func:`_git`): the publisher service runs git through its
+    supervised child runner, against a bare repository and a private index."""
+    raw = (git or _git)(repo, "status", "--porcelain=v1", "-z", "--untracked-files=all", "--", *pathspec).stdout
     entries = raw.decode("utf-8").split("\0")
     result: list[tuple[str, str]] = []
     index = 0
@@ -113,8 +116,8 @@ def status(repo: Path, *pathspec: str) -> list[tuple[str, str]]:
     return result
 
 
-def _head_json(repo: Path, path: str) -> Any:
-    completed = _git(repo, "show", f"HEAD:{path}", check=False)
+def _head_json(repo: Path, path: str, git: Optional[Callable[..., Any]] = None) -> Any:
+    completed = (git or _git)(repo, "show", f"HEAD:{path}", check=False)
     if completed.returncode != 0:
         return None
     return json.loads(completed.stdout.decode("utf-8"))
@@ -188,17 +191,17 @@ def diff_theme(old: Optional[dict], new: Optional[dict]) -> list[str]:
     return sorted({theme_label(k) for k in before.keys() | after.keys() if before.get(k) != after.get(k)})
 
 
-def summarise(repo: Path) -> ExportChanges:
-    changed = status(repo, EXPORT)
+def summarise(repo: Path, git: Optional[Callable[..., Any]] = None) -> ExportChanges:
+    changed = status(repo, EXPORT, git=git)
     paths = [path for _, path in changed]
     records: dict[str, RecordChanges] = {}
     for kind, name in RECORD_FILES.items():
         path = f"{EXPORT}/shopify/{name}"
-        old, new = (_head_json(repo, path), _work_json(repo, path)) if path in paths else (None, None)
+        old, new = (_head_json(repo, path, git), _work_json(repo, path)) if path in paths else (None, None)
         records[kind] = diff_records(old, new)
         if kind == "products" and path in paths:
             records[kind].urls = _product_urls(old, new)
-    theme = diff_theme(_head_json(repo, THEME_FILE), _work_json(repo, THEME_FILE)) if THEME_FILE in paths else []
+    theme = diff_theme(_head_json(repo, THEME_FILE, git), _work_json(repo, THEME_FILE)) if THEME_FILE in paths else []
 
     images = ImageChanges()
     for code, path in changed:

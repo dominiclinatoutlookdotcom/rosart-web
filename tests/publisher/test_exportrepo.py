@@ -136,8 +136,9 @@ def test_a_publish_with_nothing_new_still_records_one_commit(seeded, tmp_path):
 def test_the_repository_has_no_remote_and_the_wrapper_refuses_remote_commands(seeded):
     from publisher.exportrepo import ExportRepoError
 
-    repo, bare = seeded
-    children = repo._children
+    _, bare = seeded
+    children = PlainChildren()
+    repo = repo_for(bare, children=children)
 
     assert git("--git-dir", str(bare), "remote").strip() == ""
     for command in ("push", "remote", "fetch", "clone", "submodule"):

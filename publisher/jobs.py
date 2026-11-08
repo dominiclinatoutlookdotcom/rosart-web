@@ -220,6 +220,14 @@ class JobStore:
         log.warning("job %s already finished (or unknown): ignoring a second write of state %s", job_id, state)
         return False
 
+    def pending_export_commits(self) -> list[Job]:
+        """Published jobs whose export commit failed, oldest first (E5): retried before any new job."""
+        with self.connection() as db:
+            rows = db.execute("SELECT * FROM jobs WHERE site = ? AND kind = 'publish' AND export_commit IS NULL "
+                              "AND export_commit_error IS NOT NULL AND state IN ('published', 'published-cache-pending') "
+                              "ORDER BY id", (self.site,)).fetchall()
+        return [self._job(row) for row in rows]
+
     def set_child(self, job_id: int, pgid: int, started: Optional[int]) -> None:
         with self.connection() as db:
             db.execute("UPDATE jobs SET child_pgid = ?, child_started = ? WHERE id = ?", (pgid, started, job_id))
