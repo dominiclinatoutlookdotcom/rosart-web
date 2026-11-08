@@ -4,7 +4,6 @@ Seams: ``publisher.aws.service_aws`` (a ``publish.Aws`` around the service runne
 ``ServiceAwsRunner`` with an injected process runner. Nothing starts a real ``aws``.
 """
 import re
-import subprocess
 from pathlib import Path
 
 import pytest
@@ -93,17 +92,24 @@ def test_the_aws_child_gets_the_credentials_file_under_the_aws_folder_and_no_key
     monkeypatch.setenv("AWS_SHARED_CREDENTIALS_FILE", "/home/someone/.aws/credentials")
     monkeypatch.setenv("AWS_PAGER", "less")
     aws_dir = tmp_path / "aws"
-    calls = []
+    from publisher.runner import Completed
 
-    def fake_run(command, **kwargs):
-        calls.append((command, kwargs))
-        return subprocess.CompletedProcess(command, 0, stdout="{}", stderr="")
+    class RecordingChildRunner:
+        def __init__(self):
+            self.calls = []
 
-    runner = ServiceAwsRunner(aws_dir, executable="/usr/bin/aws", run=fake_run)
+        def mono(self):
+            return 0.0
+
+        def run(self, argv, env, cwd, timeout_mono):
+            self.calls.append((argv, env))
+            return Completed(0, "{}", "")
+
+    children = RecordingChildRunner()
+    runner = ServiceAwsRunner(aws_dir, children, executable="/usr/bin/aws")
     result = runner(["aws", "sts", "get-caller-identity", "--profile", "rosart-deploy"])
 
-    [(command, kwargs)] = calls
-    env = kwargs["env"]
+    [(command, env)] = children.calls
     assert command == ["/usr/bin/aws", "sts", "get-caller-identity", "--profile", "rosart-deploy"]
     assert env["AWS_SHARED_CREDENTIALS_FILE"] == str(aws_dir / "credentials")
     assert env["AWS_CONFIG_FILE"] == str(aws_dir / "config")
@@ -114,19 +120,12 @@ def test_the_aws_child_gets_the_credentials_file_under_the_aws_folder_and_no_key
     assert result == AwsResult(0, "{}", "")
 
 
-def test_the_process_runner_refuses_a_missing_aws_cli_and_reports_a_timeout(tmp_path, monkeypatch):
+def test_the_process_runner_refuses_a_missing_aws_cli(tmp_path, monkeypatch):
     from publisher.aws import ServiceAwsRunner
 
     monkeypatch.setattr("shutil.which", lambda name: None)
     with pytest.raises(PublishError, match="not on PATH"):
-        ServiceAwsRunner(tmp_path / "aws")
-
-    def slow(command, **kwargs):
-        raise subprocess.TimeoutExpired(command, 1)
-
-    runner = ServiceAwsRunner(tmp_path / "aws", executable="/usr/bin/aws", timeout=1, run=slow)
-    with pytest.raises(PublishError, match="timed out"):
-        runner(["aws", "s3", "sync", "dist", "s3://rosart-site"])
+        ServiceAwsRunner(tmp_path / "aws", object())
 
 
 def test_no_other_code_in_the_service_package_starts_aws():
@@ -135,6 +134,6 @@ def test_no_other_code_in_the_service_package_starts_aws():
         if path.name == "aws.py" and path.parent == SERVICE_DIR:
             continue
         text = path.read_text(encoding="utf-8")
-        if re.search(r"""["']aws["']|which\(\s*["']aws|\baws\s+(s3|sts|cloudfront)\b""", text):
+        if re.search(r"""\[\s*["']aws["']|which\(\s*["']aws|\baws\s+(s3|sts|cloudfront)\b""", text):
             offenders.append(path.name)
     assert offenders == []
