@@ -66,9 +66,11 @@ class Service:
 
     def start(self):
         (self.root / "port").unlink(missing_ok=True)
-        log = open(self.root / "service.log", "ab")
-        self.proc = subprocess.Popen([sys.executable, str(SERVICE), str(self.root)], env=self.env, stdout=log,
-                                     stderr=log, stdin=subprocess.DEVNULL)
+        if getattr(self, "log", None) is not None:
+            self.log.close()
+        self.log = open(self.root / "service.log", "ab")
+        self.proc = subprocess.Popen([sys.executable, str(SERVICE), str(self.root)], env=self.env, stdout=self.log,
+                                     stderr=self.log, stdin=subprocess.DEVNULL)
         def listening():
             if self.proc.poll() is not None:
                 tail = (self.root / "service.log").read_text(errors="replace")[-1500:]
@@ -103,6 +105,9 @@ class Service:
         if self.proc and self.proc.poll() is None:
             self.proc.kill()
             self.proc.wait(10)
+        log = getattr(self, "log", None)
+        if log is not None:
+            log.close()
 
 
 @pytest.fixture()
