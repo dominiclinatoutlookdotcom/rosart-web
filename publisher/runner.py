@@ -144,7 +144,7 @@ def fault_hook_from_env(environ: Mapping[str, str]) -> Optional[Callable[[Sequen
     """The test-only fault hook, enabled only by ``PUBLISHER_FAULT_HOOK`` (``selftest`` refuses it set, T100).
 
     ``build`` raises :class:`FaultInjected` in the worker just after the ``npm run build`` child has started and been
-    recorded, outside the runner's own clean-up; ``pass-N`` does the same as the Nth real ``aws s3 sync`` pass
+    recorded, outside the runner's own clean-up; ``pass-N`` does the same as the Nth real sync pass
     starts. It simulates a worker thread dying with a child running, which only the watchdog can clean up."""
     spec = (environ.get("PUBLISHER_FAULT_HOOK") or "").strip()
     if not spec:

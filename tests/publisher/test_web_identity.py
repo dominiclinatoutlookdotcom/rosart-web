@@ -68,8 +68,8 @@ def test_the_stylesheet_ignores_identity(web):
 
 
 def test_the_status_json_path_is_open_too(web):
-    # The route itself arrives with the portal tile (US4); it must already not ask for sign-in.
-    assert web.get("/status.json", user=None).status == 404
+    # The portal tile's route (T080) must not ask for sign-in.
+    assert web.get("/status.json", user=None).status == 200
 
 
 @pytest.mark.parametrize("method", ["PUT", "DELETE", "PATCH", "OPTIONS"])
