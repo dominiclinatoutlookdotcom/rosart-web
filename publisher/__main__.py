@@ -2,7 +2,7 @@
 
 ``serve`` starts the page; ``healthcheck`` asks the running service whether it is healthy (the container
 HEALTHCHECK and the box checks call it); ``seed-export-repo`` makes the export history's one seed commit.
-``backup-db`` copies the job database for the nightly backup. Further commands (``selftest``) arrive with their tasks.
+``backup-db`` copies the job database for the nightly backup; ``selftest`` checks the image itself (T100).
 """
 from __future__ import annotations
 
@@ -12,7 +12,9 @@ import logging
 import os
 import signal
 import sqlite3
+import subprocess
 import sys
+import tempfile
 import threading
 import urllib.error
 import urllib.request
@@ -24,7 +26,7 @@ from shopify_admin import AdminApiRunner, token_source_from_config
 
 from publisher.aws import ServiceAwsRunner, service_aws
 from publisher.clock import RealClock
-from publisher.config import ConfigError, load_config
+from publisher.config import FORBIDDEN_NAMES, SECRET_KEYS, ConfigError, load_config
 from publisher.egress import default_opener, make_opener_fetch
 from publisher.exportrepo import ExportRepo, ExportRepoError
 from publisher.jobs import JobStore, backup_database
@@ -229,6 +231,72 @@ def backup_db(environ: Optional[MutableMapping[str, str]] = None) -> int:
     return 0
 
 
+SELFTEST_TOOLS = ("node", "npm", "aws", "git")
+SELFTEST_ZONE = "Australia/Melbourne"
+# Variables the selftest refuses to run beside: every secret, the credential names the service refuses, and the
+# test-only fault hook (it must never exist in a released container).
+SELFTEST_REFUSED = tuple(SECRET_KEYS) + tuple(FORBIDDEN_NAMES) + ("PUBLISHER_FAULT_HOOK",)
+
+
+def _run_tool(argv: Sequence[str]) -> tuple[int, str]:
+    done = subprocess.run(list(argv), capture_output=True, text=True, timeout=30)
+    return done.returncode, done.stdout + done.stderr
+
+
+def _zone_exists(name: str) -> bool:
+    import zoneinfo
+    try:
+        zoneinfo.ZoneInfo(name)
+    except (zoneinfo.ZoneInfoNotFoundError, ValueError, OSError):
+        return False
+    return True
+
+
+def _folder_is_writable(folder: Path) -> bool:
+    """True when a file can be created in ``folder`` (the probe file is removed again)."""
+    try:
+        with tempfile.NamedTemporaryFile(dir=folder):
+            return True
+    except OSError:
+        return False
+
+
+def selftest(environ: Optional[MutableMapping[str, str]] = None, app_root: Path = APP_ROOT,
+             run: Callable[[Sequence[str]], tuple[int, str]] = _run_tool,
+             tz_lookup: Callable[[str], bool] = _zone_exists,
+             can_write: Callable[[Path], bool] = _folder_is_writable) -> int:
+    """Check the image itself: tool versions, tzdata, a read-only ``/app``, and no secret in the environment.
+
+    Prints one line per item (``ok`` or ``FAIL``) and returns 0 only when every item passed. It refuses to run
+    at all when a secret variable or the fault hook is set, naming the variable and never its value."""
+    environ = os.environ if environ is None else environ
+    present = [name for name in SELFTEST_REFUSED if name in environ]
+    if present:
+        print("selftest refused: these variables must not be set when checking the image: " + ", ".join(present),
+              file=sys.stderr)
+        return 1
+    failures = 0
+
+    def report(ok: bool, text: str) -> None:
+        nonlocal failures
+        failures += 0 if ok else 1
+        print(("ok   " if ok else "FAIL ") + text)
+
+    for tool in SELFTEST_TOOLS:
+        try:
+            code, output = run([tool, "--version"])
+        except (OSError, subprocess.SubprocessError) as exc:
+            report(False, f"{tool}: could not run ({type(exc).__name__})")
+            continue
+        line = (output.strip().splitlines() or [""])[0]
+        report(code == 0 and bool(line), f"{tool}: {line}" if code == 0 and line else f"{tool}: exit {code}, no version")
+    report(tz_lookup(SELFTEST_ZONE), f"tzdata has {SELFTEST_ZONE}")
+    writable = can_write(app_root)
+    report(not writable, "/app is not writable" if not writable else "/app is writable (it must be read-only)")
+    print("selftest: ok" if not failures else f"selftest: {failures} item(s) failed")
+    return 1 if failures else 0
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m publisher", description="The Rosart publisher service.")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -239,7 +307,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     seed = commands.add_parser("seed-export-repo", help="make the export history's first commit from the image's export/")
     seed.add_argument("--app-root", type=Path, default=Path(__file__).resolve().parent.parent,
                       help="the folder holding the committed export/ (default: the image's /app)")
+    commands.add_parser("selftest", help="check the image: tool versions, tzdata, read-only /app, no secrets")
     args = parser.parse_args(argv)
+    if args.command == "selftest":
+        return selftest()
     if args.command == "serve":
         return serve()
     if args.command == "backup-db":
