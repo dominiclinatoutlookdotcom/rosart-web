@@ -74,6 +74,29 @@ def proc_start_time(pid: int) -> Optional[int]:
         return None
 
 
+def parse_proc_stat(stat_text: str) -> tuple[int, int, str]:
+    """``(pid, pgid, state)`` from a ``/proc/<pid>/stat`` line (state is ``Z`` for a zombie)."""
+    after_name = stat_text[stat_text.rindex(")") + 2:].split()
+    return int(stat_text.split(" ", 1)[0]), int(after_name[2]), after_name[0]
+
+
+def read_proc_table() -> Optional[list[tuple[int, int, str]]]:
+    """``(pid, pgid, state)`` of every process, or None when there is no /proc (Windows, macOS)."""
+    try:
+        names = os.listdir("/proc")
+    except OSError:
+        return None
+    table = []
+    for name in names:
+        if not name.isdigit():
+            continue
+        try:
+            table.append(parse_proc_stat(Path(f"/proc/{name}/stat").read_text(encoding="ascii", errors="replace")))
+        except (OSError, ValueError, IndexError):
+            continue                    # the process ended while the table was read
+    return table
+
+
 class PosixOps:
     """The operating-system calls ``kill_and_wait`` makes; tests substitute fakes."""
 
@@ -86,12 +109,16 @@ class PosixOps:
 
 def kill_and_wait(pgid: int, started: Optional[int] = None, grace_s: float = 5.0, kill_wait_s: float = 5.0,
                   ops: Optional[Any] = None, sleep: Callable[[float], None] = time.sleep,
-                  mono: Callable[[], float] = time.monotonic, reap: Optional[Callable[[], Any]] = None) -> None:
+                  mono: Callable[[], float] = time.monotonic, reap: Optional[Callable[[], Any]] = None,
+                  proc_table: Callable[[], Optional[Sequence[tuple[int, int, str]]]] = read_proc_table) -> None:
     """SIGTERM the group, wait up to ``grace_s``, SIGKILL, and return only when ``killpg(pgid, 0)`` fails.
 
     ``started`` is the leader's recorded start time: a leader that exists with another start time is a
     reused PID and nothing is signalled. ``reap`` is called while waiting (``Popen.poll``) so a
-    zombie leader of our own child does not keep the group alive.
+    zombie leader of our own child does not keep the group alive. A group whose remaining members are all
+    zombies is gone too: with no init in the container (``docker run`` without ``--init``) nobody reaps an
+    orphaned grandchild, and ``killpg(pgid, 0)`` succeeds while a zombie is left. ``proc_table`` reads
+    ``(pid, pgid, state)`` of every process (None when there is no /proc).
     """
     ops = ops or PosixOps()
     if reap is None:
@@ -115,7 +142,10 @@ def kill_and_wait(pgid: int, started: Optional[int] = None, grace_s: float = 5.0
             ops.killpg(pgid, 0)
         except ProcessLookupError:
             return True
-        return False
+        table = proc_table()
+        if table is None:
+            return False
+        return all(state == "Z" for _pid, group, state in table if group == pgid)
 
     def wait_gone(seconds: float) -> bool:
         deadline = mono() + seconds
