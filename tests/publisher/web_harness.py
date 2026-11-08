@@ -89,6 +89,10 @@ class Harness:
     def urls_in(self, html: str) -> list[str]:
         return re.findall(r"""(?:href|src|action)\s*=\s*["']([^"']*)["']""", html)
 
+    def form_actions_in(self, html: str) -> list[str]:
+        """The URLs of ``action`` attributes: routes that answer POST (a GET on them is a 405)."""
+        return re.findall(r"""action\s*=\s*["']([^"']*)["']""", html)
+
     def close(self):
         self.server.shutdown()
         self.server.server_close()

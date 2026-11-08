@@ -204,8 +204,10 @@ def test_every_url_on_every_page_has_the_prefix_except_the_portal_home_link(fw):
         for url in web.urls_in(body):
             assert url == PORTAL_HOME or url.startswith(web.base + "/"), (name, url)
             assert "://" not in url and not url.startswith("//"), (name, url)
+        actions = set(web.form_actions_in(body))
         for url in set(web.urls_in(body)) - {PORTAL_HOME}:
-            assert web.raw("GET", url, web.identity(**MARIA)).status == 200, (name, url)
+            expected = 405 if url in actions else 200      # a form action is a POST-only route: GET says 405
+            assert web.raw("GET", url, web.identity(**MARIA)).status == expected, (name, url)
 
     assert 'href="/"' in pages["home-empty"], "the home page links back to the portal"
     assert not any(f'action="{PORTAL_HOME}"' in b or f'src="{PORTAL_HOME}"' in b for b in pages.values()), \

@@ -41,8 +41,10 @@ def test_every_url_a_page_emits_starts_with_the_prefix_and_resolves_to_a_route(w
             assert url == PORTAL_HOME or url.startswith(web.base + "/"), url
             assert not url.startswith("//") and "://" not in url
     assert seen, "the pages should link at least their stylesheet"
+    actions = {url for page in pages for url in web.form_actions_in(page.body)}
     for url in seen - {PORTAL_HOME}:
-        assert web.raw("GET", url, web.identity()).status == 200, url
+        expected = 405 if url in actions else 200      # a form action is a POST-only route: GET says 405
+        assert web.raw("GET", url, web.identity()).status == expected, url
     assert PORTAL_HOME in seen, "the home page links back to the portal home"
 
 

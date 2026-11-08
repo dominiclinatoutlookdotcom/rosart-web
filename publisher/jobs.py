@@ -226,6 +226,20 @@ class JobStore:
         log.warning("job %s already finished (or unknown): ignoring a second write of state %s", job_id, state)
         return False
 
+    def recent(self, limit: int = 20, offset: int = 0) -> list[Job]:
+        """The newest jobs of the site, newest first."""
+        with self.connection() as db:
+            rows = db.execute("SELECT * FROM jobs WHERE site = ? ORDER BY id DESC LIMIT ? OFFSET ?",
+                              (self.site, limit, offset)).fetchall()
+        return [self._job(row) for row in rows]
+
+    def last_publish(self) -> Optional[Job]:
+        """The newest finished publish job (any final state), or None."""
+        with self.connection() as db:
+            return self._job(db.execute("SELECT * FROM jobs WHERE site = ? AND kind = 'publish' "
+                                        "AND finished_at IS NOT NULL ORDER BY finished_at DESC, id DESC LIMIT 1",
+                                        (self.site,)).fetchone())
+
     def pending_export_commits(self) -> list[Job]:
         """Published jobs whose export commit failed, oldest first (E5): retried before any new job."""
         with self.connection() as db:

@@ -22,6 +22,7 @@ import hmac
 import json
 import logging
 import os
+import re
 import struct
 import urllib.parse
 from dataclasses import dataclass, field
@@ -29,8 +30,10 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, Callable, Optional
 
-from publisher.pages import Pages, esc
+from publisher.jobs import JobAlreadyRunning
+from publisher.pages import Pages
 from publisher.scrub import Scrubber
+from publisher.steps import NotPublishable
 
 log = logging.getLogger("rosart.web")
 
@@ -61,6 +64,7 @@ class Request:
     name: str = ""
     email: str = ""
     groups: list[str] = field(default_factory=list)
+    params: dict[str, str] = field(default_factory=dict)       # the captured parts of a pattern route
 
 
 @dataclass
@@ -120,21 +124,33 @@ class CsrfTokens:
 
 class App:
     def __init__(self, config: Any, store: Any, clock: Any, code_commit: str = "unknown",
-                 scrubber: Optional[Any] = None) -> None:
+                 scrubber: Optional[Any] = None, snapshots: Optional[Any] = None, runner: Optional[Any] = None,
+                 export_repo: Optional[Any] = None) -> None:
         self.config = config
         self.scrubber = scrubber or Scrubber()
         self.store = store
         self.clock = clock
         self.code_commit = code_commit
-        self.pages = Pages(config.base_path)
+        self.snapshots = snapshots
+        self.runner = runner
+        self.export_repo = export_repo
+        self.pages = Pages(config.base_path, config.tz_display)
         self.csrf = CsrfTokens(clock)
         self._routes: dict[tuple[str, str], Handler] = {}
+        self._patterns: list[tuple[str, re.Pattern, Handler]] = []
         self.add_route("GET", "/", self._home)
         self.add_route("GET", "/static/app.css", self._stylesheet)
         self.add_route("GET", "/healthz", self._healthz)
+        self.add_route("POST", "/check", self._check)
+        self.add_route("POST", "/publish", self._publish)
+        self.add_pattern("GET", r"/jobs/(?P<id>[^/]+)", self._job)
 
     def add_route(self, method: str, path: str, handler: Handler) -> None:
         self._routes[(method, path)] = handler
+
+    def add_pattern(self, method: str, pattern: str, handler: Handler) -> None:
+        """A route whose path has captured parts (``request.params``)."""
+        self._patterns.append((method, re.compile(pattern), handler))
 
     # --- dispatch -------------------------------------------------------------------------
 
@@ -202,7 +218,15 @@ class App:
     def _call(self, request: Request) -> Response:
         handler = self._routes.get((request.method, request.path))
         if handler is None:
-            if any(path == request.path for (_, path) in self._routes):
+            for method, pattern, candidate in self._patterns:
+                found = pattern.fullmatch(request.path)
+                if found and method == request.method:
+                    request.params = found.groupdict()
+                    handler = candidate
+                    break
+        if handler is None:
+            if any(path == request.path for (_, path) in self._routes) or any(
+                    pattern.fullmatch(request.path) for _, pattern, _ in self._patterns):
                 return self.message(405, "That method is not allowed here", {"Allow": ALLOWED_METHODS})
             return self.message(404, "There is nothing at this address")
         response = handler(request)
@@ -219,11 +243,65 @@ class App:
             headers["Referrer-Policy"] = "same-origin"
         return Response(response.status, response.body, response.content_type, headers)
 
-    # --- the pages of this phase ----------------------------------------------------------
+    # --- the pages --------------------------------------------------------------------------
+
+    def _log_tail(self, job: Any, lines: int = 15) -> str:
+        try:
+            text = (self.config.data / job.log_path).read_text(encoding="utf-8", errors="replace")
+        except (OSError, TypeError):
+            return ""
+        return "\n".join(text.splitlines()[-lines:])
+
+    def _page(self, html_text: str, status: int = 200) -> Response:
+        return Response(status, html_text)
 
     def _home(self, request: Request) -> Response:
-        body = f"<p>Signed in as {esc(request.name)}.</p>"
-        return Response(200, self.pages.layout("Rosart website publisher", body))
+        running = self.store.running()
+        snapshot = self.snapshots.current_publishable() if self.snapshots is not None else None
+        label = self.export_repo.summary_label(self.store) if self.export_repo is not None else None
+        return self._page(self.pages.home(
+            token=self.csrf.issue(request.user), running=running, snapshot=snapshot, pending_label=label,
+            last_publish=self.store.last_publish(), recent=self.store.recent(20),
+            log_tail=self._log_tail(running) if running is not None else ""))
+
+    def _see_job(self, job_id: int) -> Response:
+        return Response(303, self.pages.message_page(303, "See the job page", "Started"),
+                        headers={"Location": self.pages.url(f"/jobs/{job_id}")})
+
+    def _busy(self, running: Any) -> Response:
+        return Response(409, self.pages.busy_page(running))
+
+    def _check(self, request: Request) -> Response:
+        if self.runner is None:
+            return self.message(503, "The publisher is not ready; contact the owner")
+        try:
+            job = self.runner.start_check(request.user, request.name, request.email)
+        except JobAlreadyRunning as busy:
+            return self._busy(busy.running)
+        return self._see_job(job.id)
+
+    def _publish(self, request: Request) -> Response:
+        if self.runner is None:
+            return self.message(503, "The publisher is not ready; contact the owner")
+        try:
+            job = self.runner.start_publish(request.form.get("snapshot", ""), request.user, request.name,
+                                            request.email)
+        except JobAlreadyRunning as busy:
+            return self._busy(busy.running)
+        except NotPublishable:
+            return Response(410, self.pages.gone_page(self.csrf.issue(request.user)))
+        return self._see_job(job.id)
+
+    def _job(self, request: Request) -> Response:
+        raw = request.params.get("id", "")
+        job = self.store.get(int(raw)) if raw.isdigit() else None
+        if job is None:
+            return self.message(404, "There is no such job")
+        snapshot = self.snapshots.get(job.snapshot_id) if self.snapshots is not None and job.snapshot_id else None
+        publishable = bool(snapshot is not None and job.state != "running"
+                           and self.snapshots.publishable(snapshot.id))
+        return self._page(self.pages.job_page(job=job, snapshot=snapshot, publishable=publishable,
+                                              token=self.csrf.issue(request.user), log_tail=self._log_tail(job)))
 
     def _healthz(self, request: Request) -> Response:
         """Liveness with no sign-in: no secret and no person in the body (FR-002)."""

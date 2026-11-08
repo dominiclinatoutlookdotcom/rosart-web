@@ -15,9 +15,11 @@ import logging
 import os
 import subprocess
 import tempfile
+import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any, Callable, Mapping, Optional, Sequence
 
 log = logging.getLogger("rosart.runner")
@@ -188,3 +190,110 @@ class ChildRunner:
     def _text(self, data: bytes) -> str:
         text = data.decode("utf-8", errors="replace")
         return self._scrubber.scrub(text) if self._scrubber else text
+
+
+# --- the job worker ---------------------------------------------------------------------------------
+
+class JobRunner:
+    """Starts jobs and runs each on its own worker thread (spec 006 T068).
+
+    ``start_check`` and ``start_publish`` take the single-job lock inside the store's start transaction and
+    return the new job row at once; the job then runs on a thread: ``steps.run_check`` or ``steps.run_publish``
+    over the ``Deps`` the factory builds for that job (own ``ChildRunner`` and log), and when the final state
+    is written the Slack notice is posted on a background thread. Raises ``JobAlreadyRunning`` and, for a
+    publish, ``steps.NotPublishable`` (nothing is started in either case).
+    """
+
+    def __init__(self, store: Any, snapshots: Any, deps_factory: Callable[[Any], Any], notifier: Any, config: Any,
+                 code_commit: str, scrubber: Any) -> None:
+        self._store = store
+        self._snapshots = snapshots
+        self._deps_factory = deps_factory
+        self._notifier = notifier
+        self._config = config
+        self._code_commit = code_commit
+        self._scrubber = scrubber
+        self._threads: list[Any] = []
+        self._lock = threading.Lock()
+
+    # --- starting -----------------------------------------------------------------------
+
+    def start_check(self, user: str, name: str, email: str) -> Any:
+        job = self._store.start_job("check", user, name, email, self._code_commit, self._config.check_timeout_s)
+        self._spawn(job)
+        return job
+
+    def start_publish(self, snapshot_id: str, user: str, name: str, email: str) -> Any:
+        from publisher import steps
+
+        starter = SimpleNamespace(store=self._store, snapshots=self._snapshots, code_commit=self._code_commit,
+                                  config=self._config)
+        job = steps.start_publish(starter, snapshot_id, user, name, email)
+        self._spawn(job)
+        return job
+
+    def _spawn(self, job: Any) -> None:
+        worker = threading.Thread(target=self._work, args=(job,), name=f"job-{job.id}", daemon=True)
+        with self._lock:
+            self._threads = [t for t in self._threads if t.is_alive()] + [worker]
+        worker.start()
+
+    def wait_idle(self, timeout: float) -> bool:
+        """Wait for every worker and notice thread; False when something is still running after ``timeout``."""
+        end = time.monotonic() + timeout
+        while True:
+            with self._lock:
+                alive = [t for t in self._threads if t.is_alive()]
+            if not alive:
+                return True
+            remaining = end - time.monotonic()
+            if remaining <= 0:
+                return False
+            alive[0].join(min(remaining, 0.2))
+
+    # --- the worker ---------------------------------------------------------------------
+
+    def _work(self, job: Any) -> None:
+        from publisher import steps
+
+        deps = None
+        try:
+            deps = self._deps_factory(job)
+            (steps.run_check if job.kind == "check" else steps.run_publish)(job, deps)
+        except Exception:  # noqa: BLE001 - the lock must never stay held by a crashed job
+            log.exception("job %s stopped unexpectedly", job.id)
+            self._finish_unexpected(job)
+        finally:
+            closer = getattr(getattr(deps, "log", None), "close", None)
+            if closer:
+                closer()
+        self._announce(job.id)
+
+    def _finish_unexpected(self, job: Any) -> None:
+        row = self._store.get(job.id)
+        if row is None or row.state != "running":
+            return
+        state = "publish-failed-partial" if row.kind == "publish" and row.passes_started >= 1 else "failed"
+        self._store.finish(job.id, state, reason_code="unknown",
+                           reason_text="The job stopped unexpectedly: contact the owner (the job log has the detail)",
+                           notice_state="pending")
+
+    def _announce(self, job_id: int) -> None:
+        row = self._store.get(job_id)
+        if row is None or row.notice_state != "pending":
+            return
+        thread = self._notifier.notify_async(job_id, log=self._job_log_line(row))
+        with self._lock:
+            self._threads.append(thread)
+
+    def _job_log_line(self, job: Any) -> Callable[[str], None]:
+        from publisher.scrub import JobLog
+
+        def write(text: str) -> None:
+            job_log = JobLog(self._config.data / job.log_path, self._scrubber)
+            try:
+                job_log.line(text)
+            finally:
+                job_log.close()
+
+        return write

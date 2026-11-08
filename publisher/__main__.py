@@ -16,15 +16,25 @@ import threading
 import urllib.error
 import urllib.request
 from pathlib import Path
-from typing import Any, MutableMapping, Optional, Sequence, TextIO
+from typing import Any, Callable, MutableMapping, Optional, Sequence, TextIO
 
+from downloads import make_urllib_fetch
+from export_shopify import DEFAULT_STORE
+from shopify_admin import AdminApiRunner, token_source_from_config
+
+from publisher.aws import ServiceAwsRunner, service_aws
 from publisher.clock import RealClock
 from publisher.config import ConfigError, load_config
+from publisher.egress import default_opener
 from publisher.exportrepo import ExportRepo, ExportRepoError
 from publisher.jobs import JobStore
-from publisher.runner import ChildRunner, NullJobStore
-from publisher.scrub import Scrubber
+from publisher.runner import ChildRunner, JobRunner, NullJobStore
+from publisher.scrub import JobLog, Scrubber
+from publisher.slack import SlackNotifier
+from publisher.snapshots import SnapshotStore
+from publisher.steps import Deps
 from publisher.web import App, make_server
+from publisher.workspace import Workspace
 
 DEFAULT_HEALTHCHECK_URL = "http://127.0.0.1:8080/rosart/healthz"
 LOG_FORMAT = "%(asctime)s %(levelname)s %(name)s: %(message)s"
@@ -51,8 +61,41 @@ def configure_logging(scrubber: Scrubber, stream: Optional[TextIO] = None, level
     return handler
 
 
+APP_ROOT = Path(__file__).resolve().parent.parent       # the image's /app: code, deploy.config.json, export/
+
+
+def make_deps_factory(config: Any, store: JobStore, snapshots: SnapshotStore, clock: Any, scrubber: Scrubber,
+                      code_commit: str, opener: Any, app_root: Path = APP_ROOT,
+                      aws_executable: Optional[str] = None) -> Callable[[Any], Deps]:
+    """The real collaborators of one job: its own supervised ``ChildRunner``, log, workspace and AWS runner."""
+    workspace = Workspace(config.data / "work", config.site, app_root, config.export_repo)
+
+    def deps_for(job: Any) -> Deps:
+        children = ChildRunner(store, job.id, clock, scrubber)
+        job_log = JobLog(config.data / job.log_path, scrubber)
+
+        def make_shopify(deadline: float) -> tuple[Any, Any]:
+            tokens = token_source_from_config(config.token_config(), shop=DEFAULT_STORE, opener=opener,
+                                              clock=clock.mono)
+            return tokens, AdminApiRunner(DEFAULT_STORE, tokens, opener, clock.sleep, deadline, clock=clock.mono)
+
+        def make_aws(deploy: Any, temp_dir: Path, timeout_s: Optional[float]) -> Any:
+            runner = ServiceAwsRunner(config.aws_dir, children, executable=aws_executable,
+                                      timeout=int(timeout_s or 3600), env=lambda: config.child_env(aws=True))
+            return service_aws(deploy, runner, temp_dir)
+
+        return Deps(config=config, store=store, snapshots=snapshots, clock=clock, children=children, log=job_log,
+                    scrubber=scrubber, workspace=workspace,
+                    export_repo=ExportRepo(config.export_repo, children, config.child_env(), config.tmp_dir / "git",
+                                           config.tz_display),
+                    code_commit=code_commit, make_shopify=make_shopify, fetch=make_urllib_fetch(),
+                    make_aws=make_aws, sleep=clock.sleep)
+
+    return deps_for
+
+
 def create_app(environ: Optional[MutableMapping[str, str]] = None, clock: Optional[Any] = None) -> App:
-    """The whole start-up short of binding a socket: settings, secrets, credentials file, store, scrubber."""
+    """The whole start-up short of binding a socket: settings, secrets, credentials file, store, scrubber, runner."""
     environ = os.environ if environ is None else environ
     code_commit = (environ.get("PUBLISHER_CODE_COMMIT") or "").strip() or "unknown"
     config = load_config(environ)                      # takes every secret out of the environment
@@ -64,7 +107,15 @@ def create_app(environ: Optional[MutableMapping[str, str]] = None, clock: Option
         folder.mkdir(parents=True, exist_ok=True)
     clock = clock or RealClock()
     store = JobStore(config.data / "publisher.sqlite3", site=config.site, clock=clock)
-    return App(config, store, clock, code_commit=code_commit, scrubber=scrubber)
+    snapshots = SnapshotStore(store, config.data, config.site, clock, config.snapshot_window_s)
+    opener = default_opener(DEFAULT_STORE)
+    runner = JobRunner(store, snapshots,
+                       make_deps_factory(config, store, snapshots, clock, scrubber, code_commit, opener),
+                       SlackNotifier(config, store, opener, clock.sleep, scrubber), config, code_commit, scrubber)
+    reader = ExportRepo(config.export_repo, ChildRunner(NullJobStore(), 0, clock, scrubber), config.child_env(),
+                        config.tmp_dir / "git", config.tz_display)
+    return App(config, store, clock, code_commit=code_commit, scrubber=scrubber, snapshots=snapshots, runner=runner,
+               export_repo=reader)
 
 
 def serve() -> int:
