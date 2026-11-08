@@ -227,3 +227,81 @@ def test_skip_images_writes_content_without_fetching(tmp_path):
 def test_theme_content_json_is_written_from_the_theme(exported):
     content = read(exported[0] / "theme-content.json")
     assert [s["id"] for s in content["templates"]["templates/index.json"]["sections"]] == ["hero", "story", "unused"]
+
+
+# --- the Admin API transport (spec 006 R-1, T023) --------------------------------------------
+
+import export_shopify  # noqa: E402
+from publisher.fake_clock import FakeClock  # noqa: E402
+from publisher.fake_shopify_admin import SHOP as ADMIN_SHOP, FakeShopifyAdmin  # noqa: E402
+from shopify_admin import AdminApiRunner, ClientCredentialsTokenSource, Secret  # noqa: E402
+
+THEME_GID = "gid://shopify/OnlineStoreTheme/201570156625"
+
+
+def fixture_theme_files():
+    return {path.relative_to(FIXTURE_THEME).as_posix(): path.read_bytes()
+            for path in FIXTURE_THEME.rglob("*") if path.is_file()}
+
+
+def admin_fake():
+    clock = FakeClock()
+    fake = FakeShopifyAdmin(clock=clock, backend=FakeShopify())
+    fake.add_theme(THEME_GID, files=fixture_theme_files())
+    return fake, clock
+
+
+def all_files(root):
+    return {p.relative_to(root).as_posix(): p.read_bytes() for p in sorted(root.rglob("*")) if p.is_file()}
+
+
+def test_run_export_through_the_admin_api_runner_writes_the_same_files_as_the_cli_fake(tmp_path):
+    fake, clock = admin_fake()
+    tokens = ClientCredentialsTokenSource(ADMIN_SHOP, fake.client_id, Secret(fake.client_secret),
+                                          fake.opener, clock.mono)
+    runner = AdminApiRunner(ADMIN_SHOP, tokens, fake.opener, clock.sleep, clock.mono() + 3600, clock=clock.mono)
+    run_export(runner, FakeFetch(), lambda s: None, tmp_path / "admin", FIXTURE_THEME)
+    run_export(FakeShopify(), FakeFetch(), lambda s: None, tmp_path / "cli", FIXTURE_THEME)
+    assert all_files(tmp_path / "admin") == all_files(tmp_path / "cli")
+    assert len(fake.graphql_requests) > 5
+
+
+def test_transport_admin_api_uses_the_token_source_keys_and_reads_the_theme(tmp_path):
+    fake, _ = admin_fake()
+    env = {"ROSART_SHOPIFY_CLIENT_ID": fake.client_id, "ROSART_SHOPIFY_CLIENT_SECRET": fake.client_secret}
+    code = export_shopify.main(["--transport", "admin-api", "--skip-images", "--export-dir", str(tmp_path / "export")],
+                               env=env, opener=fake.opener)
+    assert code == 0
+    assert len(fake.token_requests) == 1
+    assert f"client_id={fake.client_id}" in fake.token_requests[0].body
+    out = tmp_path / "export"
+    assert all_files(out / "theme") == fixture_theme_files()
+    assert read(out / "shopify" / "shop.json")["name"] == "Rosart"
+    assert (out / "theme-content.json").is_file()
+
+
+def test_transport_admin_api_without_keys_fails_naming_the_key_not_a_value(tmp_path, capsys):
+    code = export_shopify.main(["--transport", "admin-api", "--skip-images", "--export-dir", str(tmp_path / "export")],
+                               env={"ROSART_SHOPIFY_CLIENT_ID": "only-the-id"})
+    assert code == 1
+    assert "ROSART_SHOPIFY_CLIENT_SECRET" in capsys.readouterr().err
+
+
+def test_the_default_transport_stays_the_cli_runner(tmp_path, monkeypatch):
+    seen = {}
+
+    class CliRunnerStub:
+        def __init__(self, store):
+            seen["store"] = store
+
+    def fake_run_export(runner, *args, **kwargs):
+        seen["runner"] = runner
+        return {}
+
+    monkeypatch.setattr(export_shopify, "ShopifyCliRunner", CliRunnerStub)
+    monkeypatch.setattr(export_shopify, "run_export", fake_run_export)
+    monkeypatch.setattr(export_shopify, "AdminApiRunner",
+                        lambda *a, **k: pytest.fail("the default must not use the Admin API"))
+    assert export_shopify.main(["--skip-images", "--export-dir", str(tmp_path / "export")]) == 0
+    assert isinstance(seen["runner"], CliRunnerStub)
+    assert seen["store"] == export_shopify.DEFAULT_STORE
