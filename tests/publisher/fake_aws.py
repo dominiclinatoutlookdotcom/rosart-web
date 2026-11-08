@@ -27,12 +27,14 @@ class FakeAws:
     ``get_error``: an error code that makes ``get-object`` fail instead of answering.
     ``wait_exit``: the exit code of ``cloudfront wait`` (255 is the CLI's waiter failure).
     ``no_deletes``: the bucket already mirrors ``dist/``, so no ``--delete`` pass lists a deletion.
+    ``extra_deletes``: further bucket keys the root ``--delete`` passes list (the bucket changed under us).
     """
 
     def __init__(self, config: DeployConfig, *, identity_arn: str = DEPLOY_ARN,
                  marker: Optional[dict] = None, get_error: Optional[str] = None, wait_exit: int = 0,
                  fail_passes: Optional[set[int]] = None, fail: Callable[[list[str]], bool] = lambda c: False,
-                 temp_dir: Optional[Path] = None, no_deletes: bool = False) -> None:
+                 temp_dir: Optional[Path] = None, no_deletes: bool = False,
+                 extra_deletes: tuple[str, ...] = ()) -> None:
         self.config = config
         self.identity_arn = identity_arn
         self.marker = marker
@@ -42,6 +44,7 @@ class FakeAws:
         self.fail = fail
         self.temp_dir = temp_dir
         self.no_deletes = no_deletes
+        self.extra_deletes = tuple(extra_deletes)
         self.commands: list[list[str]] = []
         self.marker_writes: list[dict] = []
         self.real_syncs = 0
@@ -84,6 +87,7 @@ class FakeAws:
             lines = [f"upload: {source}\\index.html to {dest}/index.html"]
             if "--delete" in command and not self.no_deletes:
                 lines.append(f"delete: {dest}/old-page/index.html")
+                lines.extend(f"delete: {dest}/{key}" for key in self.extra_deletes)
         prefix = "(dryrun) " if dryrun else ""
         return AwsResult(0, "".join(f"{prefix}{line}\r\n" for line in lines), "")
 

@@ -159,6 +159,23 @@ class Flow:
         outcome = run_check(job, deps)
         return self.store.get(job.id), outcome
 
+    def checked(self) -> str:
+        """A passed check; returns its snapshot id."""
+        job, _ = self.check()
+        assert job.state == "passed", job.reason_text
+        return job.snapshot_id
+
+    def publish(self, snapshot_id: str, person: str = "denise", **overrides):
+        """Start a publish of ``snapshot_id`` (through the start guard), run it, return ``(job row, outcome)``."""
+        from publisher.steps import run_publish, start_publish
+
+        deps = self.deps()
+        for name, value in overrides.items():
+            setattr(deps, name, value)
+        job = start_publish(deps, snapshot_id, person, "Denise Hill", "denise@example.org")
+        outcome = run_publish(job, deps)
+        return self.store.get(job.id), outcome
+
     def workspace_path(self) -> Path:
         return self.workspace.current()
 
