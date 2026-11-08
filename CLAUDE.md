@@ -10,14 +10,18 @@ Products, pages, collections and menus are edited in the Shopify admin; the home
 header and footer text in the Shopify theme editor. The site is rebuilt from that content on
 every publish. `export/` is written by the export tool only, never by hand.
 
-## Publishing: the `publish` skill
+## Publishing
 
-Staff publish with the project skill `.claude/skills/publish/SKILL.md` ("publish the website").
-It runs `make doctor` (preflight), `make publish-dryrun` and `make changes` (preview, then the
-staff member confirms), `make publish-only PUBLISH_FLAGS="--yes --wait"`, then
-`make publish-commit` (commits `export/` only, locally). One-time PC setup: `docs/staff-setup.md`.
+Staff publish from the page at https://int.solagratia.com.au/rosart/ (Check, then Publish; it runs on the office box). Point
+staff there: they do not run anything on their PC.
 
-## Rules for staff sessions
+The project skill `.claude/skills/publish/SKILL.md` ("publish the website") is the owner's
+fallback, used when the box or the page is down and never while a box job is running. It runs
+`make doctor` (preflight), `make publish-dryrun` and `make changes` (preview, then the owner
+confirms), `make publish-only PUBLISH_FLAGS="--yes --wait"`, then `make publish-commit` (commits
+`export/` only, locally). One-time PC setup: `docs/staff-setup.md`.
+
+## Rules for sessions that publish (the owner's fallback path; staff use the page)
 
 - Change content in Shopify only. Never edit code, tests, the theme-fidelity allowlist
   (`src/lib/allowed-differences.ts`), `deploy.config.json`, the Makefile or `export/` to make a

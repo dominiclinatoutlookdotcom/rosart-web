@@ -105,13 +105,19 @@ Example: `SITE_URL=https://staging.example.com make site`.
 
 ## Staff publishing
 
-Staff publish from Claude Code with the project skill **`publish`**
-(`.claude/skills/publish/SKILL.md`): open Claude Code in this folder and say "publish the
-website". The skill runs `make doctor`, previews with `make publish-dryrun` and `make changes`,
+**Staff publish from the page at https://int.solagratia.com.au/rosart/** (LAN or VPN, Authelia sign-in; sgs-server spec 006):
+press Check, read the plain-words result, then press Publish. The page runs on the office box
+(`rosart-publisher`, built from this repo, see "Publisher image" and "Publish from the box"), and
+staff need no AWS key, Shopify sign-in or Claude session on their PC.
+
+The project skill **`publish`** (`.claude/skills/publish/SKILL.md`) is the **owner's fallback**
+for when the box or the page is down, never while a box job is running (the bucket marker below
+catches some overlaps, not all). It is the PC path that follows: open Claude Code in this folder
+and say "publish the website". The skill runs `make doctor`, previews with `make publish-dryrun` and `make changes`,
 asks the staff member to confirm, publishes with `make publish-only PUBLISH_FLAGS="--yes --wait"`
 (the content just previewed, checks run again), then `make publish-commit` commits `export/` on
 that PC as `Publish <date> by <name>`; the owner pushes. Staff change content in Shopify only.
-One-time PC setup: [`docs/staff-setup.md`](docs/staff-setup.md). Rules for every Claude session
+One-time PC setup for the fallback: [`docs/staff-setup.md`](docs/staff-setup.md). Rules for every Claude session
 here: `CLAUDE.md`; permissions: `.claude/settings.json`.
 
 ```sh
@@ -408,6 +414,28 @@ python tools/seo_apply.py --rollback seo/apply-log-<UTC>.jsonl --write  #    rol
   ASCII-escaped JSON file, results come from `--output-file` decoded as strict UTF-8, and the CLI
   runs from a temporary folder (`ShopifyCliFileRunner` in `tools/shopify_cli.py`).
   `--allow-mutations` is passed only on a `--write` run, and only with a mutation.
+
+## Publish from the box
+
+The box service (`publisher/`, started by `python -m publisher serve`) does what the PC path does,
+without a person's credentials: it reads the store through the Admin API with a read-only
+credential (`python tools/export_shopify.py --transport admin-api`; the default transport stays
+the Shopify CLI, so the owner's PC path is unchanged), builds and checks the site (the steps of
+`make check`), shows the staff member what would change, and on Publish syncs `dist/` to S3 and
+invalidates CloudFront. Each run is a job with a state, a log and a snapshot of what was
+checked; Publish uploads exactly that snapshot. Other `python -m publisher` commands:
+`healthcheck`, `backup-db`, `seed-export-repo` and `selftest`.
+
+**The bucket marker.** Every publish, from the box or from a PC, ends its bucket writes with an
+object `_publish.json` (publish id, time, content hash, publisher `box` or `pc`; no person). A box
+Publish re-reads it before any upload and refuses ("the live site changed since this check: run
+Check again") when it differs from the marker its check saw. The `--delete` passes exclude it, and
+the AWS guard allows exactly one read and one write of that key.
+
+Settings and secrets reach the container as environment variables from the box (sgs-server
+`contracts/environment.md`); the code reads them once, keeps the secrets out of its own
+environment and passes children an allowlist. Operations are in the platform docs runbook
+`docs/runbooks/rosart-publisher.md` (sgs-server).
 
 ## Publisher image
 

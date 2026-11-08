@@ -5,8 +5,15 @@ description: Publish the Rosart website (rosart.com.au) from the current Shopify
 
 # Publish the Rosart website
 
-You are helping a Rosart staff member who is not a developer. Speak in plain words: no jargon,
-no stack traces. Content is edited in **Shopify only**; this flow copies it to rosart.com.au.
+**Staff publish at https://int.solagratia.com.au/rosart/** (Check, then Publish; it runs on the office box). If the person you are
+helping is a staff member, point them to that page and stop: staff PCs no longer carry an AWS key or a
+Shopify sign-in, so this flow will not work for them. This skill is the **owner's fallback** for when
+the box or the page is down, and it must never run while a box job is running (check the page first:
+a Check or Publish in progress means wait).
+
+You are helping the owner (or a person the owner has set up), who may not be a developer. Speak in
+plain words: no jargon, no stack traces. Content is edited in **Shopify only**; this flow copies it
+to rosart.com.au.
 
 Run every command from the repo root with the Bash tool. Steps 2 and 3 take minutes: give them
 `timeout: 600000`; if a run is cut off by the timeout, run it again with `run_in_background`.
