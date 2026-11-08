@@ -409,23 +409,44 @@ python tools/seo_apply.py --rollback seo/apply-log-<UTC>.jsonl --write  #    rol
   runs from a temporary folder (`ShopifyCliFileRunner` in `tools/shopify_cli.py`).
   `--allow-mutations` is passed only on a `--write` run, and only with a mutation.
 
-## Publisher image: the V-0 probe
+## Publisher image
 
-The box publisher (sgs-server spec 006) runs this repo in a container built from `Dockerfile`. So
-far it has two stages: `build` (the Harbor `frozen/python` base with Node and npm copied from
-`frozen/node`, both pinned by digest; `npm ci` from the lockfile; `src/`, `public/` and the
-committed `export/` without `export/theme/`) and `probe` (default command
-`scripts/probe-build.sh`: copies `/app` to `/tmp/work`, runs `npm run build` offline and prints
-the duration and the peak resident memory of the build). `.dockerignore` keeps `.env*`,
+The box publisher (sgs-server spec 006) runs this repo in a container built from `Dockerfile`.
+Stages: `build` (the Harbor `frozen/python` base with Node and npm copied from `frozen/node`, both
+pinned by digest; `npm ci` from the lockfile; `src/`, `public/` and the committed `export/`
+without `export/theme/`), `probe` (the V-0 CPU probe: default command `scripts/probe-build.sh`
+copies `/app` to `/tmp/work`, runs `npm run build` offline and prints the duration and the peak
+resident memory), `awscli` (AWS CLI v2 from a pinned zip, `ADD --checksum` verifies its SHA-256;
+`AWSCLI_VERSION` and `AWSCLI_SHA256` are bumped together in a reviewed commit), `final` (the
+service image) and `test` (the suite inside the image). `.dockerignore` keeps `.env*`,
 `node_modules`, `dist`, `.astro` and `export/theme` out of the build context.
+
+The final image runs as uid 10001 with `/app` owned by root and world-readable, so the read-only
+root file system and the service's own user can never change its code. It sets telemetry and
+update checks off (`ASTRO_TELEMETRY_DISABLED=1`, npm no-update/no-fund/no-audit), `HOME=/tmp/home`
+and the npm cache on the `/tmp` tmpfs, `PUBLISHER_CODE_COMMIT` (the commit it was built from), a
+`HEALTHCHECK` that runs `python -m publisher healthcheck`, and `python -m publisher serve` as the
+default command. No secret is an `ENV` or `ARG`: the secrets arrive at run time from the box.
 
 - `make image-probe` builds the probe stage for `linux/amd64`, pushes
   `harbor.int.solagratia.com.au/demo/rosart-publisher-probe:<commit>` and prints its digest and
-  the `docker run` line for the box (V-0, the owner's run, `--network none`, read-only root,
-  uid 10001). It refuses while the Dockerfile's `NODE_SHA256`/`PYTHON_SHA256` ARGs still hold
-  `PENDING-T001`: the frozen base digests come from the owner's Harbor freeze (spec 006 T001).
-- Tests: `tests/test_image.py` (static checks, `make image-probe` against a fake `docker`, and the
-  probe script against a fake `npm` on Linux only). No Docker needed.
+  the `docker run` line for the box (V-0, the owner's run: `--network none --read-only`,
+  `--tmpfs /tmp:size=2g,exec`, `--user 10001:10001`). The `,exec` is required: Docker mounts `--tmpfs` as
+  `noexec` by default, and the probe copies the app to `/tmp` and builds there (without it the
+  run ends with exit 126). The build workspace must never sit on a `noexec` mount.
+- `make image VERSION=v1.0.0` builds the `final` stage for `linux/amd64`, pushes
+  `harbor.int.solagratia.com.au/demo/rosart-publisher:v1.0.0` and prints the index digest, the
+  commit it was built from and the compose image line. It refuses a missing or malformed
+  `VERSION`, a dirty tree (untracked files count) and base or AWS CLI pins that are not real
+  digests. The digest reaches sgs-server's compose file only in a reviewed digest-bump commit.
+- `make image-test` builds the `test` stage and runs the whole pytest suite in it (as uid 10001,
+  `PUBLISHER_REQUIRE_POSIX=1`: a skipped POSIX-only test is a failure), then builds the `final`
+  stage and runs `python -m publisher selftest` in it with a read-only root. Local build, never
+  pushes.
+- The refusals above also hold while a base digest ARG still holds `PENDING-T001`.
+- Tests: `tests/test_image.py` (static checks of the Dockerfile, `.dockerignore` and Makefile, the
+  `image-probe`, `image` and `image-test` targets against a fake `docker`, and the probe script
+  against a fake `npm` on Linux only). No Docker needed.
 
 ## What lands where
 

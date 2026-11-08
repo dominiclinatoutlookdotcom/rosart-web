@@ -8,6 +8,7 @@ dist
 export/theme
 export/images/*.part
 .git
-.claude
+.claude/*
+!.claude/skills
 .pytest_cache
 **/__pycache__
