@@ -125,7 +125,8 @@ class Pages:
     def busy_page(self, job: Any) -> str:
         who = job.person_name or job.person_user
         body = (f"<p>A {esc(job.kind)} started by {esc(who)} at {esc(self.hhmm(job.started_at))} is running; "
-                f"wait for it to finish.</p><p>{self.link(f'/jobs/{job.id}', f'See job {job.id}')}</p>")
+                f"wait for it to finish.</p><p>{self.link(f'/jobs/{job.id}', f'See job {job.id}')} · "
+                f"{self.link('/', 'Back to the publisher')}</p>")
         return self.layout("Already running", body)
 
     def gone_page(self, token: str) -> str:
