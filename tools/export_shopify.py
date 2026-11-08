@@ -7,14 +7,22 @@ Re-runnable: images already on disk with the recorded sha256 and size are not fe
 Usage::
 
     python tools/export_shopify.py [--store DOMAIN] [--export-dir DIR] [--theme-dir DIR] [--skip-images]
+                                   [--transport cli|admin-api] [--theme ID]
+
+``--transport cli`` (default) uses the signed-in Shopify CLI; the theme is pulled beforehand
+(``make theme-pull``). ``--transport admin-api`` talks to the Admin API directly with the
+``ROSART_SHOPIFY_*`` keys of the environment (client credentials by default), reads the live
+theme into the theme folder first, and needs no browser sign-in.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
+import time
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Mapping
 
 from downloads import Fetch, Sleep, download_images, make_urllib_fetch, real_sleep
 from images import (
@@ -25,11 +33,15 @@ from images import (
     find_shop_image_refs,
     resolve_shop_images,
 )
-from shopify_cli import Runner, ShopifyCliRunner, complete_connection, paginate
+from pull_theme import DEFAULT_THEME
+from shopify_admin import AdminApiRunner, TokenConfigError, default_opener, token_source_from_config
+from shopify_cli import Runner, ShopifyCliError, ShopifyCliRunner, complete_connection, paginate
+from theme_admin import read_theme
 from theme_content import extract_theme_content, load_theme_json
 
 DEFAULT_STORE = "rosart-mhfmyuxq.myshopify.com"
 REPO_ROOT = Path(__file__).resolve().parent.parent
+ADMIN_DEADLINE_S = 2 * 3600   # the whole Admin API export, on the monotonic clock
 
 PAGE_INFO = "pageInfo { hasNextPage endCursor }"
 SEO_FIELDS = "seo { title description }"
@@ -388,18 +400,36 @@ def run_export(run: Runner, fetch: Fetch, sleep: Sleep, export_dir: Path, theme_
     return summary
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: list[str] | None = None, env: Mapping[str, str] | None = None, opener: Any = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--store", default=DEFAULT_STORE)
     parser.add_argument("--export-dir", type=Path, default=REPO_ROOT / "export")
     parser.add_argument("--theme-dir", type=Path, default=None, help="default: <export-dir>/theme")
     parser.add_argument("--skip-images", action="store_true", help="write the JSON only, download nothing")
+    parser.add_argument("--transport", choices=("cli", "admin-api"), default="cli",
+                        help="cli: the Shopify CLI (default); admin-api: the Admin API with ROSART_SHOPIFY_* keys")
+    parser.add_argument("--theme", default=DEFAULT_THEME, help="theme ID read by --transport admin-api")
     args = parser.parse_args(argv)
+    log = lambda message: print(f"export: {message}", file=sys.stderr, flush=True)  # noqa: E731
+    theme_dir = args.theme_dir or args.export_dir / "theme"
 
-    summary = run_export(ShopifyCliRunner(args.store), make_urllib_fetch(), real_sleep,
-                         args.export_dir, args.theme_dir or args.export_dir / "theme",
-                         download=not args.skip_images,
-                         log=lambda message: print(f"export: {message}", file=sys.stderr, flush=True))
+    if args.transport == "cli":
+        summary = run_export(ShopifyCliRunner(args.store), make_urllib_fetch(), real_sleep,
+                             args.export_dir, theme_dir, download=not args.skip_images, log=log)
+    else:
+        opener = opener or default_opener(args.store)
+        fetch = make_urllib_fetch()
+        try:
+            tokens = token_source_from_config(os.environ if env is None else env, shop=args.store,
+                                              opener=opener, clock=time.monotonic)
+            runner = AdminApiRunner(args.store, tokens, opener, real_sleep, time.monotonic() + ADMIN_DEADLINE_S)
+            log("theme files")
+            read_theme(runner, fetch, args.theme, theme_dir)
+            summary = run_export(runner, fetch, real_sleep, args.export_dir, theme_dir,
+                                 download=not args.skip_images, log=log)
+        except (TokenConfigError, ShopifyCliError) as exc:
+            print(f"export: {exc}", file=sys.stderr)
+            return 1
     print(json.dumps(summary, indent=2, sort_keys=True))
     return 1 if summary.get("images", {}).get("failed") else 0
 
