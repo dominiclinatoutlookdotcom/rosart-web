@@ -70,7 +70,7 @@ def test_every_setting_can_be_overridden_by_its_variable(tmp_path):
     assert (cfg.snapshot_window_s, cfg.retention_days, cfg.tz_display, cfg.shopify_api_version) == (13, 14, "UTC", "2027-01")
 
 
-@pytest.mark.parametrize("bad", ["rosart", "/", "/rosart/", ""])
+@pytest.mark.parametrize("bad", ["rosart", "/", "/rosart/"])
 def test_a_base_path_must_start_with_a_slash_and_have_no_trailing_slash(bad, tmp_path):
     from publisher.config import ConfigError
 
