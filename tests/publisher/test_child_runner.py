@@ -101,6 +101,40 @@ def test_a_group_that_is_already_gone_is_not_an_error():
     assert ops.signals == []
 
 
+def test_a_group_whose_only_members_are_zombies_counts_as_gone():
+    """Without an init (pytest as PID 1) orphaned dead grandchildren stay zombies and killpg(pgid, 0) still succeeds."""
+    t = FakeTime()
+    ops = FakeOps(t, dies_on=())            # killpg(pgid, 0) never raises: the zombies keep the group "alive"
+    table = lambda: [(4242, 4242, "Z"), (4300, 4242, "Z"), (9, 9, "S")]
+    kill(ops, t, grace_s=1.0, kill_wait_s=1.0, proc_table=table)
+    assert ops.signals == [TERM]
+
+
+def test_a_group_with_a_live_member_among_zombies_is_still_stuck():
+    from publisher.runner import ChildStuck
+
+    t = FakeTime()
+    ops = FakeOps(t, dies_on=())
+    table = lambda: [(4242, 4242, "Z"), (4300, 4242, "S")]
+    with pytest.raises(ChildStuck):
+        kill(ops, t, grace_s=1.0, kill_wait_s=1.0, proc_table=table)
+
+
+def test_without_a_process_table_the_signal_check_decides():
+    from publisher.runner import ChildStuck
+
+    t = FakeTime()
+    ops = FakeOps(t, dies_on=())
+    with pytest.raises(ChildStuck):
+        kill(ops, t, grace_s=1.0, kill_wait_s=1.0, proc_table=lambda: None)
+
+
+def test_parse_proc_stat_gives_pid_group_and_state_even_with_a_odd_name():
+    from publisher.runner import parse_proc_stat
+
+    assert parse_proc_stat("77 (a b) c) Z 1 4242 4242 0 -1") == (77, 4242, "Z")
+
+
 def test_a_group_that_never_ends_raises_instead_of_hanging():
     from publisher.runner import ChildStuck
 
