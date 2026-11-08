@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+"""A fake `npm` executable for process-level publisher tests (spec 006 T093).
+
+``npm run build`` records its pid in ``npm-build.pid`` in the working folder and then runs until it is killed, so a
+test can prove a dead worker's child group is stopped. Every other command succeeds at once.
+"""
+import os
+import sys
+import time
+from pathlib import Path
+
+if sys.argv[1:3] == ["run", "build"]:
+    Path("npm-build.pid").write_text(str(os.getpid()), encoding="utf-8")
+    while True:
+        time.sleep(0.1)
+sys.exit(0)

@@ -88,7 +88,9 @@ class Flow:
         write_tree(self.image, {"package.json": "{}", "src/site.ts": "x", "node_modules/.bin/astro": "bin",
                                 "export/from-image.json": "old",
                                 "deploy.config.json": json.dumps(deploy or DEPLOY)})
-        self.bare = make_bare_repo(tmp_path / "export.git", HEAD_EXPORT if head_export is None else head_export)
+        # A world rebuilt over the same folder (the restart tests' service process) keeps its export repository.
+        self.bare = (tmp_path / "export.git" if (tmp_path / "export.git").exists()
+                     else make_bare_repo(tmp_path / "export.git", HEAD_EXPORT if head_export is None else head_export))
         self.children = children or FakeChildren(mono=self.clock.mono)
         self.store = JobStore(self.config.data / "publisher.sqlite3", site="rosart", clock=self.clock)
         self.snapshots = SnapshotStore(self.store, self.config.data, "rosart", self.clock, self.config.snapshot_window_s)
