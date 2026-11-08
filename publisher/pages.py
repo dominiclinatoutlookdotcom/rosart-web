@@ -137,13 +137,15 @@ class Pages:
     # --- the home page ------------------------------------------------------------------
 
     def home(self, *, token: str, running: Any, snapshot: Any, pending_label: Optional[str], last_publish: Any,
-             recent: list[Any], log_tail: str) -> str:
+             recent: list[Any], log_tail: str, last_check: Any = None) -> str:
         parts = []
         if running is not None:
             parts.append(self._running_section(running, log_tail))
         else:
             parts.append("<h2>Check changes</h2><p>Read the changes from Shopify and check the site before "
                          f"publishing.</p>{self.form('/check', 'Check changes', token)}")
+        if running is None and last_check is not None and last_check.state == "failed":
+            parts.append(self._failed_check_section(last_check, snapshot))
         if snapshot is not None and running is None:
             parts.append(self._publishable_section(snapshot, token, pending_label))
         parts.append(self._last_publish_section(last_publish))
@@ -157,6 +159,23 @@ class Pages:
         return (f"<h2>{word}…</h2><p>{esc(who)} started this {esc(job.kind)} at {esc(self.hhmm(job.started_at))}; "
                 f"now: {esc(phase_in_words(job.phase))}. {self.link(f'/jobs/{job.id}', f'See job {job.id}')}</p>"
                 f"<pre>{esc(log_tail)}</pre>")
+
+    def failures_html(self, job: Any) -> str:
+        """Each recorded failure as a notice, in the plain words the translator wrote."""
+        notices = []
+        for failure in json.loads(job.failures_json or "[]"):
+            notices.append(f'<p class="notice">{esc(failure.get("text", ""))}</p>')
+        return "".join(notices)
+
+    def _failed_check_section(self, job: Any, snapshot: Any) -> str:
+        who = job.person_name or job.person_user
+        earlier = ""
+        if snapshot is not None:
+            earlier = (f"<p>Meanwhile, the check from {esc(self.hhmm(snapshot.created_at))} can still be published "
+                       f"until {esc(self.hhmm(snapshot.window_end))}.</p>")
+        return (f"<h2>The last check failed</h2><p>Check {job.id} by {esc(who)} at {esc(self.when(job.finished_at))} "
+                f"found a problem; nothing was published. {self.link(f'/jobs/{job.id}', f'See job {job.id}')}</p>"
+                f"{self.failures_html(job)}{earlier}")
 
     def _publishable_section(self, snapshot: Any, token: str, pending_label: Optional[str]) -> str:
         summary = json.loads(snapshot.summary_json)
@@ -216,8 +235,7 @@ class Pages:
                  + (f", finished {esc(self.when(job.finished_at))}" if job.finished_at else "") + ".</p>"]
         if job.state == "running":
             parts.append(f"<p>Now: {esc(phase_in_words(job.phase))}.</p><pre>{esc(log_tail)}</pre>")
-        for failure in json.loads(job.failures_json or "[]"):
-            parts.append(f'<p class="notice">{esc(failure.get("text", ""))}</p>')
+        parts.append(self.failures_html(job))
         summary = json.loads(snapshot.summary_json) if snapshot is not None else None
         if summary and job.kind == "check" and job.state == "passed":
             parts.append(f"<h2>What will change</h2><pre>{esc(summary.get('text', ''))}</pre>")

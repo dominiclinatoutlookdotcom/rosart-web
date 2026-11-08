@@ -261,7 +261,7 @@ class App:
         label = self.export_repo.summary_label(self.store) if self.export_repo is not None else None
         return self._page(self.pages.home(
             token=self.csrf.issue(request.user), running=running, snapshot=snapshot, pending_label=label,
-            last_publish=self.store.last_publish(), recent=self.store.recent(20),
+            last_publish=self.store.last_publish(), recent=self.store.recent(20), last_check=self.store.last_check(),
             log_tail=self._log_tail(running) if running is not None else ""))
 
     def _see_job(self, job_id: int) -> Response:

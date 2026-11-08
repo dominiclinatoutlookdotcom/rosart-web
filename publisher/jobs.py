@@ -240,6 +240,12 @@ class JobStore:
                                         "AND finished_at IS NOT NULL ORDER BY finished_at DESC, id DESC LIMIT 1",
                                         (self.site,)).fetchone())
 
+    def last_check(self) -> Optional[Job]:
+        """The newest finished check job (any final state), or None."""
+        with self.connection() as db:
+            return self._job(db.execute("SELECT * FROM jobs WHERE site = ? AND kind = 'check' "
+                                        "AND state <> 'running' ORDER BY id DESC LIMIT 1", (self.site,)).fetchone())
+
     def pending_export_commits(self) -> list[Job]:
         """Published jobs whose export commit failed, oldest first (E5): retried before any new job."""
         with self.connection() as db:
