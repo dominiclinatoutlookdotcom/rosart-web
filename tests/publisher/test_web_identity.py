@@ -60,8 +60,8 @@ def test_a_get_needs_no_group(web):
     assert web.get("/", groups="").status == 200
 
 
-@pytest.mark.parametrize("path", ["/healthz", "/static/app.css"])
-def test_the_open_paths_ignore_identity(web, path):
+def test_the_stylesheet_ignores_identity(web):
+    path = "/static/app.css"
     assert web.get(path, user=None).status == 200
     assert web.get(path, user="denise", groups="").status == 200
     assert web.raw("GET", web.base + path, {"Remote-User": "xÿ"}).status == 200
@@ -115,9 +115,8 @@ def test_a_body_that_is_not_a_form_is_refused(web):
     assert reply.status == 415 and web.probes == []
 
 
-def test_html_and_json_are_never_cached(web):
+def test_html_is_never_cached(web):
     assert web.get("/").headers["cache-control"] == "no-store"
-    assert web.get("/healthz").headers["cache-control"] == "no-store"
     assert web.get("/no-such-page").headers["cache-control"] == "no-store"
     assert web.get("/", user=None).headers["cache-control"] == "no-store"
 

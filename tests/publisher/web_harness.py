@@ -114,5 +114,5 @@ def start(tmp_path, base_path="/rosart", clock=None, extra_env=None) -> Harness:
 
     app.add_route("GET", "/probe", probe)
     app.add_route("POST", "/probe", probe)
-    threading.Thread(target=server.serve_forever, daemon=True).start()
+    threading.Thread(target=server.serve_forever, kwargs={"poll_interval": 0.02}, daemon=True).start()
     return harness
