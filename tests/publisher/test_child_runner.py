@@ -59,6 +59,7 @@ class FakeOps:
 def kill(ops, time_, started=None, **kwargs):
     from publisher.runner import kill_and_wait
 
+    kwargs.setdefault("proc_table", lambda: None)      # fake ops: the real /proc knows nothing of group 4242
     kill_and_wait(4242, started, ops=ops, sleep=time_.sleep, mono=time_.mono, **kwargs)
 
 

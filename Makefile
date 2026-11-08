@@ -135,6 +135,6 @@ image:
 ## service's own selftest in the final image. Local build, never pushes.
 image-test:
 	$(DOCKER) build --platform linux/amd64 --target test -t $(TEST_IMAGE) .
-	$(DOCKER) run --rm --tmpfs /tmp:size=2g,exec $(TEST_IMAGE)
+	$(DOCKER) run --rm --init --tmpfs /tmp:size=2g,exec $(TEST_IMAGE)
 	$(DOCKER) build --platform linux/amd64 --target final -t $(SELFTEST_IMAGE) .
-	$(DOCKER) run --rm --read-only --tmpfs /tmp:size=512m,mode=1777,exec --user 10001:10001 $(SELFTEST_IMAGE) python -m publisher selftest
+	$(DOCKER) run --rm --init --read-only --tmpfs /tmp:size=512m,mode=1777,exec --user 10001:10001 $(SELFTEST_IMAGE) python -m publisher selftest

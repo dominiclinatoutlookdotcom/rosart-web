@@ -145,7 +145,8 @@ def kill_and_wait(pgid: int, started: Optional[int] = None, grace_s: float = 5.0
         table = proc_table()
         if table is None:
             return False
-        return all(state == "Z" for _pid, group, state in table if group == pgid)
+        states = [state for _pid, group, state in table if group == pgid]
+        return bool(states) and all(state == "Z" for state in states)
 
     def wait_gone(seconds: float) -> bool:
         deadline = mono() + seconds
