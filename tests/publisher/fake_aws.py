@@ -26,12 +26,13 @@ class FakeAws:
     ``fail``: a predicate over the whole command for any other injected failure.
     ``get_error``: an error code that makes ``get-object`` fail instead of answering.
     ``wait_exit``: the exit code of ``cloudfront wait`` (255 is the CLI's waiter failure).
+    ``no_deletes``: the bucket already mirrors ``dist/``, so no ``--delete`` pass lists a deletion.
     """
 
     def __init__(self, config: DeployConfig, *, identity_arn: str = DEPLOY_ARN,
                  marker: Optional[dict] = None, get_error: Optional[str] = None, wait_exit: int = 0,
                  fail_passes: Optional[set[int]] = None, fail: Callable[[list[str]], bool] = lambda c: False,
-                 temp_dir: Optional[Path] = None) -> None:
+                 temp_dir: Optional[Path] = None, no_deletes: bool = False) -> None:
         self.config = config
         self.identity_arn = identity_arn
         self.marker = marker
@@ -40,6 +41,7 @@ class FakeAws:
         self.fail_passes = set(fail_passes or ())
         self.fail = fail
         self.temp_dir = temp_dir
+        self.no_deletes = no_deletes
         self.commands: list[list[str]] = []
         self.marker_writes: list[dict] = []
         self.real_syncs = 0
@@ -76,11 +78,11 @@ class FakeAws:
         source, dest = command[3], command[4]
         if dest.endswith("/_astro"):
             lines = [f"upload: {source}\\new.Ab12.css to {dest}/new.Ab12.css"]
-            if "--delete" in command:
+            if "--delete" in command and not self.no_deletes:
                 lines.append(f"delete: {dest}/old.Zz99.css")
         else:
             lines = [f"upload: {source}\\index.html to {dest}/index.html"]
-            if "--delete" in command:
+            if "--delete" in command and not self.no_deletes:
                 lines.append(f"delete: {dest}/old-page/index.html")
         prefix = "(dryrun) " if dryrun else ""
         return AwsResult(0, "".join(f"{prefix}{line}\r\n" for line in lines), "")
