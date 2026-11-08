@@ -204,7 +204,7 @@ def test_shopify_refusals_say_the_access_is_not_working_and_contact_the_owner(sc
         failure = from_exc(ShopifyAdminError(code, "Shopify refused the website's access (HTTP 401 x)"), "token",
                            scrubber)
         assert failure["code"] == code and failure["action"] == "contact-owner"
-        assert "the website's Shopify access is not working: contact the owner" in failure["text"].lower()
+        assert "the website's shopify access is not working: contact the owner" in failure["text"].lower()
 
 
 def test_shopify_not_answering_is_check_again(scrubber):
