@@ -375,6 +375,8 @@ def run_publish(job: Any, deps: Deps) -> Outcome:
 
 
 def _publish_phases(job: Any, deps: Deps, temp: Path, track: dict) -> dict[str, Any]:
+    # The deadline is a monotonic value (E9) checked only between passes (E7): a running pass is never killed by it.
+    deadline = deps.clock.mono() + deps.config.publish_timeout_s
     _phase(deps, job.id, track, "history-retry")
     deps.export_repo.retry_pending(deps.store, deps.snapshots)
 
@@ -413,6 +415,12 @@ def _publish_phases(job: Any, deps: Deps, temp: Path, track: dict) -> dict[str, 
                           "check-again", key_line=", ".join(unexpected)[:KEY_LINE_MAX])
 
     def before_pass(number: int) -> None:
+        if deps.clock.mono() >= deadline:
+            if number == 1:
+                raise StepFailure("deadline", "The publish ran out of time before it started uploading, so nothing "
+                                  "was uploaded: press Publish again", "publish-again")
+            raise StepFailure("deadline", "The publish ran out of time part-way: the live site may be partly "
+                              "updated. A new publish will mirror the site fully", "publish-again")
         track["phase"] = f"pass-{number}"
         deps.store.update(job.id, passes_started=number, phase=track["phase"])
         deps.log.line(f"== pass-{number}")
@@ -429,7 +437,7 @@ def _publish_phases(job: Any, deps: Deps, temp: Path, track: dict) -> dict[str, 
         invalidation_id, _ = publish.invalidate(aws, wait=False)
 
     _phase(deps, job.id, track, "wait")
-    completed = _wait_for_invalidation(deps, deploy, temp, invalidation_id)
+    completed = _wait_for_invalidation(deps, deploy, temp, invalidation_id, deadline)
     state = "published" if completed else "published-cache-pending"
     deps.snapshots.set_status(snapshot.id, "published", published_by_job_id=job.id)
 
@@ -441,9 +449,12 @@ def _publish_phases(job: Any, deps: Deps, temp: Path, track: dict) -> dict[str, 
             "export_commit_error": export_error, "summary": summary}
 
 
-def _wait_for_invalidation(deps: Deps, deploy: Any, temp: Path, invalidation_id: Optional[str]) -> bool:
-    """Wait for the CloudFront invalidation, at most ``INVALIDATION_WAIT_S``; a failed wait is not an error."""
-    wait_s = deps.config.invalidation_wait_s
+def _wait_for_invalidation(deps: Deps, deploy: Any, temp: Path, invalidation_id: Optional[str],
+                           deadline: float) -> bool:
+    """Wait for the CloudFront invalidation: at most ``INVALIDATION_WAIT_S`` and never past the job deadline.
+
+    A failed or skipped wait is not an error: the bucket is complete and the state is published-cache-pending."""
+    wait_s = min(float(deps.config.invalidation_wait_s), deadline - deps.clock.mono())
     if wait_s <= 0 or not invalidation_id:
         return False
     waiter = deps.make_aws(deploy, temp, float(wait_s))

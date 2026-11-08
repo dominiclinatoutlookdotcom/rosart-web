@@ -100,9 +100,10 @@ def publishing(tmp_path, on_pass=None, on_identity=None, **env):
     passes = Passes({})
 
     def fail(command):
-        if on_identity and command[1:3] == ["sts", "get-caller-identity"] and not box.get("identity_done"):
-            box["identity_done"] = True
-            on_identity()
+        if on_identity and command[1:3] == ["sts", "get-caller-identity"]:
+            box["identity_calls"] = box.get("identity_calls", 0) + 1
+            if box["identity_calls"] == 2:          # the first is the check's; the second is the publish's
+                on_identity()
         return passes(command)
 
     flow = Flow(tmp_path, aws={"fail": fail}, extra_env={"PUBLISH_TIMEOUT_S": str(PUBLISH_TIMEOUT), **env})
