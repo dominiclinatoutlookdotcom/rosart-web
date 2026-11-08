@@ -290,3 +290,34 @@ def test_image_probe_builds_the_probe_target_for_amd64_pushes_it_and_prints_the_
     assert "imagetools inspect" in calls
     assert FAKE_DIGEST in completed.stdout
     assert f"{PROBE_IMAGE}@{FAKE_DIGEST}" in completed.stdout, "print the V-0 reference by digest"
+
+
+# --- Lockfile completeness ------------------------------------------------------------------------
+
+def _resolve_in_lock(packages: dict, holder: str, name: str):
+    """The lock entry Node would load for `name` from the package at `holder` (walk up node_modules)."""
+    base = holder
+    while True:
+        entry = packages.get(f"{base}/node_modules/{name}" if base else f"node_modules/{name}")
+        if entry is not None or not base:
+            return entry
+        base = base.rpartition("/node_modules/")[0] if "/node_modules/" in base else ""
+
+
+def test_lockfile_resolves_every_exactly_pinned_dependency_for_a_linux_npm_ci():
+    # Why: a lock written on Windows by an older npm omitted the Linux-only wasm32 entries (nested
+    # @emnapi/core and runtime 2.0.0-beta.2 under @rolldown/binding-wasm32-wasi), and `npm ci` in the
+    # image failed with "Missing ... from lock file". npm ci cannot run here (no network, wrong
+    # platform), so check the cause directly: each dependency declared with an exact version must
+    # resolve, by Node's lookup, to a lock entry of that version, optional platform packages included.
+    packages = json.loads((ROOT / "package-lock.json").read_text(encoding="utf-8"))["packages"]
+    exact = re.compile(r"^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$")
+    missing = []
+    for path, meta in packages.items():
+        for name, wanted in meta.get("dependencies", {}).items():
+            if not exact.match(wanted):
+                continue
+            found = _resolve_in_lock(packages, path, name)
+            if found is None or found.get("version") != wanted:
+                missing.append(f"{path or '(root)'} needs {name}@{wanted}")
+    assert not missing, "lockfile is incomplete:\n" + "\n".join(missing)
