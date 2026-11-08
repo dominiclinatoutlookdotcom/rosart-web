@@ -2,7 +2,7 @@
 
 ``serve`` starts the page; ``healthcheck`` asks the running service whether it is healthy (the container
 HEALTHCHECK and the box checks call it); ``seed-export-repo`` makes the export history's one seed commit.
-Further commands (``backup-db``, ``selftest``) arrive with their tasks.
+``backup-db`` copies the job database for the nightly backup. Further commands (``selftest``) arrive with their tasks.
 """
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ import json
 import logging
 import os
 import signal
+import sqlite3
 import sys
 import threading
 import urllib.error
@@ -26,7 +27,7 @@ from publisher.clock import RealClock
 from publisher.config import ConfigError, load_config
 from publisher.egress import default_opener, make_opener_fetch
 from publisher.exportrepo import ExportRepo, ExportRepoError
-from publisher.jobs import JobStore
+from publisher.jobs import JobStore, backup_database
 from publisher.runner import ChildRunner, JobRunner, NullJobStore
 from publisher.scrub import JobLog, Scrubber
 from publisher.slack import SlackNotifier
@@ -174,18 +175,38 @@ def seed_export_repo(app_root: Path, environ: Optional[MutableMapping[str, str]]
     return 0
 
 
+def backup_db(environ: Optional[MutableMapping[str, str]] = None) -> int:
+    """A consistent copy of the job database in ``<data>/backup/`` for the nightly backup (research R-13)."""
+    environ = os.environ if environ is None else environ
+    data = Path((environ.get("PUBLISHER_DATA") or "").strip() or "/data")
+    source, dest = data / "publisher.sqlite3", data / "backup" / "publisher.sqlite3"
+    try:
+        if not source.is_file():
+            raise FileNotFoundError(f"there is no job database at {source}")
+        backup_database(source, dest)
+    except (sqlite3.Error, OSError) as exc:
+        print(f"backup-db: could not back up the job database ({type(exc).__name__}: {exc}); the last good copy "
+              "is untouched", file=sys.stderr)
+        return 1
+    print(f"backup-db: wrote {dest}")
+    return 0
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m publisher", description="The Rosart publisher service.")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("serve", help="start the publisher page")
     check = commands.add_parser("healthcheck", help="exit non-zero unless the running service is healthy")
     check.add_argument("--url", default=DEFAULT_HEALTHCHECK_URL)
+    commands.add_parser("backup-db", help="copy the job database to <data>/backup/ for the nightly backup")
     seed = commands.add_parser("seed-export-repo", help="make the export history's first commit from the image's export/")
     seed.add_argument("--app-root", type=Path, default=Path(__file__).resolve().parent.parent,
                       help="the folder holding the committed export/ (default: the image's /app)")
     args = parser.parse_args(argv)
     if args.command == "serve":
         return serve()
+    if args.command == "backup-db":
+        return backup_db()
     if args.command == "seed-export-repo":
         return seed_export_repo(args.app_root)
     return healthcheck(args.url)

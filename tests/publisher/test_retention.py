@@ -62,7 +62,7 @@ def test_a_failed_check_and_a_publish_purge_too(flow):
 
     flow.children.fail = {}
     snapshot_id = flow.checked()
-    second_ancient = old_job(flow, 500)
+    second_ancient = old_job(flow, 500, state="failed")
     published, _ = flow.publish(snapshot_id)
 
     assert published.state == "published" and second_ancient not in job_ids(flow)

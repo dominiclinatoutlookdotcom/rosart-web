@@ -14,6 +14,7 @@ import json
 import logging
 import re
 import shutil
+import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Optional
@@ -160,6 +161,7 @@ def run_check(job: Any, deps: Deps) -> Outcome:
         log.info("job %s: check failed in phase %s (%s)", job.id, track["phase"], failure["code"])
         deps.store.finish(job.id, "failed", reason_code=failure["code"], reason_text=failure["text"],
                           failures_json=canonical_json(failures), notice_state="pending")
+        _retain(deps)
         return Outcome("failed", job.id, None, failure["code"], failure["text"])
     finally:
         shutil.rmtree(temp, ignore_errors=True)
@@ -169,10 +171,15 @@ def run_check(job: Any, deps: Deps) -> Outcome:
 
 
 def _retain(deps: Deps) -> None:
+    """After every job: snapshot retention, then the deletion of job rows and logs past ``RETENTION_DAYS``."""
     try:
         deps.snapshots.retain()
     except OSError:
         log.exception("snapshot retention failed")
+    try:
+        deps.store.purge(deps.config.retention_days, deps.config.data)
+    except (OSError, sqlite3.Error):
+        log.exception("job retention failed")
 
 
 def _phase(deps: Deps, job_id: int, track: dict, name: str) -> None:

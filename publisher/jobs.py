@@ -9,6 +9,7 @@ the site id (FR-019) and a person (SC-003).
 from __future__ import annotations
 
 import logging
+import os
 import sqlite3
 from contextlib import closing, contextmanager
 from dataclasses import dataclass, fields
@@ -256,6 +257,34 @@ class JobStore:
                 "last_publish": {"date": finished.date().isoformat(),
                                  "result": "ok" if job.state in PUBLISH_OK_STATES else "failed"}}
 
+    def purge(self, retention_days: int, data_dir: Path) -> int:
+        """Delete finished jobs older than ``retention_days`` with their logs (A-12); returns how many.
+
+        Kept: a running job, a publish whose history commit is still pending (E5), and a job a snapshot row
+        still points at. Old snapshot rows already marked ``deleted`` go first, which frees their jobs."""
+        cutoff = (self._clock.utc_now() - timedelta(days=retention_days)).isoformat()
+        with self.connection() as db:
+            db.execute("BEGIN IMMEDIATE")
+            try:
+                db.execute("DELETE FROM snapshots WHERE site = ? AND status = 'deleted' AND created_at < ?",
+                           (self.site, cutoff))
+                old = db.execute(
+                    "SELECT id, log_path FROM jobs WHERE site = ? AND state <> 'running' AND finished_at < ? "
+                    "AND id NOT IN (SELECT check_job_id FROM snapshots) "
+                    "AND id NOT IN (SELECT published_by_job_id FROM snapshots WHERE published_by_job_id IS NOT NULL) "
+                    "AND NOT (kind = 'publish' AND export_commit IS NULL AND export_commit_error IS NOT NULL "
+                    "AND state IN ('published', 'published-cache-pending'))", (self.site, cutoff)).fetchall()
+                db.executemany("DELETE FROM jobs WHERE id = ?", [(row["id"],) for row in old])
+                db.execute("COMMIT")
+            except BaseException:
+                if db.in_transaction:
+                    db.execute("ROLLBACK")
+                raise
+        for row in old:
+            if row["log_path"]:
+                (Path(data_dir) / row["log_path"]).unlink(missing_ok=True)
+        return len(old)
+
     def last_check(self) -> Optional[Job]:
         """The newest finished check job (any final state), or None."""
         with self.connection() as db:
@@ -277,3 +306,22 @@ class JobStore:
     def clear_child(self, job_id: int) -> None:
         with self.connection() as db:
             db.execute("UPDATE jobs SET child_pgid = NULL, child_started = NULL WHERE id = ?", (job_id,))
+
+
+def backup_database(source: Path, dest: Path) -> None:
+    """A consistent copy of the job database made with the SQLite online backup API (research R-13).
+
+    The copy is written next to ``dest`` and renamed over it only when it passes ``PRAGMA integrity_check``, so
+    a failed backup never replaces the last good one. Safe while another connection is writing."""
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    partial = dest.with_name(dest.name + ".tmp")
+    partial.unlink(missing_ok=True)
+    try:
+        with closing(sqlite3.connect(source, timeout=30)) as src, closing(sqlite3.connect(partial)) as copy:
+            src.backup(copy)
+            verdict = copy.execute("PRAGMA integrity_check").fetchone()[0]
+        if verdict != "ok":
+            raise sqlite3.DatabaseError(f"the copy failed its integrity check: {verdict}")
+        os.replace(partial, dest)
+    finally:
+        partial.unlink(missing_ok=True)
