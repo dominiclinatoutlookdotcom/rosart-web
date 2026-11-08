@@ -26,6 +26,8 @@ class FakeAws:
     ``fail``: a predicate over the whole command for any other injected failure.
     ``get_error``: an error code that makes ``get-object`` fail instead of answering.
     ``wait_exit``: the exit code of ``cloudfront wait`` (255 is the CLI's waiter failure).
+    ``error_text``: the stderr of every injected failure (default ``AccessDenied``; a test plants secrets or
+    ``InvalidClientTokenId`` here).
     ``no_deletes``: the bucket already mirrors ``dist/``, so no ``--delete`` pass lists a deletion.
     ``extra_deletes``: further bucket keys the root ``--delete`` passes list (the bucket changed under us).
     """
@@ -34,7 +36,7 @@ class FakeAws:
                  marker: Optional[dict] = None, get_error: Optional[str] = None, wait_exit: int = 0,
                  fail_passes: Optional[set[int]] = None, fail: Callable[[list[str]], bool] = lambda c: False,
                  temp_dir: Optional[Path] = None, no_deletes: bool = False,
-                 extra_deletes: tuple[str, ...] = ()) -> None:
+                 extra_deletes: tuple[str, ...] = (), error_text: str = ACCESS_DENIED) -> None:
         self.config = config
         self.identity_arn = identity_arn
         self.marker = marker
@@ -45,6 +47,7 @@ class FakeAws:
         self.temp_dir = temp_dir
         self.no_deletes = no_deletes
         self.extra_deletes = tuple(extra_deletes)
+        self.error_text = error_text
         self.commands: list[list[str]] = []
         self.marker_writes: list[dict] = []
         self.real_syncs = 0
@@ -53,7 +56,7 @@ class FakeAws:
         assert_command_allowed(command, self.config, self.temp_dir or self._local_folder(command))
         self.commands.append(list(command))
         if self.fail(command):
-            return AwsResult(1, "", ACCESS_DENIED)
+            return AwsResult(1, "", self.error_text)
         args = command[1:]
         if args[:2] == ["sts", "get-caller-identity"]:
             return AwsResult(0, json.dumps({"UserId": "AIDAEXAMPLE", "Account": "123456789012",
@@ -77,7 +80,7 @@ class FakeAws:
         if not dryrun:
             self.real_syncs += 1
             if self.real_syncs in self.fail_passes:
-                return AwsResult(1, "", ACCESS_DENIED)
+                return AwsResult(1, "", self.error_text)
         source, dest = command[3], command[4]
         if dest.endswith("/_astro"):
             lines = [f"upload: {source}\\new.Ab12.css to {dest}/new.Ab12.css"]
