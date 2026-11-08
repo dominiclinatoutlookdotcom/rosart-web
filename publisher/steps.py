@@ -193,7 +193,9 @@ def _check_phases(job: Any, deps: Deps, temp: Path, track: dict) -> tuple[Any, d
 
     _phase(deps, job.id, track, "token")
     tokens, runner = deps.make_shopify(deadline)
-    tokens.get()                                    # grants and checks the scopes before anything is read
+    # Grants and checks the scopes before anything is read. The token Shopify issues is a secret that only exists
+    # now, so the scrubber learns it here: a tool or an error that echoes it is redacted in logs, pages and Slack.
+    deps.scrubber.register(tokens.get())
 
     export_dir = workspace / "export"
     theme_dir = export_dir / "theme"
