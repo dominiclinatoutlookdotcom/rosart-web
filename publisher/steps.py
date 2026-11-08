@@ -25,6 +25,7 @@ from pull_theme import DEFAULT_THEME
 from theme_admin import read_theme
 
 from publisher import translate
+from publisher.counts import change_counts
 from publisher.exportrepo import ExportRepoError, plain_commit_error
 from publisher.runner import ChildTimeout
 from publisher.snapshots import canonical_json, content_hash
@@ -334,26 +335,6 @@ def start_publish(deps: Deps, snapshot_id: str, person_user: str, person_name: s
 
     return deps.store.start_job("publish", person_user, person_name, person_email, deps.code_commit,
                                 deps.config.publish_timeout_s, snapshot_id=snapshot_id, guard=guard)
-
-
-PLURALS = (("products", "product", "products"), ("pages", "page", "pages"),
-           ("collections", "collection", "collections"), ("menus", "menu", "menus"), ("blogs", "blog", "blogs"),
-           ("theme_areas", "theme area", "theme areas"))
-
-
-def change_counts(summary: dict[str, Any]) -> str:
-    """The short count line of a summary, for example ``2 products, 1 page changed`` (at most 200 characters)."""
-    parts = []
-    for key, one, many in PLURALS:
-        entry = (summary.get("changed") or {}).get(key) or {}
-        total = sum(len(entry.get(kind) or []) for kind in ("changed", "added", "removed"))
-        if total:
-            parts.append(f"{total} {one if total == 1 else many}")
-    images = summary.get("images") or {}
-    total_images = sum(images.get(kind, 0) for kind in ("changed", "added", "removed"))
-    if total_images:
-        parts.append(f"{total_images} {'image' if total_images == 1 else 'images'}")
-    return (", ".join(parts) + " changed")[:200] if parts else "no content changes"
 
 
 def run_publish(job: Any, deps: Deps) -> Outcome:

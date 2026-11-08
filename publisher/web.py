@@ -31,7 +31,7 @@ from pathlib import Path
 from typing import Any, Callable, Optional
 
 from publisher.jobs import JobAlreadyRunning
-from publisher.pages import Pages
+from publisher.pages import HISTORY_PAGE_SIZE, Pages
 from publisher.scrub import Scrubber
 from publisher.steps import NotPublishable
 
@@ -143,7 +143,9 @@ class App:
         self.add_route("GET", "/healthz", self._healthz)
         self.add_route("POST", "/check", self._check)
         self.add_route("POST", "/publish", self._publish)
+        self.add_route("GET", "/jobs", self._history)
         self.add_pattern("GET", r"/jobs/(?P<id>[^/]+)", self._job)
+        self.add_pattern("GET", r"/jobs/(?P<id>[^/]+)/log", self._job_log)
 
     def add_route(self, method: str, path: str, handler: Handler) -> None:
         self._routes[(method, path)] = handler
@@ -302,6 +304,25 @@ class App:
                            and self.snapshots.publishable(snapshot.id))
         return self._page(self.pages.job_page(job=job, snapshot=snapshot, publishable=publishable,
                                               token=self.csrf.issue(request.user), log_tail=self._log_tail(job)))
+
+    def _history(self, request: Request) -> Response:
+        raw = request.query.get("page", "1")
+        page = int(raw) if raw.isdigit() and int(raw) >= 1 else 1
+        size = HISTORY_PAGE_SIZE
+        jobs = self.store.recent(size + 1, (page - 1) * size)
+        return self._page(self.pages.history(jobs[:size], page, len(jobs) > size))
+
+    def _job_log(self, request: Request) -> Response:
+        """The full scrubbed log as plain text (the file is written through the scrubber)."""
+        raw = request.params.get("id", "")
+        job = self.store.get(int(raw)) if raw.isdigit() else None
+        if job is None or not job.log_path:
+            return self.message(404, "There is no such job")
+        try:
+            data = (self.config.data / job.log_path).read_bytes()
+        except OSError:
+            return self.message(404, "This job has no log")
+        return Response(200, data, "text/plain; charset=utf-8")
 
     def _healthz(self, request: Request) -> Response:
         """Liveness with no sign-in: no secret and no person in the body (FR-002)."""

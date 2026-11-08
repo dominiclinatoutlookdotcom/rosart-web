@@ -59,7 +59,7 @@ def test_history_lists_every_job_newest_first_with_person_times_state_in_words_a
     assert [int(re.search(r"/jobs/(\d+)", row).group(1)) for row in rows] == [failed, published, passed]
     failed_row, published_row, passed_row = rows
     assert "John Smith" in failed_row and "Failed" in failed_row and re.search(r"8 Nov 20:0[2-9]", failed_row)
-    assert "Maria Lopez" in published_row and "Live" in published_row and "1 uploaded" in published_row
+    assert "Maria Lopez" in published_row and "Live" in published_row and "2 uploaded, 2 deleted, 1 product changed" in published_row
     assert "Maria Lopez" in passed_row and "Check passed" in passed_row and "1 product changed" in passed_row
     assert "8 Nov 20:00" in passed_row, "times are shown in Melbourne time"
     assert page.headers["cache-control"] == "no-store"
@@ -143,7 +143,7 @@ def test_a_failed_check_shows_the_failures_with_their_fix_and_its_log_link(fw, t
 
 def test_a_pending_export_commit_and_a_failed_notice_are_stated_in_words(fw, three_jobs):
     published = three_jobs[1]
-    fw.flow.store.update(published, notice_state="failed", export_commit_error="the history repository is read-only")
+    fw.flow.store.update(published, notice_state="failed", export_commit=None, export_commit_error="the history repository is read-only")
 
     page = fw.web.get(f"/jobs/{published}", **MARIA).body
 

@@ -14,6 +14,8 @@ from datetime import datetime
 from typing import Any, Mapping, Optional
 from zoneinfo import ZoneInfo
 
+from publisher.counts import change_counts
+
 STATUS_HEADINGS = {
     400: "Bad request", 403: "Not allowed", 404: "Page not found", 405: "Method not allowed",
     409: "Already running", 410: "No longer available", 411: "Length required", 413: "Request too large",
@@ -40,6 +42,10 @@ STATE_WORDS = {
     "published-cache-pending": "Published (cache refresh running)", "publish-failed-partial": "Publish failed part-way",
     "interrupted": "Interrupted by a restart",
 }
+
+NOTICE_WORDS = {"not-required": "not needed", "pending": "being posted", "posted": "posted",
+                "failed": "could not be posted"}
+HISTORY_PAGE_SIZE = 50
 
 PARTLY_UPDATED = "Publish failed: the live site may be partly updated. Press Publish again to finish it"
 
@@ -207,6 +213,38 @@ class Pages:
         return ("<h2>Recent jobs</h2><table><thead><tr><th>Job</th><th>What</th><th>Who</th><th>Started</th>"
                 f"<th>Result</th></tr></thead><tbody>{rows}</tbody></table>")
 
+    # --- the history --------------------------------------------------------------------
+
+    @staticmethod
+    def job_counts(job: Any) -> str:
+        """The summary counts of a finished job for the history table (empty when it has none)."""
+        try:
+            data = json.loads(job.summary_json or "{}")
+        except ValueError:
+            return ""
+        if job.kind == "check" and job.state == "passed":
+            return change_counts(data)
+        if job.state in ("published", "published-cache-pending"):
+            return f"{data.get('uploaded', 0)} uploaded, {data.get('deleted', 0)} deleted, {data.get('changes', '')}"
+        return ""
+
+    def history(self, jobs: list[Any], page: int, has_next: bool) -> str:
+        rows = "".join(
+            f"<tr><td>{self.link(f'/jobs/{job.id}', f'#{job.id}')}</td><td>{esc(job.kind)}</td>"
+            f"<td>{esc(job.person_name or job.person_user)}</td><td>{esc(self.when(job.started_at))}</td>"
+            f"<td>{esc(self.when(job.finished_at))}</td><td>{esc(STATE_WORDS.get(job.state, job.state))}</td>"
+            f"<td>{esc(self.job_counts(job))}</td></tr>" for job in jobs)
+        table = ("<table><thead><tr><th>Job</th><th>What</th><th>Who</th><th>Started</th><th>Finished</th>"
+                 f"<th>Result</th><th>Summary</th></tr></thead><tbody>{rows}</tbody></table>" if rows
+                 else "<p>No jobs on this page.</p>")
+        nav = []
+        if page > 1:
+            nav.append(self.link("/jobs" if page == 2 else f"/jobs?page={page - 1}", "Newer jobs"))
+        if has_next:
+            nav.append(self.link(f"/jobs?page={page + 1}", "Older jobs"))
+        nav.append(self.link("/", "Back to the publisher"))
+        return self.layout("Job history", f"{table}<p>{' · '.join(nav)}</p>")
+
     # --- the job page -------------------------------------------------------------------
 
     def job_heading(self, job: Any, snapshot: Any, publishable: bool) -> str:
@@ -230,6 +268,25 @@ class Pages:
             return "Publish stopped before anything was uploaded"
         return PARTLY_UPDATED
 
+    def _details(self, job: Any, snapshot: Any) -> str:
+        """The record of a job: snapshot, export commit, code commit, Slack notice, log (FR-016)."""
+        items = []
+        if snapshot is not None:
+            origin = ""
+            if snapshot.check_job_id != job.id:
+                origin = f" (from {self.link(f'/jobs/{snapshot.check_job_id}', f'check job {snapshot.check_job_id}')})"
+            items.append(f"Snapshot: <code>{esc(snapshot.id)}</code>{origin}")
+        if job.kind == "publish" and job.state in ("published", "published-cache-pending"):
+            if job.export_commit:
+                items.append(f"Export commit: <code>{esc(job.export_commit[:12])}</code>")
+            elif job.export_commit_error:
+                items.append(f"Export commit: history commit failed ({esc(job.export_commit_error)}); the owner "
+                             "needs to fix it")
+        items.append(f"Code commit: <code>{esc(job.code_commit)}</code>")
+        items.append(f"Slack notice: {esc(NOTICE_WORDS.get(job.notice_state, job.notice_state))}")
+        items.append(self.link(f"/jobs/{job.id}/log", "Full log"))
+        return "<h2>Details</h2><ul>" + "".join(f"<li>{item}</li>" for item in items) + "</ul>"
+
     def job_page(self, *, job: Any, snapshot: Any, publishable: bool, token: str, log_tail: str) -> str:
         who = job.person_name or job.person_user
         parts = [f"<p>Job {job.id}: {esc(job.kind)} by {esc(who)}, started {esc(self.when(job.started_at))}"
@@ -240,6 +297,8 @@ class Pages:
         summary = json.loads(snapshot.summary_json) if snapshot is not None else None
         if summary and job.kind == "check" and job.state == "passed":
             parts.append(f"<h2>What will change</h2><pre>{esc(summary.get('text', ''))}</pre>")
+        elif summary and job.kind == "publish":
+            parts.append(f"<h2>What was published</h2><pre>{esc(summary.get('text', ''))}</pre>")
         if job.state in ("published", "published-cache-pending"):
             parts.append(f"<p>Invalidation ID: <code>{esc(job.invalidation_id)}</code>.</p>")
             if summary:
@@ -247,6 +306,7 @@ class Pages:
                 parts.append(f"<h2>Pages to look at</h2><ul>{urls}</ul>")
         if publishable and snapshot is not None:
             parts.append(self.form("/publish", "Publish", token, {"snapshot": snapshot.id}))
-        parts.append(f"<p>{self.link('/', 'Back to the publisher')}</p>")
+        parts.append(self._details(job, snapshot))
+        parts.append(f"<p>{self.link('/', 'Back to the publisher')} · {self.link('/jobs', 'All jobs')}</p>")
         return self.layout(self.job_heading(job, snapshot, publishable), "\n".join(parts),
                            refresh_s=5 if job.state == "running" else None)
