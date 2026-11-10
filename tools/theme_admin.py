@@ -135,10 +135,20 @@ def _body_bytes(node: dict, fetch_url: Callable[[str], bytes]) -> bytes:
     raise _integrity(f"theme file {name} came back without a body")
 
 
+def _parse_size(raw: object, name: str) -> int:
+    """``size`` is UnsignedInt64: Shopify sends a JSON string of ASCII digits (an int is tolerated)."""
+    if isinstance(raw, int) and not isinstance(raw, bool) and raw >= 0:
+        return raw
+    if isinstance(raw, str) and raw.isascii() and raw.isdigit():
+        return int(raw)
+    raise _integrity(f"theme file {name} has an invalid size {raw!r}")
+
+
 def _verify(node: dict, data: bytes) -> None:
     name = node["filename"]
-    if len(data) != node.get("size"):
-        raise _integrity(f"theme file {name} has {len(data)} bytes, Shopify says {node.get('size')}")
+    size = _parse_size(node.get("size"), name)
+    if len(data) != size:
+        raise _integrity(f"theme file {name} has {len(data)} bytes, Shopify says {size}")
     checksum = node.get("checksumMd5")
     if checksum is not None and hashlib.md5(data).hexdigest() != str(checksum).lower():
         raise _integrity(f"theme file {name} does not match its MD5 checksum")
