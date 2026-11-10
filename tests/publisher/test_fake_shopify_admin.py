@@ -185,7 +185,7 @@ def test_theme_files_page_with_text_base64_and_url_bodies(fake):
     assert url.startswith("https://cdn.shopify.com/")
     assert fake.fetch(url) == b"wOF2" + bytes(10)
     assert fake.fetched_urls == [url]
-    assert by_name["assets/a.png"]["size"] == 256
+    assert by_name["assets/a.png"]["size"] == "256"
     assert by_name["assets/a.png"]["checksumMd5"] == hashlib.md5(png).hexdigest()
 
 
@@ -194,11 +194,11 @@ def test_theme_missing_gives_a_null_theme_and_overrides_corrupt_size_checksum_an
     _, body = graphql(fake, THEME_QUERY, {"id": THEME_GID, "after": None}, token=token)
     assert body["data"] == {"theme": None}
     fake.add_theme(THEME_GID, role="UNPUBLISHED", files={"a.txt": b"abc"},
-                   overrides={"a.txt": {"size": 99, "checksumMd5": "0" * 32}},
+                   overrides={"a.txt": {"size": "99", "checksumMd5": "0" * 32}},
                    user_errors=[{"code": "ACCESS_DENIED", "filename": "b.txt"}])
     _, body = graphql(fake, THEME_QUERY, {"id": THEME_GID, "after": None}, token=token)
     theme = body["data"]["theme"]
     assert theme["role"] == "UNPUBLISHED"
-    assert theme["files"]["nodes"][0]["size"] == 99
+    assert theme["files"]["nodes"][0]["size"] == "99"
     assert theme["files"]["nodes"][0]["checksumMd5"] == "0" * 32
     assert theme["files"]["userErrors"] == [{"code": "ACCESS_DENIED", "filename": "b.txt"}]

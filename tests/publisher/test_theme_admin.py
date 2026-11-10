@@ -113,7 +113,7 @@ def test_a_null_checksum_is_accepted_but_the_size_is_still_checked(fake, clock, 
     fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"checksumMd5": None}})
     read(fake, clock, dest)
     assert folder_tree(dest) == {"a.txt": b"abc"}
-    fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"checksumMd5": None, "size": 4}})
+    fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"checksumMd5": None, "size": "4"}})
     assert failure_of(fake, clock, dest).code == "theme-checksum"
 
 
@@ -125,8 +125,24 @@ def test_a_checksum_mismatch_fails_without_touching_dest(fake, clock, dest):
     assert_untouched(dest)
 
 
+def test_a_file_whose_body_matches_its_string_size_and_md5_is_accepted(fake, clock, dest):
+    # Shopify serialises UnsignedInt64 as a JSON string, e.g. "21936"
+    fake.add_theme(THEME_GID, files={"a.txt": b"abc"})
+    read(fake, clock, dest)
+    assert folder_tree(dest) == {"a.txt": b"abc"}
+
+
+@pytest.mark.parametrize("bad", ["abc", "-3", "3.0", "", " 3", "٣", None, 3.0, True])
+def test_a_malformed_size_fails_naming_the_file(fake, clock, dest, bad):
+    fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"size": bad}})
+    error = failure_of(fake, clock, dest)
+    assert error.code == "theme-checksum"
+    assert "a.txt" in str(error)
+    assert_untouched(dest)
+
+
 def test_a_size_mismatch_fails_without_touching_dest(fake, clock, dest):
-    fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"size": 99}})
+    fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"size": "99"}})
     assert failure_of(fake, clock, dest).code == "theme-checksum"
     assert_untouched(dest)
 

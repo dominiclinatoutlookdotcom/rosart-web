@@ -234,7 +234,7 @@ class FakeShopifyAdmin:
             url = f"https://{self.url_host}/s/files/1/0/themes/{name}?v=1"
             self._url_bodies[url] = data
             body = {"url": url}
-        node = {"filename": name, "size": len(data), "checksumMd5": hashlib.md5(data).hexdigest(),
+        node = {"filename": name, "size": str(len(data)), "checksumMd5": hashlib.md5(data).hexdigest(),
                 "contentType": "application/octet-stream", "body": body}
         node.update(theme["overrides"].get(name, {}))
         return node
