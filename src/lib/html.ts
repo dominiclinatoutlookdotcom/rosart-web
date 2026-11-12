@@ -89,6 +89,26 @@ export function sanitizeHtml(html: string, options: SanitizeOptions = {}): strin
   return renderNodes(parseFragment(html).childNodes, options).trim();
 }
 
+/**
+ * The link targets the sanitised HTML keeps, in document order: exactly the `<a href>`s `sanitizeHtml`
+ * renders for the same input and options (a refused link, or one with no text, is absent).
+ */
+export function htmlLinks(html: string, options: SanitizeOptions = {}): string[] {
+  const links: string[] = [];
+  const walk = (nodes: readonly Node[]): void => {
+    for (const node of nodes) {
+      if (!isElement(node)) continue;
+      if (node.tagName === 'a') {
+        const href = attr(node, 'href');
+        if (href !== undefined) links.push(href);
+      }
+      walk(node.childNodes);
+    }
+  };
+  walk(parseFragment(sanitizeHtml(html, options)).childNodes);
+  return links;
+}
+
 function collectText(nodes: readonly Node[], out: string[]): void {
   for (const node of nodes) {
     if (node.nodeName === '#text' && 'value' in node) {

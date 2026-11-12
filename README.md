@@ -59,6 +59,10 @@ header and footer section groups around it:
   Liquid (`{{ closest.product.title }}`, `{{ closest.collection.description }}`, a product
   metafield) shows the data that binding names; a product list shows the collection its setting
   names, up to its limit;
+  the links inside a rich-text block or page body (a mailto link staff add in Shopify, an internal
+  link) are expected too, taken through the same URL map and link policy the site uses
+  (`htmlLinks` in `src/lib/html.ts`), so a link the content carries must appear and one it lacks
+  must not;
 - nothing else appears on the page: no extra sections, products, links or text.
 
 The components emit `data-theme-section`, `data-theme-block` and `data-theme-type` on every theme

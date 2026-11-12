@@ -194,3 +194,39 @@ describe('compareOutlines', () => {
     ]);
   });
 });
+
+describe('links inside rich text', () => {
+  const template = 'templates/test.json';
+  const body = '<p>Email: <a href="mailto:info@rosart.com.au"><span>info@rosart.com.au</span></a> or read <a href="https://shop.example/pages/our-story">our story</a>.</p>';
+  const expectedLinks = (html: string, type = 'text') =>
+    expectedOutline([section('s', 'section', [block('t', type, { text: html })])], { template }, data)[0]?.children[0]?.links;
+
+  it('expects the links the Shopify HTML carries, resolved the way the site resolves them', () => {
+    expect(expectedLinks(body)).toEqual(['mailto:info@rosart.com.au', '/our-story/']);
+    expect(expectedLinks(body, '_announcement')).toEqual(['mailto:info@rosart.com.au', '/our-story/']);
+  });
+
+  it('expects the links of a page body bound to the page content', () => {
+    const page = { handle: 'contact', title: 'Contact', bodyHtml: body, isPublished: true, seo: { title: null, description: null } };
+    const bound = [section('s', 'main-page', [block('c', 'text', {}, { bindings: { text: '{{ closest.page.content }}' } })])];
+    expect(expectedOutline(bound, { template, page }, data)[0]?.children[0]?.links).toEqual(['mailto:info@rosart.com.au', '/our-story/']);
+  });
+
+  it('expects no link for one the site policy refuses (javascript:, an unknown protocol) or a link with no text', () => {
+    expect(expectedLinks('<p><a href="javascript:alert(1)">bad</a> <a href="ftp://x/y">ftp</a> <a href="/p/">  </a>ok</p>')).toEqual([]);
+  });
+
+  it('passes a site that renders those links, and fails one that adds or drops a link', () => {
+    const expected = expectedOutline([section('s', 'section', [block('t', 'text', { text: body })])], { template }, data);
+    const site = (links: string[]) => [node('s', 'section', { children: [node('t', 'text', { text: 'Email: info@rosart.com.au or read our story.', links })] })];
+    expect(compareOutlines(expected, site(['mailto:info@rosart.com.au', '/our-story/']))).toEqual([]);
+    expect(compareOutlines(expected, site(['mailto:info@rosart.com.au', '/our-story/', '/extra/']))).toHaveLength(1);
+    expect(compareOutlines(expected, site(['mailto:info@rosart.com.au']))).toHaveLength(1);
+  });
+
+  it('still fails a site link the content does not carry', () => {
+    const plain = expectedOutline([section('s', 'section', [block('t', 'text', { text: '<p>Email: info@rosart.com.au</p>' })])], { template }, data);
+    const withLink = [node('s', 'section', { children: [node('t', 'text', { text: 'Email: info@rosart.com.au', links: ['mailto:info@rosart.com.au'] })] })];
+    expect(compareOutlines(plain, withLink)).toHaveLength(1);
+  });
+});

@@ -9,7 +9,7 @@
  * Runs under plain Node too (the dist check): only `.ts` imports, no Vite features.
  */
 import { parse, type DefaultTreeAdapterTypes } from 'parse5';
-import { htmlToText } from './html.ts';
+import { htmlLinks, htmlToText } from './html.ts';
 import { orizenUrl } from './commerce.ts';
 import type { ImageResolver } from './images.ts';
 import type { RawCollection, RawMenu, RawMenuItem, RawProduct, RawThemeBlock, RawThemeSection } from './shopify-types.ts';
@@ -126,6 +126,11 @@ class ExpectedBuilder {
     });
   }
 
+  /** The links the site keeps from rich text: its own link policy over the same URL map. */
+  private richTextLinks(html: string): string[] {
+    return htmlLinks(html, { resolveLink: this.data.urls.resolve });
+  }
+
   blocks(parentType: string, blocks: readonly RawThemeBlock[], scope: Scope): OutlineNode[] {
     return orderedBlocks(parentType, blocks).flatMap((block) => this.block(block, scope));
   }
@@ -147,8 +152,9 @@ class ExpectedBuilder {
     switch (type) {
       case 'text':
       case '_announcement': {
-        const text = htmlToText(setting(block, 'text', scope));
-        return text ? [outline(id, type, { text })] : [];
+        const html = setting(block, 'text', scope);
+        const text = htmlToText(html);
+        return text ? [outline(id, type, { text, links: this.richTextLinks(html) })] : [];
       }
       case 'image': {
         const ref = setting(block, 'image', scope);
@@ -173,8 +179,9 @@ class ExpectedBuilder {
         return [outline(id, type, { links: link ? [link] : [], children: children() })];
       }
       case 'page-content': {
-        const text = htmlToText(need(scope.page, 'a page').bodyHtml);
-        return text ? [outline(id, type, { text })] : []; // an empty page body renders nothing
+        const body = need(scope.page, 'a page').bodyHtml;
+        const text = htmlToText(body);
+        return text ? [outline(id, type, { text, links: this.richTextLinks(body) })] : []; // an empty page body renders nothing
       }
       case 'product-title':
         return [outline(id, type, { text: need(scope.product, 'a product').title })];
