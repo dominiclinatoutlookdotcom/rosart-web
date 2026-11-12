@@ -2,10 +2,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { rawExport } from './export-data.ts';
 import { parseThemePages } from './site-content.ts';
 
-// Exact-value tests run on the frozen snapshot, never on the live export (tests/fixtures/export-snapshot).
+// Exact-value tests run on the frozen snapshot, never on the live export (src/test-fixtures/export-snapshot).
 vi.mock('./export-data.ts', async (importOriginal) => {
   const actual = await importOriginal<typeof import('./export-data.ts')>();
-  const { fixtureExport } = await import('../../tests/fixtures/export-snapshot/load.ts');
+  const { fixtureExport } = await import('../test-fixtures/export-snapshot/load.ts');
   return { ...actual, rawExport: fixtureExport };
 });
 

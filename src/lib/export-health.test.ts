@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { fixtureExport } from '../../tests/fixtures/export-snapshot/load.ts';
+import { fixtureExport } from '../test-fixtures/export-snapshot/load.ts';
 import { exportProblems, REQUIRED_PAGES, REQUIRED_TEMPLATES } from './export-health.ts';
 import { PRODUCT_TEMPLATE, rawExport } from './export-data.ts';
 import type { RawExport } from './shopify-types.ts';

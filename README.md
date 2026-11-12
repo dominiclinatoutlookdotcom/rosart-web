@@ -356,7 +356,7 @@ broken site, not changed content. So:
   built page that differs from its theme template. They never name a heading, a count, a logo
   file or a handle.
 - **Tests that pin exact values** (`catalog`, `theme`, `site-content`, `images`, `used-images`
-  tests) run the same code on the frozen snapshot `tests/fixtures/export-snapshot/` (JSON only,
+  tests) run the same code on the frozen snapshot `src/test-fixtures/export-snapshot/` (JSON only,
   copied 2026-11-12) through `vi.mock('./export-data.ts')`. Edit those expectations only when
   code changes; refresh the snapshot on purpose, never as part of a publish.
 - **Kept as owner decisions:** products must use `templates/product.product-catalogue.json`
@@ -376,7 +376,7 @@ A new test that needs live content must follow the first rule. Proof both ways l
 | `src/pages/`, `src/components/`, `src/layouts/`, `src/styles/` | The Astro site |
 | `scripts/check-dist.ts`, `scripts/dist-check.ts` | The post-build check (runs under plain Node) |
 | `src/lib/export-health.ts` | Structural check of the export (what a buildable site needs), no content values |
-| `tests/fixtures/export-snapshot/` | Frozen export snapshot for the exact-value tests |
+| `src/test-fixtures/export-snapshot/` | Frozen export snapshot for the exact-value tests |
 | `scripts/fidelity-dist.test.ts` | Theme fidelity of every built page (part of `npm test`) |
 | `tools/publish.py`, `deploy.config.json` | The publish script and its deploy target |
 

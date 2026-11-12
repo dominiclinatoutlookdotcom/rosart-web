@@ -12,7 +12,7 @@ import menus from './shopify/menus.json';
 import files from './shopify/files.json';
 import manifest from './images-manifest.json';
 import theme from './theme-content.json';
-import type { RawExport } from '../../../src/lib/shopify-types.ts';
+import type { RawExport } from '../../lib/shopify-types.ts';
 
 export const fixtureExport: RawExport = {
   shop: shop as RawExport['shop'],

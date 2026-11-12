@@ -2,7 +2,7 @@
  * The site's content code run on the live export (`export/`, whatever Shopify held at the last
  * export). Nothing here names a heading, a count or a file: every expectation is read from the
  * export itself, so a staff edit passes and only a broken site fails. Exact-value tests of the
- * same code run on the frozen snapshot (tests/fixtures/export-snapshot).
+ * same code run on the frozen snapshot (src/test-fixtures/export-snapshot).
  */
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
