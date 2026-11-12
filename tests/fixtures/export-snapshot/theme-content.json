@@ -1,0 +1,1789 @@
+{
+  "global_settings": {
+    "logo": "shopify://shop_images/ESPRIT_HONG_KONG.png"
+  },
+  "section_groups": {
+    "sections/footer-group.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_dGnm6k",
+              "settings": {
+                "text": "<p>Bulgarian Rose Skincare · Naturally Inspired</p>"
+              },
+              "type": "text"
+            }
+          ],
+          "disabled": false,
+          "id": "footer_m9NzUG",
+          "settings": {},
+          "type": "footer"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "footer_copyright_jweRK8",
+              "settings": {},
+              "type": "footer-copyright"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "footer_policy_list_VCdnpa",
+              "settings": {},
+              "type": "footer-policy-list"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "social_links_Ew63Kq",
+              "settings": {
+                "facebook_url": "https://www.facebook.com/",
+                "instagram_url": "https://www.instagram.com/",
+                "tiktok_url": "https://www.tiktok.com/",
+                "twitter_url": "https://x.com/",
+                "youtube_url": "https://www.youtube.com/"
+              },
+              "type": "social-links"
+            }
+          ],
+          "disabled": false,
+          "id": "footer_utilities_jLGE8U",
+          "settings": {},
+          "type": "footer-utilities"
+        }
+      ],
+      "type": "footer"
+    },
+    "sections/header-group.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "announcement_BxgCk9",
+              "settings": {
+                "text": "&nbsp;From Bulgaria's Valley of Roses, with Care&nbsp;"
+              },
+              "type": "_announcement"
+            }
+          ],
+          "disabled": false,
+          "id": "header_announcements_9jGBFp",
+          "settings": {},
+          "type": "header-announcements"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "header-logo",
+              "settings": {},
+              "static": true,
+              "type": "_header-logo"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "header-menu",
+              "settings": {
+                "menu": "main-menu"
+              },
+              "static": true,
+              "type": "_header-menu"
+            }
+          ],
+          "disabled": false,
+          "id": "header_section",
+          "settings": {
+            "customer_account_menu": "customer-account-main-menu"
+          },
+          "type": "header"
+        }
+      ],
+      "type": "header"
+    }
+  },
+  "templates": {
+    "templates/404.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_GqmVFf",
+              "settings": {
+                "text": "<h1>Page not found</h1>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_Ua9XAW",
+              "settings": {
+                "text": "<p>The link may be incorrect, or the page has been removed. </p>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "button_PAQMwR",
+              "settings": {
+                "label": "Continue shopping",
+                "link": "shopify://collections/all"
+              },
+              "type": "button"
+            }
+          ],
+          "disabled": false,
+          "id": "main",
+          "settings": {},
+          "type": "main-404"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_WJEa9Q",
+                  "settings": {
+                    "text": "<p>Discover something new</p>"
+                  },
+                  "type": "text"
+                }
+              ],
+              "disabled": false,
+              "id": "static-header",
+              "settings": {},
+              "static": true,
+              "type": "_product-list-content"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_card_gallery_wxYqE3",
+                  "settings": {},
+                  "type": "_product-card-gallery"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_title_83YMDL",
+                  "settings": {},
+                  "type": "product-title"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "price_A6DYPt",
+                  "settings": {},
+                  "type": "price"
+                }
+              ],
+              "disabled": false,
+              "id": "static-product-card",
+              "settings": {},
+              "static": true,
+              "type": "_product-card"
+            }
+          ],
+          "disabled": false,
+          "id": "product_list_iA96Tq",
+          "settings": {
+            "collection": "all",
+            "max_products": 4
+          },
+          "type": "product-list"
+        }
+      ]
+    },
+    "templates/article.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "blog-post-title",
+              "settings": {},
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "blog-post-details",
+              "settings": {},
+              "type": "_blog-post-info-text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "blog-post-image",
+              "settings": {},
+              "type": "image"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "blog-post-content",
+              "settings": {},
+              "type": "_blog-post-content"
+            }
+          ],
+          "disabled": false,
+          "id": "section",
+          "settings": {},
+          "type": "main-blog-post"
+        }
+      ]
+    },
+    "templates/blog.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "bindings": {
+                "text": "<h1>{{ closest.blog.title }}</h1>"
+              },
+              "blocks": [],
+              "disabled": false,
+              "id": "title",
+              "settings": {},
+              "type": "text"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "heading",
+                  "settings": {},
+                  "static": true,
+                  "type": "_heading"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "blog-post-details",
+                  "settings": {},
+                  "static": true,
+                  "type": "_blog-post-info-text"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "image",
+                  "settings": {},
+                  "static": true,
+                  "type": "_blog-post-image"
+                }
+              ],
+              "disabled": false,
+              "id": "static-blog-post-card",
+              "settings": {},
+              "static": true,
+              "type": "_blog-post-card"
+            }
+          ],
+          "disabled": false,
+          "id": "main",
+          "settings": {},
+          "type": "main-blog"
+        }
+      ]
+    },
+    "templates/cart.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "cart-page-title",
+              "settings": {
+                "title": "Cart"
+              },
+              "static": true,
+              "type": "_cart-title"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "cart-page-items",
+              "settings": {},
+              "static": true,
+              "type": "_cart-products"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "cart-page-summary",
+              "settings": {},
+              "static": true,
+              "type": "_cart-summary"
+            }
+          ],
+          "disabled": false,
+          "id": "cart-section",
+          "settings": {},
+          "type": "main-cart"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_list_text_fifeh4",
+                  "settings": {
+                    "text": "<h3>You may also like</h3>"
+                  },
+                  "type": "_product-list-text"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_list_button_eibbma",
+                  "settings": {
+                    "label": "View all"
+                  },
+                  "type": "_product-list-button"
+                }
+              ],
+              "disabled": false,
+              "id": "static-header",
+              "settings": {},
+              "static": true,
+              "type": "_product-list-content"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_card_gallery_PEPpfq",
+                  "settings": {},
+                  "type": "_product-card-gallery"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_title_WNMpHe",
+                  "settings": {},
+                  "type": "product-title"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "price_yXfkPX",
+                  "settings": {},
+                  "type": "price"
+                }
+              ],
+              "disabled": false,
+              "id": "static-product-card",
+              "settings": {},
+              "static": true,
+              "type": "_product-card"
+            }
+          ],
+          "disabled": false,
+          "id": "product_list_NNFgcy",
+          "settings": {
+            "collection": "all",
+            "max_products": 4
+          },
+          "type": "product-list"
+        }
+      ]
+    },
+    "templates/collection.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "bindings": {
+                "text": "<h1>{{ closest.collection.title }}</h1>"
+              },
+              "blocks": [],
+              "disabled": false,
+              "id": "text_tqQTNE",
+              "settings": {},
+              "type": "text"
+            },
+            {
+              "bindings": {
+                "text": "{{ closest.collection.description }}"
+              },
+              "blocks": [],
+              "disabled": false,
+              "id": "text_twGGkJ",
+              "settings": {},
+              "type": "text"
+            }
+          ],
+          "disabled": false,
+          "id": "section",
+          "settings": {
+            "background_image": "shopify://shop_images/bg3.png"
+          },
+          "type": "section"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": true,
+              "id": "filters",
+              "settings": {},
+              "static": true,
+              "type": "filters"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "card-gallery",
+                  "settings": {},
+                  "type": "_product-card-gallery"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_title_4nY4eT",
+                  "settings": {},
+                  "type": "product-title"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "price_EzJzMm",
+                  "settings": {},
+                  "type": "price"
+                }
+              ],
+              "disabled": false,
+              "id": "product-card",
+              "settings": {},
+              "static": true,
+              "type": "_product-card"
+            }
+          ],
+          "disabled": false,
+          "id": "main",
+          "settings": {
+            "products_per_page": 24
+          },
+          "type": "main-collection"
+        }
+      ]
+    },
+    "templates/index.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_YLPk4p",
+              "settings": {
+                "text": "<p><strong>From Soil to Skin</strong></p>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_DUhktp",
+              "settings": {
+                "text": "<p>From Our Rose Fields to Your Skin.</p>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": true,
+              "id": "button_H9gpTf",
+              "settings": {
+                "label": "Discover Our Story",
+                "link": "shopify://collections/all"
+              },
+              "type": "button"
+            }
+          ],
+          "disabled": false,
+          "id": "hero_jVaWmY",
+          "settings": {
+            "image_1": "shopify://shop_images/Untitled_design_7_f6c26f2b-ad40-440e-a57a-fb6da4fe0dcb.png",
+            "image_1_mobile": "shopify://shop_images/DSC08666_Rosart_Mobile_1200x1500_e230edb1-8068-47e5-b216-efa8170e4f7e.jpg"
+          },
+          "type": "hero"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_KWpnqx",
+              "settings": {
+                "text": "<h2><strong>Rooted in the Valley of Roses</strong></h2>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_HAfYEt",
+              "settings": {
+                "text": "<p>Born in Bulgaria's renowned Valley of Roses, Rosart cultivates Damask roses in its own certified organic fields. From freshly harvested rose petals to distillation and in-house skincare production, every stage is carefully managed to preserve the natural qualities of the Bulgarian rose.</p>"
+              },
+              "type": "text"
+            }
+          ],
+          "disabled": false,
+          "id": "section_hQaLzP",
+          "settings": {},
+          "type": "section"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "image_P4pgai",
+              "settings": {
+                "image": "shopify://shop_images/ESPRIT_HONG_KONG_f0a060ae-af0e-4c30-b417-84e0f08f40c7.png"
+              },
+              "type": "image"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_T6fWwM",
+                  "settings": {
+                    "text": "<p><strong>Our Roses. Our Fields. Our Craft.</strong></p>"
+                  },
+                  "type": "text"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_aKzwYg",
+                  "settings": {
+                    "text": "<p>From our own certified organic rose fields in Bulgaria's Valley of Roses to fresh distillation and in-house skincare production, every stage reflects Rosart's dedication to quality and craftsmanship.</p>"
+                  },
+                  "type": "text"
+                }
+              ],
+              "disabled": false,
+              "id": "group_UwWm3R",
+              "settings": {},
+              "type": "group"
+            }
+          ],
+          "disabled": false,
+          "id": "section_mKDAGQ",
+          "settings": {},
+          "type": "section"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "image_xMny6C",
+              "settings": {
+                "image": "shopify://shop_images/USDA_and_EU_Organic_Certifications.png"
+              },
+              "type": "image"
+            }
+          ],
+          "disabled": false,
+          "id": "section_n4eLBK",
+          "settings": {
+            "background_image": "shopify://shop_images/bg1.png"
+          },
+          "type": "section"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "image_EWqLXH",
+                  "settings": {
+                    "image": "shopify://shop_images/1.png"
+                  },
+                  "type": "image"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_z9mmxW",
+                  "settings": {
+                    "text": "<h2><strong>Face Care</strong></h2>"
+                  },
+                  "type": "text"
+                }
+              ],
+              "disabled": false,
+              "id": "group_DnPwbh",
+              "settings": {},
+              "type": "group"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "image_ngGmUC",
+                  "settings": {
+                    "image": "shopify://shop_images/2.png"
+                  },
+                  "type": "image"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_URQqX6",
+                  "settings": {
+                    "text": "<p><strong>Rose Water & Toners</strong></p>"
+                  },
+                  "type": "text"
+                }
+              ],
+              "disabled": false,
+              "id": "group_4B9m9J",
+              "settings": {},
+              "type": "group"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "image_BemEm7",
+                  "settings": {
+                    "image": "shopify://shop_images/3.png"
+                  },
+                  "type": "image"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_c8TTkd",
+                  "settings": {
+                    "text": "<p><strong>Masks & Treatments</strong></p>"
+                  },
+                  "type": "text"
+                }
+              ],
+              "disabled": false,
+              "id": "group_NHAVXA",
+              "settings": {},
+              "type": "group"
+            }
+          ],
+          "disabled": false,
+          "id": "section_t4EcwA",
+          "settings": {},
+          "type": "section"
+        },
+        {
+          "blocks": [],
+          "disabled": false,
+          "id": "section_kFXkyX",
+          "settings": {},
+          "type": "section"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_zf64fr",
+              "settings": {
+                "text": "<p>ROSART · BULGARIAN ROSE SKINCARE</p><h1></h1>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_xDm9ky",
+              "settings": {
+                "text": "<h1>A Little of Nature, Every Day.</h1>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_KdQ7wP",
+              "settings": {
+                "text": "<p>Discover the beauty of Bulgarian roses, thoughtfully brought into your everyday skincare ritual.</p>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "button_3zVejn",
+              "settings": {
+                "label": "Discover Our Story",
+                "link": "shopify://pages/our-story"
+              },
+              "type": "button"
+            }
+          ],
+          "disabled": false,
+          "id": "section_GPKnxM",
+          "settings": {
+            "background_image": "shopify://shop_images/bg3.png"
+          },
+          "type": "section"
+        }
+      ]
+    },
+    "templates/list-collections.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_fRMQMR",
+                  "settings": {
+                    "text": "<h1>Collections</h1>"
+                  },
+                  "type": "text"
+                }
+              ],
+              "disabled": false,
+              "id": "group_4FtiAg",
+              "settings": {},
+              "type": "group"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "collection_title_7YgBPU",
+                  "settings": {},
+                  "type": "collection-title"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "collection-card-image",
+                  "settings": {},
+                  "static": true,
+                  "type": "_collection-card-image"
+                }
+              ],
+              "disabled": false,
+              "id": "static-collection-card",
+              "settings": {},
+              "static": true,
+              "type": "_collection-card"
+            }
+          ],
+          "disabled": false,
+          "id": "collection_list_Wfgh3m",
+          "settings": {
+            "max_collections": 4
+          },
+          "type": "main-collection-list"
+        }
+      ]
+    },
+    "templates/page.contact.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "bindings": {
+                "text": "<h1>{{ closest.page.title }}</h1>"
+              },
+              "blocks": [],
+              "disabled": false,
+              "id": "title",
+              "settings": {},
+              "type": "text"
+            },
+            {
+              "bindings": {
+                "text": "{{ closest.page.content }}"
+              },
+              "blocks": [],
+              "disabled": false,
+              "id": "content",
+              "settings": {},
+              "type": "text"
+            }
+          ],
+          "disabled": false,
+          "id": "main",
+          "settings": {},
+          "type": "main-page"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "submit-button",
+                  "settings": {
+                    "label": "Submit"
+                  },
+                  "static": true,
+                  "type": "contact-form-submit-button"
+                }
+              ],
+              "disabled": false,
+              "id": "contact_form_UwiCkQ",
+              "settings": {},
+              "type": "contact-form"
+            }
+          ],
+          "disabled": false,
+          "id": "form",
+          "settings": {},
+          "type": "section"
+        }
+      ]
+    },
+    "templates/page.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "bindings": {
+                "text": "<h1>{{ closest.page.title }}</h1>"
+              },
+              "blocks": [],
+              "disabled": false,
+              "id": "heading",
+              "settings": {},
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "page-content",
+              "settings": {},
+              "type": "page-content"
+            }
+          ],
+          "disabled": false,
+          "id": "main",
+          "settings": {},
+          "type": "main-page"
+        }
+      ]
+    },
+    "templates/page.our-collection.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "bindings": {
+                "text": "<h1>{{ closest.page.title }}</h1>"
+              },
+              "blocks": [],
+              "disabled": false,
+              "id": "heading",
+              "settings": {},
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "page-content",
+              "settings": {},
+              "type": "page-content"
+            }
+          ],
+          "disabled": false,
+          "id": "main",
+          "settings": {},
+          "type": "main-page"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_gzcb9h",
+                  "settings": {
+                    "text": "<h3>Shop by collection</h3>"
+                  },
+                  "type": "text"
+                }
+              ],
+              "disabled": false,
+              "id": "group_j6ne7b",
+              "settings": {},
+              "type": "group"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "collection_title_wPhi9K",
+                  "settings": {},
+                  "type": "collection-title"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "collection-card-image",
+                  "settings": {},
+                  "static": true,
+                  "type": "_collection-card-image"
+                }
+              ],
+              "disabled": false,
+              "id": "static-collection-card",
+              "settings": {},
+              "static": true,
+              "type": "_collection-card"
+            }
+          ],
+          "disabled": false,
+          "id": "collection_list_bx67Y7",
+          "settings": {
+            "collection_list": [
+              "face-care",
+              "face-care-copy",
+              "rose-water-toners-copy"
+            ],
+            "max_collections": 4
+          },
+          "type": "collection-list"
+        }
+      ]
+    },
+    "templates/page.our-story.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "bindings": {
+                "text": "<h1>{{ closest.page.title }}</h1>"
+              },
+              "blocks": [],
+              "disabled": false,
+              "id": "heading",
+              "settings": {},
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "page-content",
+              "settings": {},
+              "type": "page-content"
+            }
+          ],
+          "disabled": true,
+          "id": "main",
+          "settings": {},
+          "type": "main-page"
+        },
+        {
+          "blocks": [],
+          "disabled": false,
+          "id": "hero_ekaKre",
+          "settings": {
+            "image_1": "shopify://shop_images/Add_a_heading_fcec8aa5-9bda-44ce-96bc-7966b68e00f2.png"
+          },
+          "type": "hero"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": true,
+              "id": "text_33CQP6",
+              "settings": {
+                "text": "<h2><strong>Our Story</strong></h2>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_g74cbP",
+              "settings": {
+                "text": "<p><strong>From Our Fields, With Care.</strong><br/><br/>Nestled in Bulgaria's renowned Valley of Roses, Rosart cultivates Damask roses in its own certified organic fields. From nurturing each rose to fresh distillation and in-house production, we oversee every stage with care, preserving the authenticity and natural character of this treasured botanical ingredient.</p>"
+              },
+              "type": "text"
+            }
+          ],
+          "disabled": false,
+          "id": "section_BHVMYT",
+          "settings": {},
+          "type": "section"
+        },
+        {
+          "blocks": [],
+          "disabled": false,
+          "id": "hero_7Ur4Pn",
+          "settings": {
+            "image_1": "shopify://shop_images/Untitled_design_8_7171c05c-c755-42c7-b662-fc397c08f2bb.png"
+          },
+          "type": "hero"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_nfNiCi",
+                  "settings": {
+                    "text": "<p><strong>FROM PETALS TO ESSENCE</strong></p>"
+                  },
+                  "type": "text"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_RqWUKP",
+                  "settings": {
+                    "text": "<p>Freshly harvested Damask roses are carefully distilled to capture their natural essence. By bringing cultivation, distillation and skincare production together, Rosart maintains a close connection to its ingredients — from the rose fields to the finished product.</p>"
+                  },
+                  "type": "text"
+                }
+              ],
+              "disabled": false,
+              "id": "group_NbEyEt",
+              "settings": {},
+              "type": "group"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "image_NwDE8d",
+              "settings": {
+                "image": "shopify://shop_images/DSC06467.jpg"
+              },
+              "type": "image"
+            }
+          ],
+          "disabled": false,
+          "id": "section_DyWHzK",
+          "settings": {},
+          "type": "section"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_hK6Wqw",
+              "settings": {
+                "text": "<h3><strong>FROM NATURE TO FORMULATION</strong></h3>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_mRkRhj",
+              "settings": {
+                "text": "<p>Alongside traditional distillation methods used to extract essential oils and botanical extracts, Rosart also uses cold pressing to obtain plant oils. Its organically certified oils and extracts reflect a commitment to carefully selected botanical ingredients and thoughtful skincare production.</p>"
+              },
+              "type": "text"
+            }
+          ],
+          "disabled": false,
+          "id": "section_dUgUNf",
+          "settings": {},
+          "type": "section"
+        },
+        {
+          "blocks": [],
+          "disabled": false,
+          "id": "hero_qj9cAq",
+          "settings": {
+            "image_1": "shopify://shop_images/Rosart_Distillery_in_Bulgaria_s_Valley_of_Roses.png",
+            "image_1_mobile": "shopify://shop_images/Rosart_s_Bulgarian_Valley_of_Roses_Map.png"
+          },
+          "type": "hero"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "image_DKkzMq",
+              "settings": {
+                "image": "shopify://shop_images/Rosart_Rose_Balm_in_a_Sunlit_Garden.png"
+              },
+              "type": "image"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_M7cnBc",
+                  "settings": {
+                    "text": "<p><strong>Nature, Refined for Your Skin</strong></p>"
+                  },
+                  "type": "text"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_AgBT9B",
+                  "settings": {
+                    "text": "<p>Rooted in the beauty of Bulgarian roses, Rosart brings together carefully selected botanical ingredients and thoughtful skincare formulations. From gentle daily essentials to nourishing facial care, each product reflects our commitment to quality, nature and everyday wellbeing.</p>"
+                  },
+                  "type": "text"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "button_TKgfF7",
+                  "settings": {
+                    "label": "Explore Our Collection",
+                    "link": "shopify://pages/our-collection"
+                  },
+                  "type": "button"
+                }
+              ],
+              "disabled": false,
+              "id": "group_YmqiiJ",
+              "settings": {},
+              "type": "group"
+            }
+          ],
+          "disabled": false,
+          "id": "section_KU3yqz",
+          "settings": {},
+          "type": "section"
+        },
+        {
+          "blocks": [],
+          "disabled": false,
+          "id": "custom_liquid_qaykmd",
+          "settings": {
+            "custom_liquid": "<style>\n  .rosart-connections {\n    background: #FFFFFF;\n    padding: 60px 24px;\n    text-align: center;\n    color: #403838;\n  }\n\n  .rosart-connections-inner {\n    max-width: 1100px;\n    margin: 0 auto;\n  }\n\n  .rosart-connections h2 {\n    font-family: Georgia, serif;\n    font-size: 30px;\n    font-weight: 400;\n    margin: 0 0 16px;\n  }\n\n  .rosart-connections .intro {\n    max-width: 680px;\n    margin: 0 auto 45px;\n    font-size: 16px;\n    line-height: 1.8;\n    color: #625959;\n  }\n\n  .rosart-connection-grid {\n    display: grid;\n    grid-template-columns: repeat(3, minmax(0, 1fr));\n    gap: 0;\n  }\n\n  .rosart-connection {\n    padding: 15px 24px;\n    min-width: 0;\n  }\n\n  .rosart-connection + .rosart-connection {\n    border-left: 1px solid #DDCFCE;\n  }\n\n  .rosart-connection .role {\n    font-family: Arial, sans-serif;\n    font-size: 11px;\n    letter-spacing: 1.7px;\n    color: #9A7C7E;\n    margin-bottom: 20px;\n    text-transform: uppercase;\n  }\n\n  .rosart-connection .logo {\n    height: 115px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    margin-bottom: 18px;\n  }\n\n  .rosart-connection .logo img {\n    display: block;\n    width: auto;\n    height: auto;\n    max-width: 100%;\n    object-fit: contain;\n  }\n\n  .rosart-connection .logo-artec {\n    width: 285px;\n    max-height: 100px;\n  }\n\n  .rosart-connection .logo-rosart {\n    width: 190px;\n    max-height: 100px;\n  }\n\n  .rosart-connection .logo-orizen {\n    width: 145px;\n    max-height: 100px;\n  }\n\n  .rosart-connection h3 {\n    font-family: Georgia, serif;\n    font-size: 19px;\n    font-weight: 400;\n    margin: 0 0 14px;\n  }\n\n  .rosart-connection a {\n    color: #86676B;\n    font-size: 14px;\n    text-decoration: underline;\n    text-underline-offset: 5px;\n  }\n\n  .rosart-connections .tagline {\n    margin-top: 48px;\n    padding-top: 25px;\n    border-top: 1px solid #DDCFCE;\n    font-size: 14px;\n    color: #756969;\n  }\n\n  @media (max-width: 749px) {\n    .rosart-connections {\n      padding: 45px 20px;\n    }\n\n    .rosart-connections h2 {\n      font-size: 26px;\n    }\n\n    .rosart-connections .intro {\n      margin-bottom: 25px;\n    }\n\n    .rosart-connection-grid {\n      grid-template-columns: 1fr;\n    }\n\n    .rosart-connection {\n      padding: 28px 10px;\n    }\n\n    .rosart-connection + .rosart-connection {\n      border-left: none;\n      border-top: 1px solid #DDCFCE;\n    }\n\n    .rosart-connections .tagline {\n      margin-top: 25px;\n    }\n  }\n</style>\n\n<section class=\"rosart-connections\">\n  <div class=\"rosart-connections-inner\">\n\n    <h2>Our Global Connections</h2>\n\n    <p class=\"intro\">\n      Rooted in Bulgaria's Valley of Roses,\n      Rosart's story continues in Australia\n      through a shared appreciation for\n      botanical skincare.\n    </p>\n\n    <div class=\"rosart-connection-grid\">\n\n      <!-- ARTEC -->\n      <div class=\"rosart-connection\">\n        <div class=\"role\">Parent Company</div>\n\n        <div class=\"logo\">\n          <img\n            class=\"logo-artec\"\n            src=\"https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ARTEC.png?v=1793858961\"\n            alt=\"Artec Chemical Group\"\n            loading=\"lazy\">\n        </div>\n\n        <h3>Artec Chemical Group</h3>\n\n        <a href=\"https://artechem.com/en/\"\n           target=\"_blank\"\n           rel=\"noopener noreferrer\">\n          Visit Website\n        </a>\n      </div>\n\n      <!-- ROSART BULGARIA -->\n      <div class=\"rosart-connection\">\n        <div class=\"role\">Brand Origin</div>\n\n        <div class=\"logo\">\n          <img\n            class=\"logo-rosart\"\n            src=\"https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ROSART.png?v=1793858961\"\n            alt=\"Rosart Bulgaria\"\n            loading=\"lazy\">\n        </div>\n\n        <h3>Rosart · Bulgaria</h3>\n\n        <a href=\"https://rosart-bg.com/home\"\n           target=\"_blank\"\n           rel=\"noopener noreferrer\">\n          Visit Website\n        </a>\n      </div>\n\n      <!-- ORIZEN AUSTRALIA -->\n      <div class=\"rosart-connection\">\n        <div class=\"role\">Australian Retail Partner</div>\n\n        <div class=\"logo\">\n          <img\n            class=\"logo-orizen\"\n            src=\"https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ORIZEN.png?v=1793858961\"\n            alt=\"ORIZEN Australia\"\n            loading=\"lazy\">\n        </div>\n\n        <h3>ORIZEN · Australia</h3>\n\n        <a href=\"https://orizen.com.au/\"\n           target=\"_blank\"\n           rel=\"noopener noreferrer\">\n          Shop Rosart\n        </a>\n      </div>\n\n    </div>\n\n \n\n  </div>\n</section>"
+          },
+          "type": "custom-liquid"
+        }
+      ]
+    },
+    "templates/password.json": {
+      "layout": "password",
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "logo",
+              "settings": {},
+              "type": "logo"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text",
+              "settings": {
+                "text": "<h1>Opening soon</h1>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text-2",
+              "settings": {
+                "text": "<p>Sign up for our newsletter to be the first to know when we launch.</p>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "email-signup",
+              "settings": {
+                "label": "Sign up"
+              },
+              "type": "email-signup"
+            }
+          ],
+          "disabled": false,
+          "id": "main",
+          "settings": {},
+          "type": "password"
+        }
+      ]
+    },
+    "templates/product.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "disclosures_g9mWze",
+              "settings": {
+                "heading": "Disclosures"
+              },
+              "type": "disclosures"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "media-gallery",
+              "settings": {},
+              "static": true,
+              "type": "_product-media-gallery"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [
+                    {
+                      "bindings": {
+                        "text": "<h1>{{ closest.product.title }}</h1>"
+                      },
+                      "blocks": [],
+                      "disabled": false,
+                      "id": "text_xrnftG",
+                      "settings": {},
+                      "type": "text"
+                    },
+                    {
+                      "blocks": [],
+                      "disabled": false,
+                      "id": "price_tVjtKg",
+                      "settings": {},
+                      "type": "price"
+                    }
+                  ],
+                  "disabled": false,
+                  "id": "group_icgrde",
+                  "settings": {},
+                  "type": "group"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "divider_VJhene",
+                  "settings": {},
+                  "type": "_divider"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "variant_picker_R3rGDr",
+                  "settings": {},
+                  "type": "variant-picker"
+                },
+                {
+                  "blocks": [
+                    {
+                      "blocks": [],
+                      "disabled": false,
+                      "id": "quantity",
+                      "settings": {},
+                      "static": true,
+                      "type": "quantity"
+                    },
+                    {
+                      "blocks": [],
+                      "disabled": false,
+                      "id": "add-to-cart",
+                      "settings": {},
+                      "static": true,
+                      "type": "add-to-cart"
+                    },
+                    {
+                      "blocks": [],
+                      "disabled": false,
+                      "id": "accelerated-checkout",
+                      "settings": {},
+                      "static": true,
+                      "type": "accelerated-checkout"
+                    }
+                  ],
+                  "disabled": false,
+                  "id": "buy_buttons_eYQEYi",
+                  "settings": {},
+                  "type": "buy-buttons"
+                },
+                {
+                  "bindings": {
+                    "text": "{{ closest.product.description }}"
+                  },
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_aEtTtq",
+                  "settings": {},
+                  "type": "text"
+                }
+              ],
+              "disabled": false,
+              "id": "product-details",
+              "settings": {},
+              "static": true,
+              "type": "_product-details"
+            }
+          ],
+          "disabled": false,
+          "id": "main",
+          "settings": {},
+          "type": "product-information"
+        },
+        {
+          "bindings": {
+            "product": "{{ closest.product }}"
+          },
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_cbcgyb",
+              "settings": {
+                "text": "<h3>You may also like </h3>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_card_gallery_DNizbJ",
+                  "settings": {},
+                  "type": "_product-card-gallery"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_title_M7MJkb",
+                  "settings": {},
+                  "type": "product-title"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "price_gLWgA6",
+                  "settings": {},
+                  "type": "price"
+                }
+              ],
+              "disabled": false,
+              "id": "static-product-card",
+              "settings": {},
+              "static": true,
+              "type": "_product-card"
+            }
+          ],
+          "disabled": false,
+          "id": "product_recommendations_qggXJq",
+          "settings": {
+            "max_products": 4
+          },
+          "type": "product-recommendations"
+        }
+      ]
+    },
+    "templates/product.product-catalogue.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "disclosures_g9mWze",
+              "settings": {
+                "heading": "Disclosures"
+              },
+              "type": "disclosures"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "media-gallery",
+              "settings": {},
+              "static": true,
+              "type": "_product-media-gallery"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [
+                    {
+                      "bindings": {
+                        "text": "<h1>{{ closest.product.title }}</h1>"
+                      },
+                      "blocks": [],
+                      "disabled": false,
+                      "id": "text_xrnftG",
+                      "settings": {},
+                      "type": "text"
+                    },
+                    {
+                      "blocks": [],
+                      "disabled": true,
+                      "id": "price_tVjtKg",
+                      "settings": {},
+                      "type": "price"
+                    }
+                  ],
+                  "disabled": false,
+                  "id": "group_icgrde",
+                  "settings": {},
+                  "type": "group"
+                },
+                {
+                  "bindings": {
+                    "text": "{{ closest.product.description }}"
+                  },
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_aEtTtq",
+                  "settings": {},
+                  "type": "text"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "price_wwwFr8",
+                  "settings": {},
+                  "type": "price"
+                },
+                {
+                  "blocks": [
+                    {
+                      "blocks": [
+                        {
+                          "bindings": {
+                            "text": "<p>{{ closest.product.metafields.custom.how_to_use | metafield_tag }}</p>"
+                          },
+                          "blocks": [],
+                          "disabled": false,
+                          "id": "text_7gFpPP",
+                          "settings": {},
+                          "type": "text"
+                        }
+                      ],
+                      "disabled": false,
+                      "id": "accordion_row_KLPMCr",
+                      "settings": {
+                        "heading": "HOW TO USE"
+                      },
+                      "type": "_accordion-row"
+                    },
+                    {
+                      "blocks": [
+                        {
+                          "bindings": {
+                            "text": "<p><br/>{{ closest.product.metafields.custom.the_ingredients | metafield_tag }}</p>"
+                          },
+                          "blocks": [],
+                          "disabled": false,
+                          "id": "text_WTyd4j",
+                          "settings": {},
+                          "type": "text"
+                        }
+                      ],
+                      "disabled": false,
+                      "id": "accordion_row_gi7Ry6",
+                      "settings": {
+                        "heading": "THE INGREDIENTS"
+                      },
+                      "type": "_accordion-row"
+                    },
+                    {
+                      "blocks": [
+                        {
+                          "bindings": {
+                            "text": "<p>{{ closest.product.metafields.custom.certifications_brand_values | metafield_tag }}</p>"
+                          },
+                          "blocks": [],
+                          "disabled": false,
+                          "id": "text_qAghDy",
+                          "settings": {},
+                          "type": "text"
+                        }
+                      ],
+                      "disabled": false,
+                      "id": "accordion_row_qxV8dt",
+                      "settings": {
+                        "heading": "CERTIFICATIONS & BRAND VALUES"
+                      },
+                      "type": "_accordion-row"
+                    },
+                    {
+                      "blocks": [
+                        {
+                          "bindings": {
+                            "text": "{{ closest.product.metafields.custom.caution | metafield_tag }}"
+                          },
+                          "blocks": [],
+                          "disabled": false,
+                          "id": "text_dUBgxb",
+                          "settings": {},
+                          "type": "text"
+                        }
+                      ],
+                      "disabled": false,
+                      "id": "accordion_row_DyTD9N",
+                      "settings": {
+                        "heading": "CAUTION"
+                      },
+                      "type": "_accordion-row"
+                    }
+                  ],
+                  "disabled": false,
+                  "id": "accordion_Ygf6jp",
+                  "settings": {},
+                  "type": "accordion"
+                },
+                {
+                  "bindings": {
+                    "link": "{{ closest.product.metafields.custom.orizen_product_url.value }}"
+                  },
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "button_z9EEwn",
+                  "settings": {
+                    "label": "SHOP NOW"
+                  },
+                  "type": "button"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "text_pY4eBT",
+                  "settings": {
+                    "text": "<h6>You’ll be redirected to ORIZEN, our Australian retail partner, to complete your purchase.</h6>"
+                  },
+                  "type": "text"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "divider_VJhene",
+                  "settings": {},
+                  "type": "_divider"
+                },
+                {
+                  "blocks": [],
+                  "disabled": true,
+                  "id": "variant_picker_R3rGDr",
+                  "settings": {},
+                  "type": "variant-picker"
+                },
+                {
+                  "blocks": [
+                    {
+                      "blocks": [],
+                      "disabled": false,
+                      "id": "quantity",
+                      "settings": {},
+                      "static": true,
+                      "type": "quantity"
+                    },
+                    {
+                      "blocks": [],
+                      "disabled": false,
+                      "id": "add-to-cart",
+                      "settings": {},
+                      "static": true,
+                      "type": "add-to-cart"
+                    },
+                    {
+                      "blocks": [],
+                      "disabled": false,
+                      "id": "accelerated-checkout",
+                      "settings": {},
+                      "static": true,
+                      "type": "accelerated-checkout"
+                    }
+                  ],
+                  "disabled": true,
+                  "id": "buy_buttons_eYQEYi",
+                  "settings": {},
+                  "type": "buy-buttons"
+                }
+              ],
+              "disabled": false,
+              "id": "product-details",
+              "settings": {},
+              "static": true,
+              "type": "_product-details"
+            }
+          ],
+          "disabled": false,
+          "id": "main",
+          "settings": {},
+          "type": "product-information"
+        },
+        {
+          "bindings": {
+            "product": "{{ closest.product }}"
+          },
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "text_cbcgyb",
+              "settings": {
+                "text": "<h3>You may also like </h3>"
+              },
+              "type": "text"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_card_gallery_DNizbJ",
+                  "settings": {},
+                  "type": "_product-card-gallery"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_title_M7MJkb",
+                  "settings": {},
+                  "type": "product-title"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "price_gLWgA6",
+                  "settings": {},
+                  "type": "price"
+                }
+              ],
+              "disabled": false,
+              "id": "static-product-card",
+              "settings": {},
+              "static": true,
+              "type": "_product-card"
+            }
+          ],
+          "disabled": false,
+          "id": "product_recommendations_qggXJq",
+          "settings": {
+            "max_products": 4
+          },
+          "type": "product-recommendations"
+        }
+      ]
+    },
+    "templates/search.json": {
+      "sections": [
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "heading",
+              "settings": {},
+              "static": true,
+              "type": "_heading"
+            },
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "search",
+              "settings": {},
+              "static": true,
+              "type": "_search-input"
+            }
+          ],
+          "disabled": false,
+          "id": "search",
+          "settings": {},
+          "type": "search-header"
+        },
+        {
+          "blocks": [
+            {
+              "blocks": [],
+              "disabled": false,
+              "id": "filters",
+              "settings": {},
+              "static": true,
+              "type": "filters"
+            },
+            {
+              "blocks": [
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_card_gallery_cFExAi",
+                  "settings": {},
+                  "type": "_product-card-gallery"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "product_title_j7qXTx",
+                  "settings": {},
+                  "type": "product-title"
+                },
+                {
+                  "blocks": [],
+                  "disabled": false,
+                  "id": "price_fYkUgG",
+                  "settings": {},
+                  "type": "price"
+                }
+              ],
+              "disabled": false,
+              "id": "product-card",
+              "settings": {},
+              "static": true,
+              "type": "_product-card"
+            }
+          ],
+          "disabled": false,
+          "id": "main",
+          "settings": {},
+          "type": "search-results"
+        }
+      ]
+    }
+  }
+}

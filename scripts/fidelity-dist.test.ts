@@ -23,16 +23,16 @@ describe('which theme template renders each page', () => {
     expect(byTemplate(PRODUCT_TEMPLATE)).toHaveLength(products.length);
   });
 
-  it('covers home, 404, the three pages and the three collections', () => {
+  it('covers home, 404, the three pages and every collection but the frontpage one, in export order', () => {
     expect(pages.filter((p) => !p.path.startsWith('/products/')).map((p) => `${p.path} ${p.template}`)).toEqual([
       '/ templates/index.json',
       '/404.html templates/404.json',
       '/contact/ templates/page.contact.json',
       '/our-collection/ templates/page.our-collection.json',
       '/our-story/ templates/page.our-story.json',
-      '/collections/face-care/ templates/collection.json',
-      '/collections/rose-water-toners/ templates/collection.json',
-      '/collections/masks-treatments/ templates/collection.json',
+      ...rawExport.collections
+        .filter((c) => c.handle !== 'frontpage')
+        .map((c) => `${data.urls.collection(c.handle)} ${templateFor('collection', c.templateSuffix)}`),
     ]);
   });
 });
@@ -63,25 +63,32 @@ describe.skipIf(!existsSync(dist))('the check catches the homepage bug class', (
     return nodes.filter((n) => ids.has(n.id) || !n.id.startsWith('header') && !n.id.startsWith('footer'));
   };
 
-  it('flags products injected into the empty theme section (the frontpage collection bug)', () => {
+  // Targets are read from the built page, never named: staff may rename or remove any section or button.
+  const emptySection = /<div[^>]*data-theme-section="([^"]+)"[^>]*><\/div>/.exec(html);
+  const button = /<p class="block-actions" data-theme-block="([^"]+)"[\s\S]*?<\/p>/.exec(html);
+  const product = rawExport.products.find((p) => p.status === 'ACTIVE');
+
+  it.skipIf(!emptySection || !product)('flags products injected into an empty theme section (the frontpage collection bug)', () => {
+    const id = emptySection![1]!;
     const injected = html.replace(
-      /(<div[^>]*data-theme-section="section_kFXkyX"[^>]*>)<\/div>/,
-      '$1<ul><li><a href="/products/rose-face-cream-50ml/">Rose Face Cream 50ml</a></li></ul></div>',
+      /(<div[^>]*data-theme-section="[^"]+"[^>]*>)<\/div>/,
+      `$1<ul><li><a href="/products/${product!.handle}/">${product!.title}</a></li></ul></div>`,
     );
     expect(injected).not.toBe(html);
-    expect(compareOutlines(expected, homeOnly(injected))).toEqual([
-      'theme section_kFXkyX [section] text "", site has text "Rose Face Cream 50ml"',
-      'theme section_kFXkyX [section] links [], site has links [/products/rose-face-cream-50ml/]',
-    ]);
+    const problems = compareOutlines(expected, homeOnly(injected));
+    expect(problems.length).toBeGreaterThan(0);
+    expect(problems.every((line) => line.startsWith(`theme ${id} `))).toBe(true);
   });
 
-  it('flags an extra section and a dropped block', () => {
+  it('flags an extra section', () => {
     const extra = html.replace('<footer', '<section data-theme-section="featured-products" data-theme-type="featured-products"></section><footer');
-    const dropped = html.replace(/<p class="block-actions" data-theme-block="button_3zVejn"[\s\S]*?<\/p>/, '');
+    expect(extra).not.toBe(html);
+    expect(compareOutlines(expected, homeOnly(extra)).join(' | ')).toMatch(/site renders featured-products \[featured-products\]/);
+  });
+
+  it.skipIf(!button)('flags a dropped block', () => {
+    const dropped = html.replace(button![0], '');
     expect(dropped).not.toBe(html);
-    expect(compareOutlines(expected, homeOnly(extra))).toEqual([
-      'site renders featured-products [featured-products] after section_GPKnxM, the theme has no such node here',
-    ]);
-    expect(compareOutlines(expected, homeOnly(dropped))).toEqual(['theme section_GPKnxM > button_3zVejn [button] is missing on the site']);
+    expect(compareOutlines(expected, homeOnly(dropped)).join(' | ')).toContain(`${button![1]!} [button] is missing on the site`);
   });
 });

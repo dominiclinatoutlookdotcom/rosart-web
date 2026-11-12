@@ -1,0 +1,1036 @@
+{
+  "failed": {},
+  "images": {
+    "1-2.png": {
+      "bytes": 1616888,
+      "references": [
+        "collection:face-care"
+      ],
+      "sha256": "b9e155df327ef940fa4f759d7c74c357c9093ad33e5704a83c3699a2f119ba72",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/1.png?v=1794031669"
+    },
+    "1.png": {
+      "bytes": 1616888,
+      "references": [
+        "file:gid://shopify/MediaImage/74391738908753",
+        "shop_images:1.png"
+      ],
+      "sha256": "b9e155df327ef940fa4f759d7c74c357c9093ad33e5704a83c3699a2f119ba72",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/1.png?v=1793701179"
+    },
+    "1_e8d51abc-fa25-4a53-8000-2a109dc374e9.png": {
+      "bytes": 2020827,
+      "references": [
+        "file:gid://shopify/MediaImage/74418953650257",
+        "product:rose-facial-toner-330ml"
+      ],
+      "sha256": "93e7f8024de61d254508bffa95135c1704a6155d4de2c3e1f40d9cc2843e2491",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/1_e8d51abc-fa25-4a53-8000-2a109dc374e9.png?v=1793790133"
+    },
+    "2-2.png": {
+      "bytes": 1742509,
+      "references": [
+        "collection:face-care-copy"
+      ],
+      "sha256": "dfe0e24be368369c41386f2306985a4c90e774629acdbd3bba86d94123751484",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/2.png?v=1794031665"
+    },
+    "2.png": {
+      "bytes": 1742509,
+      "references": [
+        "file:gid://shopify/MediaImage/74391743365201",
+        "shop_images:2.png"
+      ],
+      "sha256": "dfe0e24be368369c41386f2306985a4c90e774629acdbd3bba86d94123751484",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/2.png?v=1793701192"
+    },
+    "2_3f29349c-2ca4-4df1-a6a4-11f29261cce9.png": {
+      "bytes": 1780772,
+      "references": [
+        "file:gid://shopify/MediaImage/74418953683025",
+        "product:rose-facial-toner-330ml"
+      ],
+      "sha256": "e5eded6a2234a5208d74480670b91ef6c487a9b7744b7ad81f91e1535dc38c54",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/2_3f29349c-2ca4-4df1-a6a4-11f29261cce9.png?v=1793790133"
+    },
+    "3.png": {
+      "bytes": 2140296,
+      "references": [
+        "file:gid://shopify/MediaImage/74391749230673",
+        "shop_images:3.png"
+      ],
+      "sha256": "a417f8612e1600b73bc81bdea21f33a6e90f83321a43e7fe1b3331cc51f72874",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/3.png?v=1793701208"
+    },
+    "3_e77f03d4-0767-4f83-939c-86d99bde2338-2.png": {
+      "bytes": 2140296,
+      "references": [
+        "collection:rose-water-toners-copy"
+      ],
+      "sha256": "a417f8612e1600b73bc81bdea21f33a6e90f83321a43e7fe1b3331cc51f72874",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/3_e77f03d4-0767-4f83-939c-86d99bde2338.png?v=1794031673"
+    },
+    "3_e77f03d4-0767-4f83-939c-86d99bde2338.png": {
+      "bytes": 2140296,
+      "references": [
+        "file:gid://shopify/MediaImage/74410766106705"
+      ],
+      "sha256": "a417f8612e1600b73bc81bdea21f33a6e90f83321a43e7fe1b3331cc51f72874",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/3_e77f03d4-0767-4f83-939c-86d99bde2338.png?v=1793763688"
+    },
+    "ARTEC.png": {
+      "bytes": 121453,
+      "references": [
+        "file:gid://shopify/MediaImage/74438877937745",
+        "theme:templates/page.our-story.json"
+      ],
+      "sha256": "e4213644cbabea793acd730a53ce40c5ad50fc86960fa2fe64d3eacc53fb7d2e",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ARTEC.png?v=1793858961"
+    },
+    "Add_a_heading.png": {
+      "bytes": 519768,
+      "references": [
+        "file:gid://shopify/MediaImage/74433943404625"
+      ],
+      "sha256": "dc8d34049a5f905d695df1cfe700cbcc0053800bc1754ec0dbc2f2eb7efaa9ed",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Add_a_heading.png?v=1793849461"
+    },
+    "Add_a_heading_fcec8aa5-9bda-44ce-96bc-7966b68e00f2.png": {
+      "bytes": 519768,
+      "references": [
+        "file:gid://shopify/MediaImage/74433948680273",
+        "shop_images:Add_a_heading_fcec8aa5-9bda-44ce-96bc-7966b68e00f2.png"
+      ],
+      "sha256": "dc8d34049a5f905d695df1cfe700cbcc0053800bc1754ec0dbc2f2eb7efaa9ed",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Add_a_heading_fcec8aa5-9bda-44ce-96bc-7966b68e00f2.png?v=1793849476"
+    },
+    "Aged_Iron_Hatch_with_Rose_Petals.png": {
+      "bytes": 2845800,
+      "references": [
+        "file:gid://shopify/MediaImage/74409168896081"
+      ],
+      "sha256": "294e35f8257099ba8cae34c5e1aefae991fbd307bba0b01629bef80695a8cc11",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Aged_Iron_Hatch_with_Rose_Petals.png?v=1793758111"
+    },
+    "BulgarianRoseCream3g.jpg": {
+      "bytes": 69804,
+      "references": [
+        "file:gid://shopify/MediaImage/74412600721489"
+      ],
+      "sha256": "144109817cb872ee05a19ce3573e29fe39501771c6a5bd0384eff70ba3d61904",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCream3g.jpg?v=1793770749"
+    },
+    "BulgarianRoseCream3g_14a773ff-e665-4af0-8662-6debcfef1347.jpg": {
+      "bytes": 69804,
+      "references": [
+        "file:gid://shopify/MediaImage/74412707905617",
+        "product:rose-face-cream-3g"
+      ],
+      "sha256": "144109817cb872ee05a19ce3573e29fe39501771c6a5bd0384eff70ba3d61904",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCream3g_14a773ff-e665-4af0-8662-6debcfef1347.jpg?v=1793772403"
+    },
+    "BulgarianRoseCreamDuo.jpg": {
+      "bytes": 74619,
+      "references": [
+        "file:gid://shopify/MediaImage/74412680839249",
+        "product:rose-face-cream-50ml"
+      ],
+      "sha256": "e3fcf4c106294b3be696d371931b19bf1de71caf7d98a0cb762f71eb7be2ff2a",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCreamDuo.jpg?v=1793771836"
+    },
+    "BulgarianRoseCreaminBloomingGarden.png": {
+      "bytes": 1851907,
+      "references": [
+        "file:gid://shopify/MediaImage/74412600754257"
+      ],
+      "sha256": "d6f51deb8c0b43a4c8b0191cc40d2d0e2bb2c81bb9108246206e021c076c6318",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCreaminBloomingGarden.png?v=1793770749"
+    },
+    "BulgarianRoseFaceCreamStillLife.png": {
+      "bytes": 1617329,
+      "references": [
+        "file:gid://shopify/MediaImage/74412600787025"
+      ],
+      "sha256": "316e7e4bcc4bd45abc7ab62f83d16c1061a43705c36b2a653bd9e96f3f3803e3",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseFaceCreamStillLife.png?v=1793770749"
+    },
+    "BulgarianRoseFaceCreamStillLife_ca18a3dc-fd34-4fcd-90fa-796fa6294fe9.png": {
+      "bytes": 1617329,
+      "references": [
+        "file:gid://shopify/MediaImage/74412708659281",
+        "product:rose-face-cream-3g"
+      ],
+      "sha256": "316e7e4bcc4bd45abc7ab62f83d16c1061a43705c36b2a653bd9e96f3f3803e3",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseFaceCreamStillLife_ca18a3dc-fd34-4fcd-90fa-796fa6294fe9.png?v=1793772421"
+    },
+    "BulgarianRoseHydrosolEssenceMask.png": {
+      "bytes": 1728030,
+      "references": [
+        "file:gid://shopify/MediaImage/74419025870929"
+      ],
+      "sha256": "84432d780293573bbcc10927ab1c92b075b938f6bc762f285c464312674740e2",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseHydrosolEssenceMask.png?v=1793790308"
+    },
+    "BulgarianRoseRosartWaterSet.png": {
+      "bytes": 1755135,
+      "references": [
+        "file:gid://shopify/MediaImage/74419325010001",
+        "product:rose-water-100ml"
+      ],
+      "sha256": "055a710335ce5c0686d3f7d496e3be874ac7457674bfa10f17ee7d903ddf12cb",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseRosartWaterSet.png?v=1793791195"
+    },
+    "Bulgarian_Rose_Face_Cream_Still_Life.png": {
+      "bytes": 1617329,
+      "references": [
+        "file:gid://shopify/MediaImage/74391541317713"
+      ],
+      "sha256": "316e7e4bcc4bd45abc7ab62f83d16c1061a43705c36b2a653bd9e96f3f3803e3",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Bulgarian_Rose_Face_Cream_Still_Life.png?v=1793700639"
+    },
+    "Curved-LabelRosartRoseCreamSet.png": {
+      "bytes": 1525434,
+      "references": [
+        "file:gid://shopify/MediaImage/74451420545105",
+        "product:rose-face-souffle-cream-50ml"
+      ],
+      "sha256": "b62e46d6911720a27e48f1a67042be34274184270a8ad5f21fc4a388ebe2618e",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Curved-LabelRosartRoseCreamSet.png?v=1793879081"
+    },
+    "DSC06467.jpg": {
+      "bytes": 4175928,
+      "references": [
+        "file:gid://shopify/MediaImage/74391044358225",
+        "shop_images:DSC06467.jpg"
+      ],
+      "sha256": "ea1b27f7b8c474d34c7ea83ca3659b62eff54616de84c2b07c92a706c9aee8e4",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/DSC06467.jpg?v=1793699436"
+    },
+    "DSC08666_Rosart_Mobile_1200x1500_e230edb1-8068-47e5-b216-efa8170e4f7e.jpg": {
+      "bytes": 284276,
+      "references": [
+        "file:gid://shopify/MediaImage/74433116078161",
+        "shop_images:DSC08666_Rosart_Mobile_1200x1500_e230edb1-8068-47e5-b216-efa8170e4f7e.jpg"
+      ],
+      "sha256": "384d44c5b4893bf1b369665fb9fc8dbca3e03d150d6ca26cf966711d4f2973dd",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/DSC08666_Rosart_Mobile_1200x1500_e230edb1-8068-47e5-b216-efa8170e4f7e.jpg?v=1793843525"
+    },
+    "Dewy_Damask_Roses_at_Dawn.png": {
+      "bytes": 2037466,
+      "references": [
+        "file:gid://shopify/MediaImage/74391997874257"
+      ],
+      "sha256": "89c73bc3882cc1900ee33f02c35b463b8856364d8906db20772d2a6dc8d1d736",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Dewy_Damask_Roses_at_Dawn.png?v=1793701883"
+    },
+    "Dewy_Damask_Roses_at_Dawn_20823fa8-eb59-41df-9263-936ae55708bc.png": {
+      "bytes": 2037466,
+      "references": [
+        "file:gid://shopify/MediaImage/74409087991889"
+      ],
+      "sha256": "89c73bc3882cc1900ee33f02c35b463b8856364d8906db20772d2a6dc8d1d736",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Dewy_Damask_Roses_at_Dawn_20823fa8-eb59-41df-9263-936ae55708bc.png?v=1793756093"
+    },
+    "Dewy_Damask_Roses_at_Dawn_fc3ff61b-477a-4dae-95ce-7ccb65678889.png": {
+      "bytes": 2037466,
+      "references": [
+        "file:gid://shopify/MediaImage/74432808452177"
+      ],
+      "sha256": "89c73bc3882cc1900ee33f02c35b463b8856364d8906db20772d2a6dc8d1d736",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Dewy_Damask_Roses_at_Dawn_fc3ff61b-477a-4dae-95ce-7ccb65678889.png?v=1793842337"
+    },
+    "ESPRITHONGKONG_1.png": {
+      "bytes": 1860147,
+      "references": [
+        "file:gid://shopify/MediaImage/74412645941329",
+        "product:rose-face-cream-50ml"
+      ],
+      "sha256": "199d610930c4b0a70c256e887b3604bf4bf93809f2a53ddf5c07c9b19c0de3f1",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_1.png?v=1793771197"
+    },
+    "ESPRITHONGKONG_3.png": {
+      "bytes": 1618167,
+      "references": [
+        "file:gid://shopify/MediaImage/74452926726225",
+        "product:100-natural-damascena-rose-water-10ml"
+      ],
+      "sha256": "e5db3f1ff8d9f35145e26052e3796af6e7972ac9204e443a9adacdb0f5b4a6c3",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_3.png?v=1793880128"
+    },
+    "ESPRIT_HONG_KONG.png": {
+      "bytes": 107901,
+      "references": [
+        "file:gid://shopify/MediaImage/74389395308625",
+        "shop_images:ESPRIT_HONG_KONG.png"
+      ],
+      "sha256": "7f1f6827b3f228986f4bb2233047bf64d6b76f749605a5d7922cd9c7c8ede5c9",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRIT_HONG_KONG.png?v=1793695789"
+    },
+    "ESPRIT_HONG_KONG_ccb47ef3-5956-4292-85c2-cde106af6ce8.png": {
+      "bytes": 2506449,
+      "references": [
+        "file:gid://shopify/MediaImage/74409144975441"
+      ],
+      "sha256": "6cd70d967030785fd2cbe49a4b55b272e5f19bc3a4ed24441825aef843a14374",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRIT_HONG_KONG_ccb47ef3-5956-4292-85c2-cde106af6ce8.png?v=1793757580"
+    },
+    "ESPRIT_HONG_KONG_f0a060ae-af0e-4c30-b417-84e0f08f40c7.png": {
+      "bytes": 3364018,
+      "references": [
+        "file:gid://shopify/MediaImage/74392770183249",
+        "shop_images:ESPRIT_HONG_KONG_f0a060ae-af0e-4c30-b417-84e0f08f40c7.png"
+      ],
+      "sha256": "d8e6f1dbf6bf55ed945067ea1b53e83eca079065d0169a20476bb1b83137656e",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRIT_HONG_KONG_f0a060ae-af0e-4c30-b417-84e0f08f40c7.png?v=1793703648"
+    },
+    "ESPRIT_HONG_KONG_fdf0dc76-fb97-4a9b-bc71-5c452274882d.png": {
+      "bytes": 2546647,
+      "references": [
+        "file:gid://shopify/MediaImage/74409142550609"
+      ],
+      "sha256": "ed0a2c5e2ae3ac7c4c75a88ad30819078196eb722ad2aa7afcf93f7aeabccab8",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRIT_HONG_KONG_fdf0dc76-fb97-4a9b-bc71-5c452274882d.png?v=1793757512"
+    },
+    "GlossyGoldenSoftgelCapsules.png": {
+      "bytes": 1630034,
+      "references": [
+        "file:gid://shopify/MediaImage/74419416039505",
+        "product:rose-oil-revitalizing-essence-30-capsules"
+      ],
+      "sha256": "b30f49b732e7e9e36b1d542f3f5cf3d3797ddc1acfdaa2eb66abe31f53e18614",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GlossyGoldenSoftgelCapsules.png?v=1793791564"
+    },
+    "GoldenCapsuleCuttingGuide.png": {
+      "bytes": 1660939,
+      "references": [
+        "file:gid://shopify/MediaImage/74419382222929",
+        "product:rose-oil-revitalizing-essence-30-capsules"
+      ],
+      "sha256": "a47ee3c382ab395b53191f6524f034248b8c3bb542e7116d1b8c01bf1fc55ec4",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GoldenCapsuleCuttingGuide.png?v=1793791393"
+    },
+    "ORIZEN.png": {
+      "bytes": 68580,
+      "references": [
+        "file:gid://shopify/MediaImage/74438877741137",
+        "theme:templates/page.our-story.json"
+      ],
+      "sha256": "9feb1c2ea71ff94166a24c0a32ca774ebd600219d6f01ee1d60c5501ad7274df",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ORIZEN.png?v=1793858961"
+    },
+    "ROSART.png": {
+      "bytes": 103268,
+      "references": [
+        "file:gid://shopify/MediaImage/74438877970513",
+        "theme:templates/page.our-story.json"
+      ],
+      "sha256": "2b7231549dc029edab4e55027b2d624d272ed5b275173da3250a4dc4a6b85f7e",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ROSART.png?v=1793858961"
+    },
+    "RST.png": {
+      "bytes": 1299823,
+      "references": [
+        "file:gid://shopify/MediaImage/74453223735377",
+        "product:rose-water-100ml"
+      ],
+      "sha256": "6acddbb0782daac04d8c4c38af9b4b10d03e24a6b2ee7d63a384e61f82e9d347",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST.png?v=1793880512"
+    },
+    "RST2.png": {
+      "bytes": 2204763,
+      "references": [
+        "file:gid://shopify/MediaImage/74454394110033",
+        "product:bulgarian-rose-hydrosol-essence-mask-5pcs"
+      ],
+      "sha256": "4a0cbb04f198412ab4c6bd1939df7283054c574e6876036035644c6a05ce20a6",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST2.png?v=1793881336"
+    },
+    "RST_007bac73-3152-441e-9d95-86ccd6e85270.png": {
+      "bytes": 2285798,
+      "references": [
+        "file:gid://shopify/MediaImage/74453937946705",
+        "product:bulgarian-rose-hydrosol-essence-mask-5pcs"
+      ],
+      "sha256": "781e5b546dce65cd3053465a07e87e19cae7955de0ca02d0b030a711262fc376",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_007bac73-3152-441e-9d95-86ccd6e85270.png?v=1793881123"
+    },
+    "RST_1.png": {
+      "bytes": 2192372,
+      "references": [
+        "file:gid://shopify/MediaImage/74453223768145",
+        "product:rose-water-100ml"
+      ],
+      "sha256": "f042f659e573e14687366d264744ad59595e0b64ab2e2ae078a6e84998b271b4",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1.png?v=1793880511"
+    },
+    "RST_1_c9e99047-71cb-42e8-86ac-bfdbad6c3da8.png": {
+      "bytes": 1834388,
+      "references": [
+        "file:gid://shopify/MediaImage/74453893972049",
+        "product:rose-oil-revitalizing-essence-30-capsules"
+      ],
+      "sha256": "0d74dd26912b2545fdd1704dee2391ea3443feb2ca77479e8e9055fedea9a1eb",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1_c9e99047-71cb-42e8-86ac-bfdbad6c3da8.png?v=1793880975"
+    },
+    "RST_2.png": {
+      "bytes": 1660242,
+      "references": [
+        "file:gid://shopify/MediaImage/74453223800913",
+        "product:rose-water-100ml"
+      ],
+      "sha256": "7c851258988079dc1ab5bc2b63ca9a7e17dc94c40e545fb142b532ac2c70c6d4",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_2.png?v=1793880511"
+    },
+    "RST_65e67bcf-5d90-4538-8ea6-8383481d6367.png": {
+      "bytes": 1300225,
+      "references": [
+        "file:gid://shopify/MediaImage/74455763026001",
+        "product:rose-facial-toner-330ml"
+      ],
+      "sha256": "a719e977d65ac4926337d83a93b67e86cc1c890b63594ff703fa89e6524f377f",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_65e67bcf-5d90-4538-8ea6-8383481d6367.png?v=1793882604"
+    },
+    "RST_a7c30e84-49fb-48b6-a53d-de7ec63c08d5.png": {
+      "bytes": 1738740,
+      "references": [
+        "file:gid://shopify/MediaImage/74453894004817",
+        "product:rose-oil-revitalizing-essence-30-capsules"
+      ],
+      "sha256": "e6daad229f6f7824cfe9e0b1e9551225e4ae5e545361bab8bcd1125c65380542",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_a7c30e84-49fb-48b6-a53d-de7ec63c08d5.png?v=1793880975"
+    },
+    "RosartBulgarianRoseEssenceMaskBox.png": {
+      "bytes": 1508338,
+      "references": [
+        "file:gid://shopify/MediaImage/74419025838161",
+        "product:bulgarian-rose-hydrosol-essence-mask-5pcs"
+      ],
+      "sha256": "984607add308d7922b4a1bee685e703e730e6b42baa53773159bac4fca547d0c",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseEssenceMaskBox.png?v=1793790307"
+    },
+    "RosartBulgarianRoseFaceMaskDuo.png": {
+      "bytes": 1746376,
+      "references": [
+        "file:gid://shopify/MediaImage/74418718212177",
+        "product:rosart-rose-face-mask-80ml"
+      ],
+      "sha256": "b9cf3000d8cbf7f0c700eff24e4eea139381311dccf59cc5053b31f6c3b41af2",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseFaceMaskDuo.png?v=1793789419"
+    },
+    "RosartBulgarianRoseMaskShowcase.png": {
+      "bytes": 1910012,
+      "references": [
+        "file:gid://shopify/MediaImage/74454394142801",
+        "product:bulgarian-rose-hydrosol-essence-mask-5pcs"
+      ],
+      "sha256": "59b64eae011b47e12d795d93125f9fc4ca39dfdbfeeb149fbed03e03aa2c27af",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseMaskShowcase.png?v=1793881335"
+    },
+    "RosartBulgarianRoseWaterSet.png": {
+      "bytes": 1599246,
+      "references": [
+        "file:gid://shopify/MediaImage/74419497762897",
+        "product:100-natural-damascena-rose-water-10ml"
+      ],
+      "sha256": "e9eb7a16488214fc6740ef58b2c7d36db426405ac65b38631f163f1fd79c0abd",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseWaterSet.png?v=1793791940"
+    },
+    "RosartGoldSkincareJarinBloomingGarden.png": {
+      "bytes": 1787305,
+      "references": [
+        "file:gid://shopify/MediaImage/74419241287761",
+        "product:rose-oil-revitalizing-essence-30-capsules"
+      ],
+      "sha256": "a4e0c2f2e3c95d65a582384ceded799b3cd5f6bfd74918ff7125357b8a786695",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartGoldSkincareJarinBloomingGarden.png?v=1793790918"
+    },
+    "RosartGoldenCapsulesandSpoon.png": {
+      "bytes": 1723959,
+      "references": [
+        "file:gid://shopify/MediaImage/74419230507089"
+      ],
+      "sha256": "b72f1ce4725fe07f50a093e1a37e829c8b0811273ad7097b400fe9fb4729e757",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartGoldenCapsulesandSpoon.png?v=1793790886"
+    },
+    "RosartOrganicRoseWaterinBloom.png": {
+      "bytes": 1594976,
+      "references": [
+        "file:gid://shopify/MediaImage/74419497795665"
+      ],
+      "sha256": "305b9fd8ea9830727f74bf70ea4b473d9ae04322c01bdfecd4fac4ca69cd12ef",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartOrganicRoseWaterinBloom.png?v=1793791939"
+    },
+    "RosartRoseBalminaSunlitGarden.png": {
+      "bytes": 1886752,
+      "references": [
+        "file:gid://shopify/MediaImage/74418652151889",
+        "product:rose-cleansing-balm-80ml"
+      ],
+      "sha256": "989bfc5b26433d0dacd6dcbd2e16bbcff158a7ac32a3722a7507ec0745b70d76",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseBalminaSunlitGarden.png?v=1793789264"
+    },
+    "RosartRoseCleansingBalmDisplay.png": {
+      "bytes": 1515298,
+      "references": [
+        "file:gid://shopify/MediaImage/74418652086353",
+        "product:rose-cleansing-balm-80ml"
+      ],
+      "sha256": "471ee2dd5d419a57721d5dd246bbe9ae95911c0ca639d9d06413d9ce3a7319c8",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseCleansingBalmDisplay.png?v=1793789263"
+    },
+    "RosartRoseCreaminaRoseGarden.png": {
+      "bytes": 1618507,
+      "references": [
+        "file:gid://shopify/MediaImage/74419230539857"
+      ],
+      "sha256": "480eefa0176c81ef59eb95e1a80ba64053a65283dc6a2e8d2f5b689f0e7b3146",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseCreaminaRoseGarden.png?v=1793790886"
+    },
+    "RosartRoseGlycerinSoapSet.png": {
+      "bytes": 1455769,
+      "references": [
+        "file:gid://shopify/MediaImage/74419133218897",
+        "product:rose-glycerin-soap-90g"
+      ],
+      "sha256": "7e1f8ab89a35a331e6b8ef8380972e3e7525332a7e0c03f4eeb6b5fd811733cc",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseGlycerinSoapSet.png?v=1793790615"
+    },
+    "RosartRoseMaskGardenStillLife.png": {
+      "bytes": 2185230,
+      "references": [
+        "file:gid://shopify/MediaImage/74418718244945",
+        "product:rosart-rose-face-mask-80ml"
+      ],
+      "sha256": "f88aed21105852e23aed0723b67d46d60ea80f691b0dfbd42c9905e9024346b0",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskGardenStillLife.png?v=1793789419"
+    },
+    "RosartRoseMaskinBloom.png": {
+      "bytes": 2152319,
+      "references": [
+        "file:gid://shopify/MediaImage/74418718277713",
+        "product:rosart-rose-face-mask-80ml"
+      ],
+      "sha256": "6cdb113c88a4941f99da0533eb4d0748cc471b12edda9da72509822d1608200a",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskinBloom.png?v=1793789419"
+    },
+    "RosartRoseOilProductDisplay.png": {
+      "bytes": 1646226,
+      "references": [
+        "file:gid://shopify/MediaImage/74419230441553"
+      ],
+      "sha256": "9801167f1ffd9bafdf6458ed2e9b6b5dc20ae94616633cdc8e800832e5c1f5b1",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseOilProductDisplay.png?v=1793790886"
+    },
+    "RosartRoseSoapinSunlitGarden.png": {
+      "bytes": 1822537,
+      "references": [
+        "file:gid://shopify/MediaImage/74419133251665"
+      ],
+      "sha256": "832f7fcfe9ae6ce803da1ae41648ec8365b380b992cdeddd9478a3dbd16250de",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSoapinSunlitGarden.png?v=1793790615"
+    },
+    "RosartRoseSoapinSunlitGarden_3f7fc8b5-0d9f-477b-88d5-ba98bfe3eaa7.png": {
+      "bytes": 1884125,
+      "references": [
+        "file:gid://shopify/MediaImage/74432052363345",
+        "product:rose-glycerin-soap-90g"
+      ],
+      "sha256": "224a06adc115595d686b19dec520d9ca213da1d44d3bdb232e383bf59c9c62e8",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSoapinSunlitGarden_3f7fc8b5-0d9f-477b-88d5-ba98bfe3eaa7.png?v=1793838507"
+    },
+    "RosartRoseSouffleCreamDisplay.png": {
+      "bytes": 1512318,
+      "references": [
+        "file:gid://shopify/MediaImage/74412714000465"
+      ],
+      "sha256": "3d796d2d5f7da07419453613c9165cae6e82ba072c9272e3c27c06c4f26b6627",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleCreamDisplay.png?v=1793772602"
+    },
+    "RosartRoseSouffleCreamSet.png": {
+      "bytes": 1519329,
+      "references": [
+        "file:gid://shopify/MediaImage/74412718358609",
+        "product:rose-face-souffle-cream-3g"
+      ],
+      "sha256": "a4724a50a8c5876b41a6ded01f9fc27e306ea44e744e270978e523283955e17c",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleCreamSet.png?v=1793772758"
+    },
+    "RosartRoseSouffleStillLife.png": {
+      "bytes": 1753292,
+      "references": [
+        "file:gid://shopify/MediaImage/74412714033233",
+        "product:rose-face-souffle-cream-50ml"
+      ],
+      "sha256": "a96fbfd864bfeadacd28c38fd8678205a8b9fe338aa4384a0eb7541220c2e44b",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleStillLife.png?v=1793772602"
+    },
+    "RosartRoseTonerStillLife.png": {
+      "bytes": 1992265,
+      "references": [
+        "file:gid://shopify/MediaImage/74418953715793",
+        "product:rose-facial-toner-330ml"
+      ],
+      "sha256": "fcd7342260b5bc35fca2dc4a9a565c186c41384d647174ba4c6b08af04926d1c",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseTonerStillLife.png?v=1793790134"
+    },
+    "RosartRoseWaterReflections.png": {
+      "bytes": 1908173,
+      "references": [
+        "file:gid://shopify/MediaImage/74419325075537"
+      ],
+      "sha256": "52afb6bba909ab73e360ca7a7db12a5595052fe8baae9d1851b937e7db027155",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterReflections.png?v=1793791195"
+    },
+    "RosartRoseWaterStillLife.png": {
+      "bytes": 1744217,
+      "references": [
+        "file:gid://shopify/MediaImage/74419325108305"
+      ],
+      "sha256": "e2a0de3a41dfcf9b735b293be442ed619a6aefd50b8e5849fdd2fba91fb3190e",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterStillLife.png?v=1793791195"
+    },
+    "RosartRoseWaterinBloom.png": {
+      "bytes": 2229963,
+      "references": [
+        "file:gid://shopify/MediaImage/74419325042769"
+      ],
+      "sha256": "2c8317e1ef07f48b0de6cf128ba3ae3a000532394dda60ce9d6b8fc1f5e2e119",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterinBloom.png?v=1793791195"
+    },
+    "RosartRoseWaterinaSunlitRoseGarden.png": {
+      "bytes": 1787354,
+      "references": [
+        "file:gid://shopify/MediaImage/74419427278929",
+        "product:rose-water-100ml"
+      ],
+      "sha256": "0695f9c709d5c754b2661b204dc6bab5cca8b0da8aa71c6f1c8ee4f1d3872c6e",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterinaSunlitRoseGarden.png?v=1793791608"
+    },
+    "RosartRosehipOilinaSunlitGarden.png": {
+      "bytes": 1840540,
+      "references": [
+        "file:gid://shopify/MediaImage/74419533807697",
+        "product:pure-face-rosehip-oil-20ml"
+      ],
+      "sha256": "e9a6f6b7eb27d59dc5fd48073c2abdec633bf754c5e5df377b9bb34584cf8422",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRosehipOilinaSunlitGarden.png?v=1793792090"
+    },
+    "RosartSmallDropperBottleinWarmStudioLight.png": {
+      "bytes": 1250003,
+      "references": [
+        "file:gid://shopify/MediaImage/74419602587729",
+        "product:pure-face-rosehip-oil-2ml"
+      ],
+      "sha256": "78d6abbb3e77b964ddc25b54b78e73caf430755d04406cfe30b6c2a1503318f8",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartSmallDropperBottleinWarmStudioLight.png?v=1793792441"
+    },
+    "Rosart_Distillery_in_Bulgaria_s_Valley_of_Roses.png": {
+      "bytes": 3079359,
+      "references": [
+        "file:gid://shopify/MediaImage/74433281982545",
+        "shop_images:Rosart_Distillery_in_Bulgaria_s_Valley_of_Roses.png"
+      ],
+      "sha256": "030b1f5b227e00f04a40f47dd5a00672a50a0a2b5f52d4f88455804935bf5a09",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Distillery_in_Bulgaria_s_Valley_of_Roses.png?v=1793844850"
+    },
+    "Rosart_Organic_Rose_Water_in_Bloom.png": {
+      "bytes": 1594976,
+      "references": [
+        "file:gid://shopify/MediaImage/74391560323153"
+      ],
+      "sha256": "305b9fd8ea9830727f74bf70ea4b473d9ae04322c01bdfecd4fac4ca69cd12ef",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Organic_Rose_Water_in_Bloom.png?v=1793700682"
+    },
+    "Rosart_Rose_Balm_in_a_Sunlit_Garden.png": {
+      "bytes": 1886752,
+      "references": [
+        "file:gid://shopify/MediaImage/74409211494481",
+        "shop_images:Rosart_Rose_Balm_in_a_Sunlit_Garden.png"
+      ],
+      "sha256": "989bfc5b26433d0dacd6dcbd2e16bbcff158a7ac32a3722a7507ec0745b70d76",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rose_Balm_in_a_Sunlit_Garden.png?v=1793758541"
+    },
+    "Rosart_Rose_Skincare_Garden_Display.png": {
+      "bytes": 2121236,
+      "references": [
+        "file:gid://shopify/MediaImage/74392897847377"
+      ],
+      "sha256": "40e2f5e93724b1541611ebac2c47a2aaeba1f70990d5092d58d5b24a6400c2a1",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rose_Skincare_Garden_Display.png?v=1793703926"
+    },
+    "Rosart_Rose_Water_Still_Life.png": {
+      "bytes": 1744217,
+      "references": [
+        "file:gid://shopify/MediaImage/74391593615441"
+      ],
+      "sha256": "e2a0de3a41dfcf9b735b293be442ed619a6aefd50b8e5849fdd2fba91fb3190e",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rose_Water_Still_Life.png?v=1793700770"
+    },
+    "Rosart_Rosehip_4x5_1.png": {
+      "bytes": 1351124,
+      "references": [
+        "file:gid://shopify/MediaImage/74419533840465",
+        "product:pure-face-rosehip-oil-20ml"
+      ],
+      "sha256": "c6cadc77fdbf9dee90f39eb897adf453d10abc70fad35feed87f33ade264343e",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_1.png?v=1793792089"
+    },
+    "Rosart_Rosehip_4x5_2.png": {
+      "bytes": 1689829,
+      "references": [
+        "file:gid://shopify/MediaImage/74419533742161",
+        "product:pure-face-rosehip-oil-20ml"
+      ],
+      "sha256": "81a20c0f39ce9b84da97a41c192bfc48711c6eac84c37350a80e074e89e1c657",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_2.png?v=1793792089"
+    },
+    "Rosart_Rosehip_4x5_3.png": {
+      "bytes": 526473,
+      "references": [
+        "file:gid://shopify/MediaImage/74419533774929",
+        "product:pure-face-rosehip-oil-20ml"
+      ],
+      "sha256": "35ae0f65a96f86c88fef38f120b5b67f4f45d13083215b7f54b6d109752c79c6",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_3.png?v=1793792088"
+    },
+    "Rosart_s_Bulgarian_Valley_of_Roses_Map.png": {
+      "bytes": 2884574,
+      "references": [
+        "file:gid://shopify/MediaImage/74433807286353",
+        "shop_images:Rosart_s_Bulgarian_Valley_of_Roses_Map.png"
+      ],
+      "sha256": "695c6844e39da79d8e166d7fc46c6ff0e312b453dfab3e500047cce1c780f5e4",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_s_Bulgarian_Valley_of_Roses_Map.png?v=1793848733"
+    },
+    "Rose-GoldBulgarianRoseTonerDuo.png": {
+      "bytes": 1795958,
+      "references": [
+        "file:gid://shopify/MediaImage/74418953617489"
+      ],
+      "sha256": "8956af603663377fefd1fdf3c8d22a655529523a8bb1ea51e19cc48f15f17e60",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rose-GoldBulgarianRoseTonerDuo.png?v=1793790133"
+    },
+    "Rose-GoldGlycerinSoapPackaging.png": {
+      "bytes": 2216388,
+      "references": [
+        "file:gid://shopify/MediaImage/74419133284433",
+        "product:rose-glycerin-soap-90g"
+      ],
+      "sha256": "b8e9f30a6dd687a3db8b2cebd24913bb136fb7a09321e5cd7d3fb4673a8bf327",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rose-GoldGlycerinSoapPackaging.png?v=1793790615"
+    },
+    "Rose_Petals_in_Copper_Distillation_Pot.png": {
+      "bytes": 2235827,
+      "references": [
+        "file:gid://shopify/MediaImage/74409134915665"
+      ],
+      "sha256": "9d9c34cb9f67cf8c58ab2365d5e4585611f4bc58f6e0b9436efbf68499b664c2",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rose_Petals_in_Copper_Distillation_Pot.png?v=1793757375"
+    },
+    "SunlitRoseCleansingBalmPortrait.png": {
+      "bytes": 2094762,
+      "references": [
+        "file:gid://shopify/MediaImage/74418652119121",
+        "product:rose-cleansing-balm-80ml"
+      ],
+      "sha256": "664a0e4f8b18a9cccb84f417396377ca8c8f31d92f6f718668c691fa4dd9ea3a",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseCleansingBalmPortrait.png?v=1793789263"
+    },
+    "SunlitRoseFaceCreamPortrait.png": {
+      "bytes": 1871930,
+      "references": [
+        "file:gid://shopify/MediaImage/74412600852561",
+        "product:rose-face-cream-50ml"
+      ],
+      "sha256": "670f08d69a44b56ba05b2f70600e2ddd0f047ae8423905750e25e267c067fd29",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseFaceCreamPortrait.png?v=1793770749"
+    },
+    "SunlitRoseGardenSkincarePortrait.png": {
+      "bytes": 1725097,
+      "references": [
+        "file:gid://shopify/MediaImage/74419230474321",
+        "product:rose-oil-revitalizing-essence-30-capsules"
+      ],
+      "sha256": "a967d36ab473b65935038e4423b1e285e9990449c7e0552a682e493d973d53c4",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenSkincarePortrait.png?v=1793790886"
+    },
+    "SunlitRoseGardenwithAmberDisc.png": {
+      "bytes": 1946403,
+      "references": [
+        "file:gid://shopify/MediaImage/74419133317201",
+        "product:rose-glycerin-soap-90g"
+      ],
+      "sha256": "0494943ad17ba3d6985c277b1674c872e51382333d17cdd5cdf8592ff88dd959",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenwithAmberDisc.png?v=1793790615"
+    },
+    "Sunlit_Damask_Rose_Valley.png": {
+      "bytes": 2630063,
+      "references": [
+        "file:gid://shopify/MediaImage/74392087593041"
+      ],
+      "sha256": "feaf1f28e9418dbc9096ba58099e3306c9573d9b6b78b8369d2de5a915c7d5ec",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Sunlit_Damask_Rose_Valley.png?v=1793702067"
+    },
+    "USDA_and_EU_Organic_Certifications.png": {
+      "bytes": 864483,
+      "references": [
+        "file:gid://shopify/MediaImage/74392596611153",
+        "shop_images:USDA_and_EU_Organic_Certifications.png"
+      ],
+      "sha256": "e9ab651a04519e2b753e36c8786e380cd1baf2b2df5391bfff8b9805f7c1e239",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/USDA_and_EU_Organic_Certifications.png?v=1793703156"
+    },
+    "Untitled_design_6.png": {
+      "bytes": 2293513,
+      "references": [
+        "file:gid://shopify/MediaImage/74390315171921"
+      ],
+      "sha256": "6be7d92c2da7a6a4c7275c2f384148d570453df466aa2cdf2c75b30c1d66f5fd",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Untitled_design_6.png?v=1793697775"
+    },
+    "Untitled_design_7.png": {
+      "bytes": 2293750,
+      "references": [
+        "file:gid://shopify/MediaImage/74392431263825"
+      ],
+      "sha256": "90997ec2db7b9412a9236f37dcc3f02a7602c6fbf6eee6128aa1cd9d0b471ad9",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Untitled_design_7.png?v=1793702707"
+    },
+    "Untitled_design_7_f6c26f2b-ad40-440e-a57a-fb6da4fe0dcb.png": {
+      "bytes": 2283288,
+      "references": [
+        "file:gid://shopify/MediaImage/74393615335505",
+        "shop_images:Untitled_design_7_f6c26f2b-ad40-440e-a57a-fb6da4fe0dcb.png"
+      ],
+      "sha256": "00907d010d178e4068d05cd2040c45b7c4db54d963d6c3ef2e5661e0ba2f40ef",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Untitled_design_7_f6c26f2b-ad40-440e-a57a-fb6da4fe0dcb.png?v=1793705726"
+    },
+    "Untitled_design_8.png": {
+      "bytes": 2557149,
+      "references": [
+        "file:gid://shopify/MediaImage/74392430608465"
+      ],
+      "sha256": "0318d97d55e7e3780692237f23ad27f0eb9bea0cbe7728c005e18216df10fbf9",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Untitled_design_8.png?v=1793702706"
+    },
+    "Untitled_design_8_7171c05c-c755-42c7-b662-fc397c08f2bb.png": {
+      "bytes": 2557149,
+      "references": [
+        "file:gid://shopify/MediaImage/74392448303185",
+        "shop_images:Untitled_design_8_7171c05c-c755-42c7-b662-fc397c08f2bb.png"
+      ],
+      "sha256": "0318d97d55e7e3780692237f23ad27f0eb9bea0cbe7728c005e18216df10fbf9",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Untitled_design_8_7171c05c-c755-42c7-b662-fc397c08f2bb.png?v=1793702759"
+    },
+    "bg1.png": {
+      "bytes": 2133694,
+      "references": [
+        "file:gid://shopify/MediaImage/74409321889873",
+        "shop_images:bg1.png"
+      ],
+      "sha256": "da6c7ac358b46ce4228faa4dcf8ad019cf2d21a1c3f3e4d7782a02731583e522",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/bg1.png?v=1793758902"
+    },
+    "bg3.png": {
+      "bytes": 1076901,
+      "references": [
+        "file:gid://shopify/MediaImage/74409847423057",
+        "shop_images:bg3.png"
+      ],
+      "sha256": "ecd5437361d6102e84dd75b56c1b28dcbcabc4a90b0f90095f17c6f0acdec07e",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/bg3.png?v=1793760782"
+    },
+    "cream.webp": {
+      "bytes": 76288,
+      "references": [
+        "file:gid://shopify/MediaImage/74412600819793"
+      ],
+      "sha256": "d360c824a3bf68fde15f6efcba026a27b456efa0da5983576e0bf53fb0292640",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/cream.webp?v=1793770748"
+    },
+    "cream_a16713dc-91d5-47a3-bf4b-0c7d6b82655a.webp": {
+      "bytes": 76288,
+      "references": [
+        "file:gid://shopify/MediaImage/74412707872849"
+      ],
+      "sha256": "d360c824a3bf68fde15f6efcba026a27b456efa0da5983576e0bf53fb0292640",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/cream_a16713dc-91d5-47a3-bf4b-0c7d6b82655a.webp?v=1793772402"
+    },
+    "fc1.png": {
+      "bytes": 1043388,
+      "references": [
+        "file:gid://shopify/MediaImage/74412759351377",
+        "product:rose-face-cream-50ml"
+      ],
+      "sha256": "0134c314b242efb15b2bf29d186de08296270671741ed28f7c2debe052431c6b",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/fc1.png?v=1793772987"
+    },
+    "hero_banner.png": {
+      "bytes": 2225745,
+      "references": [
+        "file:gid://shopify/MediaImage/74432276562001"
+      ],
+      "sha256": "f825d71b98f94c27404c5366db7574ef7047414a2811cf4360462cddd829ae5c",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/hero_banner.png?v=1793840132"
+    },
+    "papermask.webp": {
+      "bytes": 270918,
+      "references": [
+        "file:gid://shopify/MediaImage/74391574413393"
+      ],
+      "sha256": "d398a423c320fd2b6f3a187eaa780d12eb3c1709f218a3ce31a075c1bef04f05",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/papermask.webp?v=1793700723"
+    },
+    "papermask2.png": {
+      "bytes": 2714348,
+      "references": [
+        "file:gid://shopify/MediaImage/74419025903697"
+      ],
+      "sha256": "c67b1312081e7ca3e3e68b49fdaae478c388a6e0fb710e45a08ffa4005092277",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/papermask2.png?v=1793790308"
+    },
+    "papermask_e848f78c-f87f-48d7-8ed7-b9079143ff62.webp": {
+      "bytes": 270918,
+      "references": [
+        "file:gid://shopify/MediaImage/74419025936465"
+      ],
+      "sha256": "d398a423c320fd2b6f3a187eaa780d12eb3c1709f218a3ce31a075c1bef04f05",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/papermask_e848f78c-f87f-48d7-8ed7-b9079143ff62.webp?v=1793790306"
+    },
+    "qt_q_95.webp": {
+      "bytes": 67778,
+      "references": [
+        "file:gid://shopify/MediaImage/74389309587537"
+      ],
+      "sha256": "06434488980dcd9e99bd7cbd6ad42b9c8a8e2745b764df07f5263e78fa4901f2",
+      "url": "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/qt_q_95.webp?v=1793695680"
+    }
+  },
+  "note": "Paths are filenames relative to this folder. sources: canonical CDN URL (no query) -> file.",
+  "shop_images": {
+    "1.png": "1.png",
+    "2.png": "2.png",
+    "3.png": "3.png",
+    "Add_a_heading_fcec8aa5-9bda-44ce-96bc-7966b68e00f2.png": "Add_a_heading_fcec8aa5-9bda-44ce-96bc-7966b68e00f2.png",
+    "DSC06467.jpg": "DSC06467.jpg",
+    "DSC08666_Rosart_Mobile_1200x1500_e230edb1-8068-47e5-b216-efa8170e4f7e.jpg": "DSC08666_Rosart_Mobile_1200x1500_e230edb1-8068-47e5-b216-efa8170e4f7e.jpg",
+    "ESPRIT_HONG_KONG.png": "ESPRIT_HONG_KONG.png",
+    "ESPRIT_HONG_KONG_f0a060ae-af0e-4c30-b417-84e0f08f40c7.png": "ESPRIT_HONG_KONG_f0a060ae-af0e-4c30-b417-84e0f08f40c7.png",
+    "Rosart_Distillery_in_Bulgaria_s_Valley_of_Roses.png": "Rosart_Distillery_in_Bulgaria_s_Valley_of_Roses.png",
+    "Rosart_Rose_Balm_in_a_Sunlit_Garden.png": "Rosart_Rose_Balm_in_a_Sunlit_Garden.png",
+    "Rosart_s_Bulgarian_Valley_of_Roses_Map.png": "Rosart_s_Bulgarian_Valley_of_Roses_Map.png",
+    "USDA_and_EU_Organic_Certifications.png": "USDA_and_EU_Organic_Certifications.png",
+    "Untitled_design_7_f6c26f2b-ad40-440e-a57a-fb6da4fe0dcb.png": "Untitled_design_7_f6c26f2b-ad40-440e-a57a-fb6da4fe0dcb.png",
+    "Untitled_design_8_7171c05c-c755-42c7-b662-fc397c08f2bb.png": "Untitled_design_8_7171c05c-c755-42c7-b662-fc397c08f2bb.png",
+    "bg1.png": "bg1.png",
+    "bg3.png": "bg3.png"
+  },
+  "sources": {
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/1.png": "1-2.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/2.png": "2-2.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/collections/3_e77f03d4-0767-4f83-939c-86d99bde2338.png": "3_e77f03d4-0767-4f83-939c-86d99bde2338-2.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/1.png": "1.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/1_e8d51abc-fa25-4a53-8000-2a109dc374e9.png": "1_e8d51abc-fa25-4a53-8000-2a109dc374e9.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/2.png": "2.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/2_3f29349c-2ca4-4df1-a6a4-11f29261cce9.png": "2_3f29349c-2ca4-4df1-a6a4-11f29261cce9.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/3.png": "3.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/3_e77f03d4-0767-4f83-939c-86d99bde2338.png": "3_e77f03d4-0767-4f83-939c-86d99bde2338.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ARTEC.png": "ARTEC.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Add_a_heading.png": "Add_a_heading.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Add_a_heading_fcec8aa5-9bda-44ce-96bc-7966b68e00f2.png": "Add_a_heading_fcec8aa5-9bda-44ce-96bc-7966b68e00f2.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Aged_Iron_Hatch_with_Rose_Petals.png": "Aged_Iron_Hatch_with_Rose_Petals.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCream3g.jpg": "BulgarianRoseCream3g.jpg",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCream3g_14a773ff-e665-4af0-8662-6debcfef1347.jpg": "BulgarianRoseCream3g_14a773ff-e665-4af0-8662-6debcfef1347.jpg",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCreamDuo.jpg": "BulgarianRoseCreamDuo.jpg",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseCreaminBloomingGarden.png": "BulgarianRoseCreaminBloomingGarden.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseFaceCreamStillLife.png": "BulgarianRoseFaceCreamStillLife.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseFaceCreamStillLife_ca18a3dc-fd34-4fcd-90fa-796fa6294fe9.png": "BulgarianRoseFaceCreamStillLife_ca18a3dc-fd34-4fcd-90fa-796fa6294fe9.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseHydrosolEssenceMask.png": "BulgarianRoseHydrosolEssenceMask.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/BulgarianRoseRosartWaterSet.png": "BulgarianRoseRosartWaterSet.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Bulgarian_Rose_Face_Cream_Still_Life.png": "Bulgarian_Rose_Face_Cream_Still_Life.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Curved-LabelRosartRoseCreamSet.png": "Curved-LabelRosartRoseCreamSet.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/DSC06467.jpg": "DSC06467.jpg",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/DSC08666_Rosart_Mobile_1200x1500_e230edb1-8068-47e5-b216-efa8170e4f7e.jpg": "DSC08666_Rosart_Mobile_1200x1500_e230edb1-8068-47e5-b216-efa8170e4f7e.jpg",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Dewy_Damask_Roses_at_Dawn.png": "Dewy_Damask_Roses_at_Dawn.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Dewy_Damask_Roses_at_Dawn_20823fa8-eb59-41df-9263-936ae55708bc.png": "Dewy_Damask_Roses_at_Dawn_20823fa8-eb59-41df-9263-936ae55708bc.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Dewy_Damask_Roses_at_Dawn_fc3ff61b-477a-4dae-95ce-7ccb65678889.png": "Dewy_Damask_Roses_at_Dawn_fc3ff61b-477a-4dae-95ce-7ccb65678889.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_1.png": "ESPRITHONGKONG_1.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRITHONGKONG_3.png": "ESPRITHONGKONG_3.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRIT_HONG_KONG.png": "ESPRIT_HONG_KONG.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRIT_HONG_KONG_ccb47ef3-5956-4292-85c2-cde106af6ce8.png": "ESPRIT_HONG_KONG_ccb47ef3-5956-4292-85c2-cde106af6ce8.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRIT_HONG_KONG_f0a060ae-af0e-4c30-b417-84e0f08f40c7.png": "ESPRIT_HONG_KONG_f0a060ae-af0e-4c30-b417-84e0f08f40c7.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ESPRIT_HONG_KONG_fdf0dc76-fb97-4a9b-bc71-5c452274882d.png": "ESPRIT_HONG_KONG_fdf0dc76-fb97-4a9b-bc71-5c452274882d.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GlossyGoldenSoftgelCapsules.png": "GlossyGoldenSoftgelCapsules.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/GoldenCapsuleCuttingGuide.png": "GoldenCapsuleCuttingGuide.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ORIZEN.png": "ORIZEN.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/ROSART.png": "ROSART.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST.png": "RST.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST2.png": "RST2.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_007bac73-3152-441e-9d95-86ccd6e85270.png": "RST_007bac73-3152-441e-9d95-86ccd6e85270.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1.png": "RST_1.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_1_c9e99047-71cb-42e8-86ac-bfdbad6c3da8.png": "RST_1_c9e99047-71cb-42e8-86ac-bfdbad6c3da8.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_2.png": "RST_2.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_65e67bcf-5d90-4538-8ea6-8383481d6367.png": "RST_65e67bcf-5d90-4538-8ea6-8383481d6367.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RST_a7c30e84-49fb-48b6-a53d-de7ec63c08d5.png": "RST_a7c30e84-49fb-48b6-a53d-de7ec63c08d5.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseEssenceMaskBox.png": "RosartBulgarianRoseEssenceMaskBox.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseFaceMaskDuo.png": "RosartBulgarianRoseFaceMaskDuo.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseMaskShowcase.png": "RosartBulgarianRoseMaskShowcase.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartBulgarianRoseWaterSet.png": "RosartBulgarianRoseWaterSet.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartGoldSkincareJarinBloomingGarden.png": "RosartGoldSkincareJarinBloomingGarden.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartGoldenCapsulesandSpoon.png": "RosartGoldenCapsulesandSpoon.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartOrganicRoseWaterinBloom.png": "RosartOrganicRoseWaterinBloom.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseBalminaSunlitGarden.png": "RosartRoseBalminaSunlitGarden.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseCleansingBalmDisplay.png": "RosartRoseCleansingBalmDisplay.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseCreaminaRoseGarden.png": "RosartRoseCreaminaRoseGarden.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseGlycerinSoapSet.png": "RosartRoseGlycerinSoapSet.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskGardenStillLife.png": "RosartRoseMaskGardenStillLife.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseMaskinBloom.png": "RosartRoseMaskinBloom.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseOilProductDisplay.png": "RosartRoseOilProductDisplay.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSoapinSunlitGarden.png": "RosartRoseSoapinSunlitGarden.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSoapinSunlitGarden_3f7fc8b5-0d9f-477b-88d5-ba98bfe3eaa7.png": "RosartRoseSoapinSunlitGarden_3f7fc8b5-0d9f-477b-88d5-ba98bfe3eaa7.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleCreamDisplay.png": "RosartRoseSouffleCreamDisplay.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleCreamSet.png": "RosartRoseSouffleCreamSet.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseSouffleStillLife.png": "RosartRoseSouffleStillLife.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseTonerStillLife.png": "RosartRoseTonerStillLife.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterReflections.png": "RosartRoseWaterReflections.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterStillLife.png": "RosartRoseWaterStillLife.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterinBloom.png": "RosartRoseWaterinBloom.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRoseWaterinaSunlitRoseGarden.png": "RosartRoseWaterinaSunlitRoseGarden.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartRosehipOilinaSunlitGarden.png": "RosartRosehipOilinaSunlitGarden.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/RosartSmallDropperBottleinWarmStudioLight.png": "RosartSmallDropperBottleinWarmStudioLight.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Distillery_in_Bulgaria_s_Valley_of_Roses.png": "Rosart_Distillery_in_Bulgaria_s_Valley_of_Roses.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Organic_Rose_Water_in_Bloom.png": "Rosart_Organic_Rose_Water_in_Bloom.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rose_Balm_in_a_Sunlit_Garden.png": "Rosart_Rose_Balm_in_a_Sunlit_Garden.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rose_Skincare_Garden_Display.png": "Rosart_Rose_Skincare_Garden_Display.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rose_Water_Still_Life.png": "Rosart_Rose_Water_Still_Life.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_1.png": "Rosart_Rosehip_4x5_1.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_2.png": "Rosart_Rosehip_4x5_2.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_Rosehip_4x5_3.png": "Rosart_Rosehip_4x5_3.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rosart_s_Bulgarian_Valley_of_Roses_Map.png": "Rosart_s_Bulgarian_Valley_of_Roses_Map.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rose-GoldBulgarianRoseTonerDuo.png": "Rose-GoldBulgarianRoseTonerDuo.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rose-GoldGlycerinSoapPackaging.png": "Rose-GoldGlycerinSoapPackaging.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Rose_Petals_in_Copper_Distillation_Pot.png": "Rose_Petals_in_Copper_Distillation_Pot.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseCleansingBalmPortrait.png": "SunlitRoseCleansingBalmPortrait.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseFaceCreamPortrait.png": "SunlitRoseFaceCreamPortrait.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenSkincarePortrait.png": "SunlitRoseGardenSkincarePortrait.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/SunlitRoseGardenwithAmberDisc.png": "SunlitRoseGardenwithAmberDisc.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Sunlit_Damask_Rose_Valley.png": "Sunlit_Damask_Rose_Valley.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/USDA_and_EU_Organic_Certifications.png": "USDA_and_EU_Organic_Certifications.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Untitled_design_6.png": "Untitled_design_6.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Untitled_design_7.png": "Untitled_design_7.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Untitled_design_7_f6c26f2b-ad40-440e-a57a-fb6da4fe0dcb.png": "Untitled_design_7_f6c26f2b-ad40-440e-a57a-fb6da4fe0dcb.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Untitled_design_8.png": "Untitled_design_8.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/Untitled_design_8_7171c05c-c755-42c7-b662-fc397c08f2bb.png": "Untitled_design_8_7171c05c-c755-42c7-b662-fc397c08f2bb.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/bg1.png": "bg1.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/bg3.png": "bg3.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/cream.webp": "cream.webp",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/cream_a16713dc-91d5-47a3-bf4b-0c7d6b82655a.webp": "cream_a16713dc-91d5-47a3-bf4b-0c7d6b82655a.webp",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/fc1.png": "fc1.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/hero_banner.png": "hero_banner.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/papermask.webp": "papermask.webp",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/papermask2.png": "papermask2.png",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/papermask_e848f78c-f87f-48d7-8ed7-b9079143ff62.webp": "papermask_e848f78c-f87f-48d7-8ed7-b9079143ff62.webp",
+    "https://cdn.shopify.com/s/files/1/1075/6656/3409/files/qt_q_95.webp": "qt_q_95.webp"
+  },
+  "unresolved_shop_images": {}
+}

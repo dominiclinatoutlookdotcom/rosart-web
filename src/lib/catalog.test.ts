@@ -1,7 +1,13 @@
-import { existsSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createSiteContext, rawExport } from './export-data.ts';
 import { toCollections, toPages, toProducts } from './catalog.ts';
+
+// Exact-value tests run on the frozen snapshot, never on the live export (tests/fixtures/export-snapshot).
+vi.mock('./export-data.ts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./export-data.ts')>();
+  const { fixtureExport } = await import('../../tests/fixtures/export-snapshot/load.ts');
+  return { ...actual, rawExport: fixtureExport };
+});
 
 const ctx = createSiteContext(rawExport, { imageAlt: {} });
 const products = toProducts(rawExport.products, ctx);
@@ -24,14 +30,14 @@ describe('toProducts', () => {
     expect(bySlug('rose-face-cream-50ml').url).toBe('/products/rose-face-cream-50ml/');
   });
 
-  it('resolves every product image to a file in export/images, with the Shopify alt text', () => {
+  it('resolves every product image to a file in the image manifest, with the Shopify alt text', () => {
     const shopifyAlts = rawExport.products.flatMap((p) => p.images.map((i) => i.altText?.trim() ?? '')).filter(Boolean);
     expect(shopifyAlts.length).toBeGreaterThan(0); // the export holds alt texts, so ignoring them would fail below
     for (const product of products) {
       const raw = rawProduct(product.handle);
       expect(product.images.length).toBe(raw.images.length);
       product.images.forEach((image, index) => {
-        expect(existsSync(`export/images/${image.file}`), image.file).toBe(true);
+        expect(rawExport.manifest.images[image.file], image.file).toBeDefined();
         expect(image.alt, image.file).toBe(raw.images[index]?.altText?.trim() || product.title);
       });
     }

@@ -1,0 +1,62 @@
+[
+  {
+    "bodyHtml": "<p style=\"text-align: center;\"><span>We'd love to hear from you.</span></p>\n<p style=\"text-align: center;\"><span>For enquiries about Rosart products in Australia or general information, please get in touch with our Australian team.</span></p>\n<p data-pm-slice=\"1 1 []\" style=\"text-align: center;\"><strong><span>Australian Business Enquiries</span></strong></p>\n<p style=\"text-align: center;\"><span>MinervaBelle &amp; Co.</span><br><span>Melbourne, Victoria, Australia</span><br><span>Email: info@rosart.com.au</span></p>\n<p style=\"text-align: center;\"> </p>",
+    "createdAt": "2026-09-19T10:45:56Z",
+    "handle": "contact",
+    "id": "gid://shopify/Page/763576025169",
+    "isPublished": true,
+    "publishedAt": "2026-09-19T10:45:56Z",
+    "seo": {
+      "description": "Contact Rosart's Australian team with enquiries about Rosart Bulgarian rose skincare products in Australia, or for general information.",
+      "title": "Contact Us, Australian Enquiries | Rosart"
+    },
+    "templateSuffix": "contact",
+    "title": "Contact us",
+    "updatedAt": "2026-11-07T06:07:35Z"
+  },
+  {
+    "bodyHtml": "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.shopify.com/shopifycloud/privacy-banner/data-sale-opt-out.css\">\n<meta charset=\"utf-8\"> <p>As described in our Privacy Policy, we collect personal information from your interactions with us and our website, including through cookies and similar technologies. We may also share this personal information with third parties, including advertising partners. We do this in order to show you ads on other websites that are more relevant to your interests and for other reasons outlined in our privacy policy.</p> <p>Sharing of personal information for targeted advertising based on your interaction on different websites may be considered &quot;sales&quot;, &quot;sharing&quot;, or &quot;targeted advertising&quot; under certain U.S. state privacy laws. Depending on where you live, you may have the right to opt out of these activities. If you would like to exercise this opt-out right, please follow the instructions below.</p> <p>If you visit our website with the Global Privacy Control opt-out preference signal enabled, depending on where you are, we will treat this as a request to opt-out of activity that may be considered a “sale” or “sharing” of personal information or other uses that may be considered targeted advertising for the device and browser you used to visit our website.</p>\n<div id=\"pc--optOutFormContainer\" data-not-applicable='To opt out of the &quot;sale&quot; or &quot;sharing&quot; of your personal information collected using cookies and other device-based identifiers as described above, you must be browsing from one of the applicable US states referred to above.' data-description='If you would like to opt out of activity that may be considered a &quot;sale&quot; or &quot;share,&quot; or &quot;targeted advertising&quot;, please submit your email.' data-email-label='Email' data-success='Opted-out successfully' data-error='A problem occurred, try submitting your email again' data-form-description='By clicking “opt out“, the browser on this device will be opted out of sharing personal data. If you select the checkbox and enter an email, the related customer account will also be opted out.' data-form-email-label='Email' data-form-opt-out-account-label=\"Don&#39;t share data from my account (optional)\" data-form-button-text='Opt out' data-form-opted-out='The browser on this device is opted out' data-form-success='You have successfully opted out' data-form-error='A problem occurred, please try again' ></div>\n<script src=\"https://cdn.shopify.com/shopifycloud/privacy-banner/data-sale-opt-out.js\" defer></script> <script src=\"https://js.hcaptcha.com/1/api.js?onload=optOutOnLoad\" defer></script>",
+    "createdAt": "2026-09-19T10:45:57Z",
+    "handle": "data-sharing-opt-out",
+    "id": "gid://shopify/Page/763576057937",
+    "isPublished": true,
+    "publishedAt": "2026-09-19T10:45:57Z",
+    "seo": {
+      "description": null,
+      "title": null
+    },
+    "templateSuffix": null,
+    "title": "Your Privacy Choices",
+    "updatedAt": "2026-09-19T10:45:57Z"
+  },
+  {
+    "bodyHtml": "",
+    "createdAt": "2026-11-03T08:57:04Z",
+    "handle": "our-collection",
+    "id": "gid://shopify/Page/766614831185",
+    "isPublished": true,
+    "publishedAt": "2026-11-03T08:58:44Z",
+    "seo": {
+      "description": "Browse the Rosart collection of Bulgarian rose skincare: Face Care, Rose Water & Toners, and Masks & Treatments, from face creams to rose water.",
+      "title": "Our Collection: Bulgarian Rose Skincare | Rosart"
+    },
+    "templateSuffix": "our-collection",
+    "title": "Our Collection",
+    "updatedAt": "2026-11-07T06:07:38Z"
+  },
+  {
+    "bodyHtml": "",
+    "createdAt": "2026-11-03T08:56:26Z",
+    "handle": "our-story",
+    "id": "gid://shopify/Page/766614798417",
+    "isPublished": true,
+    "publishedAt": "2026-11-03T08:58:48Z",
+    "seo": {
+      "description": "From its own certified organic Damask rose fields in Bulgaria's Valley of Roses, Rosart distils freshly harvested roses and makes its skincare in-house.",
+      "title": "Our Story: From Bulgaria's Valley of Roses | Rosart"
+    },
+    "templateSuffix": "our-story",
+    "title": "Our Story",
+    "updatedAt": "2026-11-07T06:07:42Z"
+  }
+]

@@ -1,6 +1,13 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { collectImageFiles } from './used-images.ts';
 import { usedImageFiles } from './site-content.ts';
+
+// Exact-value tests run on the frozen snapshot, never on the live export (tests/fixtures/export-snapshot).
+vi.mock('./export-data.ts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./export-data.ts')>();
+  const { fixtureExport } = await import('../../tests/fixtures/export-snapshot/load.ts');
+  return { ...actual, rawExport: fixtureExport };
+});
 
 describe('collectImageFiles', () => {
   it('finds image references anywhere in nested content, once each, sorted', () => {

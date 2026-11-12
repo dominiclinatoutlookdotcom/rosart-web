@@ -1,0 +1,12 @@
+{
+  "currencyCode": "AUD",
+  "description": "",
+  "ianaTimezone": "Australia/Melbourne",
+  "myshopifyDomain": "rosart-mhfmyuxq.myshopify.com",
+  "name": "Rosart",
+  "primaryDomain": {
+    "host": "rosart-mhfmyuxq.myshopify.com",
+    "url": "https://rosart-mhfmyuxq.myshopify.com"
+  },
+  "url": "https://rosart-mhfmyuxq.myshopify.com"
+}

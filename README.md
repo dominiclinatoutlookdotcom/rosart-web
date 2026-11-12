@@ -341,6 +341,31 @@ reshaped by tested modules in `src/lib/`; the export files are never edited by h
 Fonts are the theme's (Cormorant, Libre Baskerville, Inter), self-hosted from `@fontsource`
 packages; the site makes no requests to other hosts.
 
+### What the site tests pin (and what they never pin)
+
+The publish "Check" runs `npm test` right after exporting the live Shopify content, so a test
+that names live copy fails every publish after a normal staff edit (job 8, 2026-11-12: the
+connections heading and a logo had changed). The owner's rule: checks in the publish path catch a
+broken site, not changed content. So:
+
+- **Tests on the live `export/`** (`src/lib/export-health.test.ts`, `src/lib/live-export.test.ts`,
+  `scripts/fidelity-dist.test.ts`) read every expected value from the export itself. They fail only
+  when the export cannot build a site: a required template, section group, page or the main menu
+  missing, an empty shop name or product title, a product with no image, a theme or product image
+  the manifest does not map or `export/images/` does not hold (`src/lib/export-health.ts`), or a
+  built page that differs from its theme template. They never name a heading, a count, a logo
+  file or a handle.
+- **Tests that pin exact values** (`catalog`, `theme`, `site-content`, `images`, `used-images`
+  tests) run the same code on the frozen snapshot `tests/fixtures/export-snapshot/` (JSON only,
+  copied 2026-11-12) through `vi.mock('./export-data.ts')`. Edit those expectations only when
+  code changes; refresh the snapshot on purpose, never as part of a publish.
+- **Kept as owner decisions:** products must use `templates/product.product-catalogue.json`
+  (`PRODUCT_TEMPLATE`, also enforced by `export-health` and `createSiteContext`), and the
+  theme-fidelity allowlist.
+
+A new test that needs live content must follow the first rule. Proof both ways lives in
+`export-health.test.ts` (edited copy passes, broken copy fails).
+
 ### Layout
 
 | Path | What |
@@ -350,6 +375,8 @@ packages; the site makes no requests to other hosts.
 | `src/lib/` | Tested, framework-free modules: URL map, HTML sanitiser, rich text, catalog, theme section model, theme fidelity check and its allowlist (`allowed-differences.ts`), image references (`*.test.ts` beside each) |
 | `src/pages/`, `src/components/`, `src/layouts/`, `src/styles/` | The Astro site |
 | `scripts/check-dist.ts`, `scripts/dist-check.ts` | The post-build check (runs under plain Node) |
+| `src/lib/export-health.ts` | Structural check of the export (what a buildable site needs), no content values |
+| `tests/fixtures/export-snapshot/` | Frozen export snapshot for the exact-value tests |
 | `scripts/fidelity-dist.test.ts` | Theme fidelity of every built page (part of `npm test`) |
 | `tools/publish.py`, `deploy.config.json` | The publish script and its deploy target |
 
