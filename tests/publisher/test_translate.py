@@ -180,8 +180,6 @@ def test_missing_and_extra_shopify_scopes_read_differently(scrubber):
 
 
 @pytest.mark.parametrize("message, needle, action", [
-    ("theme file layout/theme.liquid has 10 bytes, Shopify says 12", "size", "check-again"),
-    ("theme file layout/theme.liquid does not match its MD5 checksum", "checksum", "check-again"),
     ("the theme has a file with an unsafe name: '../x'", "unsafe", "contact-owner"),
     ("theme file a.json has an invalid Base64 body", "unreadable", "check-again"),
     ("theme file a.json came back without a body", "without", "check-again"),
@@ -194,7 +192,7 @@ def test_theme_download_problems_read_differently(message, needle, action, scrub
 
 def test_the_theme_checksum_texts_are_all_different(scrubber):
     texts = {from_exc(ShopifyAdminError("theme-checksum", m), "theme", scrubber)["text"] for m in (
-        "theme file x has 1 bytes, Shopify says 2", "theme file x does not match its MD5 checksum",
+        "theme file x has an invalid Base64 body", "theme file x came back without a body",
         "the theme has a file with an unsafe name: 'x'")}
     assert len(texts) == 3
 

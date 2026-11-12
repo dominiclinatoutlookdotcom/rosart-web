@@ -7,7 +7,7 @@ known, ``where`` and ``key_line``; contracts/check-result.schema.json):
   ``npm run check:dist``) and recognises the rows of the publish skill's failure table
   (``.claude/skills/publish/SKILL.md:77-91``) with the real message text of the site's checks;
 * ``from_exception`` translates an error raised inside a job. The Phase 2 Shopify code reports different problems
-  under one code (missing and extra scopes are both ``shopify-write-scope``; size, MD5, unsafe name and body
+  under one code (missing and extra scopes are both ``shopify-write-scope``; unsafe name and body
   problems are all ``theme-checksum``): the schema enum has no codes for them, so they are told apart here by the
   detail of the message.
 
@@ -205,17 +205,11 @@ def _theme_checksum(message: str) -> tuple[str, str]:
     lowered = message.lower()
     if "unsafe name" in lowered:
         return ("The Shopify theme has a file with an unsafe name, so the check stopped: contact the owner", OWNER)
-    if "md5" in lowered:
-        return ("A file of the Shopify theme did not match its checksum, so the check stopped: check again, and "
-                "tell the owner if it keeps happening", AGAIN)
     if "invalid base64" in lowered:
         return ("A file of the Shopify theme was unreadable, so the check stopped: check again, and tell the owner "
                 "if it keeps happening", AGAIN)
     if "without a body" in lowered:
         return ("A file of the Shopify theme arrived without its contents, so the check stopped: check again, and "
-                "tell the owner if it keeps happening", AGAIN)
-    if " bytes, shopify says" in lowered:
-        return ("A file of the Shopify theme arrived with the wrong size, so the check stopped: check again, and "
                 "tell the owner if it keeps happening", AGAIN)
     return CODE_TEXT["theme-checksum"]
 

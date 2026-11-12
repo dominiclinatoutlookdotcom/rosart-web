@@ -2,9 +2,12 @@
 
 The read-only replacement for ``shopify theme pull`` on the publisher box: it needs only the
 ``read_themes`` scope. ``read_theme`` pages through ``theme(id).files``, rebuilds every file byte
-for byte (Text, Base64 and Url bodies), verifies the size and MD5 of each, and swaps a freshly
-written folder into ``dest`` by rename, so ``dest`` mirrors the theme exactly. Nothing is touched
-unless every check passed. Url bodies are fetched only from ``THEME_URL_HOSTS``.
+for byte (Text, Base64 and Url bodies) as returned, and swaps a freshly written folder into ``dest``
+by rename, so ``dest`` mirrors the theme exactly. Shopify's ``size`` and ``checksumMd5`` are not
+checked (owner ruling 2026-11-12): for JSON files they describe a stored form the API does not serve,
+and the site's own build and fidelity checks guard against a bad theme. Only the unsafe-name guard, a
+missing body, a malformed Base64 body and the Url host check can stop a read. Nothing is touched
+unless they all passed. Url bodies are fetched only from ``THEME_URL_HOSTS``.
 """
 from __future__ import annotations
 
@@ -32,7 +35,7 @@ QUERY_THEME_FILES = """query ThemeFiles($id: ID!, $after: String) {
   theme(id: $id) {
     id name role processing
     files(first: 250, after: $after) {
-      nodes { filename size checksumMd5 contentType body {
+      nodes { filename body {
         ... on OnlineStoreThemeFileBodyText { content }
         ... on OnlineStoreThemeFileBodyBase64 { contentBase64 }
         ... on OnlineStoreThemeFileBodyUrl { url } } }
@@ -135,25 +138,6 @@ def _body_bytes(node: dict, fetch_url: Callable[[str], bytes]) -> bytes:
     raise _integrity(f"theme file {name} came back without a body")
 
 
-def _parse_size(raw: object, name: str) -> int:
-    """``size`` is UnsignedInt64: Shopify sends a JSON string of ASCII digits (an int is tolerated)."""
-    if isinstance(raw, int) and not isinstance(raw, bool) and raw >= 0:
-        return raw
-    if isinstance(raw, str) and raw.isascii() and raw.isdigit():
-        return int(raw)
-    raise _integrity(f"theme file {name} has an invalid size {raw!r}")
-
-
-def _verify(node: dict, data: bytes) -> None:
-    name = node["filename"]
-    size = _parse_size(node.get("size"), name)
-    if len(data) != size:
-        raise _integrity(f"theme file {name} has {len(data)} bytes, Shopify says {size}")
-    checksum = node.get("checksumMd5")
-    if checksum is not None and hashlib.md5(data).hexdigest() != str(checksum).lower():
-        raise _integrity(f"theme file {name} does not match its MD5 checksum")
-
-
 def _swap(staging: Path, dest: Path) -> None:
     previous = dest.parent / f".{dest.name}.old-{os.getpid()}"
     had_old = dest.exists()
@@ -183,7 +167,6 @@ def read_theme(run: Runner, fetch_url: Callable[[str], bytes], theme_id: str, de
     contents: dict[str, bytes] = {}
     for node in nodes:
         data = _body_bytes(node, fetch_url)
-        _verify(node, data)
         contents[node["filename"]] = data
 
     dest.parent.mkdir(parents=True, exist_ok=True)

@@ -109,42 +109,21 @@ def test_dest_is_created_when_it_does_not_exist(fake, clock, tmp_path):
     assert folder_tree(tmp_path / "fresh" / "theme") == fixture_tree()
 
 
-def test_a_null_checksum_is_accepted_but_the_size_is_still_checked(fake, clock, dest):
-    fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"checksumMd5": None}})
+@pytest.mark.parametrize("override", [
+    {"checksumMd5": "0" * 32}, {"size": "99"}, {"size": "abc"}, {"size": None}, {"checksumMd5": None},
+    {"size": "99", "checksumMd5": "0" * 32}])
+def test_shopifys_size_and_md5_are_not_checked_the_bytes_are_written_as_returned(fake, clock, dest, override):
+    # Owner ruling 2026-11-12: size/checksumMd5 describe a stored form the API does not always serve.
+    fake.add_theme(THEME_GID, files={"layout/theme.liquid": b"abc"}, overrides={"layout/theme.liquid": override})
     read(fake, clock, dest)
-    assert folder_tree(dest) == {"a.txt": b"abc"}
-    fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"checksumMd5": None, "size": "4"}})
-    assert failure_of(fake, clock, dest).code == "theme-checksum"
+    assert folder_tree(dest) == {"layout/theme.liquid": b"abc"}
 
 
-def test_a_checksum_mismatch_fails_without_touching_dest(fake, clock, dest):
-    fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"checksumMd5": "0" * 32}})
-    error = failure_of(fake, clock, dest)
-    assert error.code == "theme-checksum"
-    assert "a.txt" in str(error)
-    assert_untouched(dest)
-
-
-def test_a_file_whose_body_matches_its_string_size_and_md5_is_accepted(fake, clock, dest):
-    # Shopify serialises UnsignedInt64 as a JSON string, e.g. "21936"
+def test_the_query_no_longer_asks_for_size_or_checksum(fake, clock, dest):
     fake.add_theme(THEME_GID, files={"a.txt": b"abc"})
     read(fake, clock, dest)
-    assert folder_tree(dest) == {"a.txt": b"abc"}
-
-
-@pytest.mark.parametrize("bad", ["abc", "-3", "3.0", "", " 3", "٣", None, 3.0, True])
-def test_a_malformed_size_fails_naming_the_file(fake, clock, dest, bad):
-    fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"size": bad}})
-    error = failure_of(fake, clock, dest)
-    assert error.code == "theme-checksum"
-    assert "a.txt" in str(error)
-    assert_untouched(dest)
-
-
-def test_a_size_mismatch_fails_without_touching_dest(fake, clock, dest):
-    fake.add_theme(THEME_GID, files={"a.txt": b"abc"}, overrides={"a.txt": {"size": "99"}})
-    assert failure_of(fake, clock, dest).code == "theme-checksum"
-    assert_untouched(dest)
+    query = [r for r in fake.graphql_requests if "theme" in r.query][0].query
+    assert "checksumMd5" not in query and " size " not in query
 
 
 def test_user_errors_fail_without_touching_dest(fake, clock, dest):
@@ -168,9 +147,10 @@ def test_an_unsafe_file_name_fails_without_touching_dest(fake, clock, dest, name
                                   "locales/en.json", "sections/s.liquid", "snippets/s.liquid",
                                   "templates/customers/login.json", "README.md"])
 def test_known_top_folders_and_top_level_files_are_allowed(fake, clock, dest, name):
-    fake.add_theme(THEME_GID, files={name: b"x"})
+    body = b"{}" if name.endswith(".json") else b"x"      # a JSON theme file must parse
+    fake.add_theme(THEME_GID, files={name: body})
     read(fake, clock, dest)
-    assert folder_tree(dest) == {name: b"x"}
+    assert folder_tree(dest) == {name: body}
 
 
 def test_a_missing_theme_fails_theme_missing(fake, clock, dest):
@@ -208,3 +188,42 @@ def test_the_manifest_lists_filename_sha256_and_size_sorted(fake, clock, dest):
     expected = [{"filename": name, "sha256": hashlib.sha256(data).hexdigest(), "size": len(data)}
                 for name, data in sorted(tree.items())]
     assert manifest.as_list() == expected
+
+
+# --- JSON theme files as the live API serves them (2026-11-12): header comment + indented JSON, and a size and
+# MD5 of a stored form that is never served. They must download and be written as returned. ---
+
+HEADER = ("/*\n * ------------------------------------------------------------\n * IMPORTANT: auto-generated.\n"
+          " * ------------------------------------------------------------\n */\n")
+SETTINGS = HEADER + '{\n  "current": {\n    "colors": "x"\n  }\n}\n'
+INDEX = HEADER + ('{\n  "sections": {\n    "hero": {\n      "type": "text",\n      "settings": {\n'
+                  '        "text": "<p>Hello</p>"\n      }\n    }\n  },\n  "order": [\n    "hero"\n  ]\n}\n')
+
+
+def test_a_json_file_with_header_comment_and_indented_body_and_a_different_size_and_md5_downloads(fake, clock, dest):
+    files = {"config/settings_data.json": SETTINGS.encode(), "templates/index.json": INDEX.encode()}
+    fake.add_theme(THEME_GID, files=files)
+    for node in fake._theme({"id": THEME_GID})["files"]["nodes"]:     # the fake reproduces the live mismatch
+        data = files[node["filename"]]
+        assert int(node["size"]) != len(data) and node["checksumMd5"] != hashlib.md5(data).hexdigest()
+    read(fake, clock, dest)
+    assert folder_tree(dest) == files
+
+
+def test_downloaded_commented_json_theme_files_feed_the_theme_content_extraction(fake, clock, dest):
+    from theme_content import extract_theme_content, load_theme_json
+    fake.add_theme(THEME_GID, files={"config/settings_data.json": SETTINGS.encode(),
+                                     "templates/index.json": INDEX.encode()})
+    read(fake, clock, dest)
+    assert load_theme_json(dest / "config" / "settings_data.json") == {"current": {"colors": "x"}}
+    content = extract_theme_content(dest)
+    assert "Hello" in str(content)
+
+
+def test_a_base64_json_body_is_still_decoded_and_a_bad_one_still_fails(fake, clock, dest):
+    fake.add_theme(THEME_GID, files={"assets/data.json": b'{"a":1}'}, body_types={"assets/data.json": "base64"})
+    read(fake, clock, dest)
+    assert folder_tree(dest) == {"assets/data.json": b'{"a":1}'}
+    fake.add_theme(THEME_GID, files={"assets/data.json": b"x"}, body_types={"assets/data.json": "base64"},
+                   overrides={"assets/data.json": {"body": {"contentBase64": "***"}}})
+    assert failure_of(fake, clock, dest).code == "theme-checksum"

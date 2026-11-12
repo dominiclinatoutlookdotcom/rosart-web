@@ -426,6 +426,19 @@ invalidates CloudFront. Each run is a job with a state, a log and a snapshot of 
 checked; Publish uploads exactly that snapshot. Other `python -m publisher` commands:
 `healthcheck`, `backup-db`, `seed-export-repo` and `selftest`.
 
+**Theme files are not checked against Shopify's size or MD5.** The box reads the theme through
+`theme(id).files` and writes each file's bytes as returned (`tools/theme_admin.py`). Shopify's `size` and
+`checksumMd5` are neither queried nor compared (owner ruling 2026-11-12): for JSON files they describe a
+stored form the API does not serve. Verified live on the Rosart theme on 2026-11-12: `layout/theme.liquid`
+matched exactly, but `config/settings_data.json` (size 7953) came back as 9758 bytes, a 363-byte leading
+`/* ... */` "auto-generated" header comment plus the JSON pretty-printed with 2-space indentation, and
+`templates/index.json` (size 20305) came back as 32555 bytes the same way; no re-serialisation reproduced
+the MD5. The owner chose not to depend on Shopify's download format, so a change there cannot stop a
+Check. The header stays in the stored file; `tools/theme_content.py` strips it when it reads the JSON.
+What can still stop the theme read: an unsafe file name, a file that comes back without a body, a
+malformed Base64 body, a Url body from a host other than `cdn.shopify.com`. A bad theme is caught later
+by the site's own build, tests and theme fidelity check.
+
 **The bucket marker.** Every publish, from the box or from a PC, ends its bucket writes with an
 object `_publish.json` (publish id, time, content hash, publisher `box` or `pc`; no person). A box
 Publish re-reads it before any upload and refuses ("the live site changed since this check: run

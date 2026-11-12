@@ -56,6 +56,10 @@ class _Response:
         return False
 
 
+def _strip_header(text: str) -> str:
+    return re.sub(r"\A\s*/\*.*?\*/", "", text, count=1, flags=re.S)
+
+
 class _Opener:
     def __init__(self, fake: "FakeShopifyAdmin") -> None:
         self._fake = fake
@@ -236,5 +240,12 @@ class FakeShopifyAdmin:
             body = {"url": url}
         node = {"filename": name, "size": str(len(data)), "checksumMd5": hashlib.md5(data).hexdigest(),
                 "contentType": "application/octet-stream", "body": body}
+        if name.endswith(".json") and kind == "text":
+            # Like the live API (2026-11-12): a JSON file is served as text with Shopify's auto-generated header
+            # comment and indented JSON, but its size and MD5 describe a stored form that is never served.
+            # The compact form here differs in bytes from what is served, as the real one does.
+            stored = json.dumps(json.loads(_strip_header(data.decode("utf-8"))), separators=(",", ":")).encode("utf-8")
+            node.update(size=str(len(stored)), checksumMd5=hashlib.md5(stored).hexdigest(),
+                        contentType="application/json")
         node.update(theme["overrides"].get(name, {}))
         return node
